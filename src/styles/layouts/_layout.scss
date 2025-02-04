@@ -1,0 +1,8 @@
+/* Main layout style using Tailwind CSS*/
+.body {
+    @apply w-full h-full overflow-hidden;
+}
+
+.main {
+    @apply container mx-auto px-5 pt-10;
+}
