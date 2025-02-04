@@ -13,7 +13,7 @@ export default function Logo() {
     }
 
     return (
-        <div onClick={doReset} className='flex items-center text-3xl font-bold text-blue-500 cursor-pointer'>
+        <div onClick={doReset} className='flex items-center text-3xl font-bold text-primary cursor-pointer'>
             <div>Teamo</div>
         </div>
     )

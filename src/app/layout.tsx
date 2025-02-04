@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Navbar from "./nav/NavBar";
+import "../styles/main.scss"
+import Header from "./layout/header/Header";
 
 export const metadata: Metadata = {
   title: "Teamo",
@@ -14,9 +15,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
-        <Navbar/>
-        <main className='container mx-auto px-5 pt-10'>
+      <body className='body'>
+        <Header/>
+        <main className='main'>
             {children}
         </main>
       </body>

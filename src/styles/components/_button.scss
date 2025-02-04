@@ -1,0 +1,53 @@
+/* Button style using Tailwind CSS*/
+.btn {
+  @apply uppercase no-underline py-1 px-6 w-max rounded-full text-sm font-medium cursor-pointer text-tertiary;
+  
+  &:hover {
+    @apply shadow-lg;
+  }
+
+  &:active {
+    @apply shadow-md;
+  }
+
+  &:focus {
+    @apply ring-0 !important;
+  }
+
+  /* Style for primary color button */
+  &--primary {
+    @apply bg-primary;
+    &:hover {
+      @apply outline outline-2 outline-primary text-primary bg-tertiary !important;
+    }
+
+    /* Style for primary color button outline type */
+    &--outline {
+      @apply bg-tertiary text-primary outline outline-2 outline-primary !important;
+      &:hover {
+        @apply bg-primary text-tertiary !important;
+      }
+    }
+  }
+
+  /* Style for secondary color button */
+  &--secondary {
+    @apply bg-secondary;
+    &:hover {
+      @apply outline outline-2 outline-grey text-secondary bg-tertiary !important;
+    }
+
+    /* Style for secondary color button outline type */
+    &--outline {
+      @apply bg-tertiary text-secondary outline outline-2 outline-secondary !important;
+      &:hover {
+        @apply bg-secondary text-tertiary !important;
+      }
+    }
+  }
+
+  /* Style for button with icon */
+  &--icon {
+    @apply flex items-center justify-center gap-2;
+  }
+}
