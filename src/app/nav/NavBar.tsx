@@ -4,12 +4,12 @@ import NavLinks from './NavLinks';
 
 export default async function Navbar() {
     return (
-        <header className='sticky top-0 z-50 bg-white shadow-md items-center font-semibold text-gray-500 w-full'>
-            <div className='flex justify-between shadow-sm py-3 px-5'>
+        <header className='sticky top-0 z-50 bg-tertiary shadow-md items-center w-full'>
+            <div className='flex justify-between shadow-sm py-3 px-10'>
                 <Logo />
                 <LoginButton />
             </div>
-            <div className='flex justify-center items-center py-3 px-3'>
+            <div className='flex justify-center items-center py-4'>
                 <NavLinks />
             </div>
         </header>

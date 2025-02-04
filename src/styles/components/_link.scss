@@ -1,0 +1,8 @@
+/* Navigation link style using Tailwind CSS*/
+.link {
+    @apply text-grey text-xl font-semibold;
+
+    &:hover {
+        @apply text-darkgrey;
+    }
+}

@@ -2,10 +2,18 @@ const flowbite = require("flowbite-react/tailwind");
 module.exports = {
   content: [
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/styles/**/*.{scss,css}",
     flowbite.content(),
   ],
   theme: {
     extend: {
+      colors: {
+        primary: '#4CA4CD',
+        secondary: '#1C1C1C',
+        tertiary: '#FCFCFC',
+        grey: '#606261',
+        darkgrey: '#3E424A',
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
