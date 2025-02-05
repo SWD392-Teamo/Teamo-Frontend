@@ -5,7 +5,7 @@ import { useController, UseControllerProps } from 'react-hook-form'
 type Props = {
     label: string
     type?: string
-    showLabel?: boolean
+    showlabel?: string
 } & UseControllerProps
 
 export default function Input(props: Props) {
@@ -13,13 +13,13 @@ export default function Input(props: Props) {
     const {fieldState, field} = useController({...props, defaultValue: ''})
 
   return (
-    <div className='mb-3'>
-        {props.showLabel && (
-            <div className='mb-2 block'>
+    <div className='mb-8'>
+        {props.showlabel=='true' && (
+            <div className='mb-2 block text-darkgrey'>
                 <Label htmlFor={field.name} value={props.label}/>
             </div>
         )}
-        <div className='mb-3 block'>
+        <div className='mb-6 block text-secondary'>
             <TextInput 
                 {...props}
                 {...field}

@@ -10,16 +10,16 @@ import toast from 'react-hot-toast';
 import { AiFillGoogleCircle } from 'react-icons/ai';
 
 export default function LoginForm() {
-    // next navigation
-    const router = useRouter();
+  // Next navigation
+  const router = useRouter();
 
-    // set up form state
-    const {control, handleSubmit, setFocus, reset, 
+  // Set up form state
+  const {control, handleSubmit, setFocus, reset, 
         formState: {isSubmitting, isValid}} = useForm({
             mode: 'onTouched'
         });
 
-  // on submit logic
+  // On submit logic
   async function onSubmit(data: FieldValues) {
         try {
             const res = await login(data)
@@ -35,8 +35,10 @@ export default function LoginForm() {
     }
 
   return (
-    <form className='flex flex-col mt-3' onSubmit={handleSubmit(onSubmit)}>
-        <Input label='Email' name='email' control={control} 
+    <form className='mt-8' onSubmit={handleSubmit(onSubmit)}>
+        <Input label='Email' name='email' control={control}
+            type='email'
+            showlabel='true'
             rules={{
                 required: 'Email is required',
                 pattern: {
@@ -47,9 +49,10 @@ export default function LoginForm() {
 
         <Input label='Password' name='password' control={control} 
             type='password'
+            showlabel='true'
             rules={{required: 'Password is required'}}/>
 
-        <div className='flex justify-between'>
+        <div className='flex gap-6'>
             <Button 
                 className='btn btn--primary--outline'
                 isProcessing={isSubmitting} 
@@ -57,11 +60,10 @@ export default function LoginForm() {
                 type='submit'>Submit</Button>
             <Button 
                 className='btn btn--primary'
-                isProcessing={isSubmitting}
                 type='submit'>
                     <div className='btn--icon'>
                         <div>Login with</div>
-                        <AiFillGoogleCircle size={15}/>
+                        <AiFillGoogleCircle size={20}/>
                     </div>
             </Button>
         </div>

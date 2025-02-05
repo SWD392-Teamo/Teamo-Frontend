@@ -3,7 +3,7 @@
     @apply text-grey text-xl font-semibold;
 
     &:hover {
-        @apply text-darkgrey;
+        @apply text-darkgrey cursor-pointer;
     }
 
     &:focus {
