@@ -1,23 +1,26 @@
+import { cookies } from 'next/headers';
+
 const baseUrl = process.env.API_URL;
 
 // GET request
 async function get(url: string) {
-    const requestOptions = {
+    const requestOptions: RequestInit = {
         method: 'GET',
-        headers: await getHeaders()
+        headers: await getHeaders(),
+        credentials: 'include'
     }
 
     const response = await fetch(baseUrl + url, requestOptions);
-
     return handleResponse(response);
 }
 
 // POST request
-async function post(url: string, body: {}) {
-    const requestOptions = {
+async function post(url: string, body: NonNullable<unknown>) {
+    const requestOptions: RequestInit = {
         method: 'POST',
         headers: await getHeaders(),
-        body: JSON.stringify(body)
+        body: JSON.stringify(body),
+        credentials: 'include'
     }
 
     const response = await fetch(baseUrl + url, requestOptions);
@@ -26,11 +29,12 @@ async function post(url: string, body: {}) {
 }
 
 // PUT request
-async function put(url: string, body: {}) {
-    const requestOptions = {
+async function put(url: string, body: NonNullable<unknown>) {
+    const requestOptions: RequestInit = {
         method: 'PUT',
         headers: await getHeaders(),
-        body: JSON.stringify(body)
+        body: JSON.stringify(body),
+        credentials: 'include'
     }
 
     const response = await fetch(baseUrl + url, requestOptions);
@@ -40,9 +44,10 @@ async function put(url: string, body: {}) {
 
 // DELETE request
 async function del(url: string) {
-    const requestOptions = {
+    const requestOptions: RequestInit = {
         method: 'DELETE',
-        headers: await getHeaders()
+        headers: await getHeaders(),
+        credentials: 'include'
     }
 
     const response = await fetch(baseUrl + url, requestOptions);
@@ -50,17 +55,31 @@ async function del(url: string) {
     return handleResponse(response);
 }
 
-// Get headers
 async function getHeaders() {
-    const headers = {
-        'Content-type': 'application/json'
-    } as any;
+    // Get cookie from browser
+    var cookieHeader = await cookies();
+    var cookie = cookieHeader.toString();
+
+    const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
+    };
+
+    // Set cookie in the header
+    if(cookie) {
+        headers['Cookie'] = cookie
+    }
+
     return headers;
 }
 
-// Handle response from the server
+// return JSON data or error object
 async function handleResponse(response: Response) {
     const text = await response.text();
+
+    // Extract cookies from response headers
+    const cookies = response.headers.get('set-cookie')
+
+    // Check if the error is a json object or normal string
     let data;
     try {
         data = JSON.parse(text);
@@ -69,10 +88,14 @@ async function handleResponse(response: Response) {
     }
 
     if (response.ok) {
-        return data || response.statusText;
+        if (cookies) {
+            return { data: data || response.statusText, cookies };
+        }
+        return { data: data || response.statusText };
     } else {
         const error = {
             status: response.status,
+            // If there is an error text then display it
             message: typeof(data === 'string') ? data : response.statusText
         }
         return {error}

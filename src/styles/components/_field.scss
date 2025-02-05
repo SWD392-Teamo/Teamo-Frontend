@@ -1,9 +1,9 @@
-/* Navigation link style using Tailwind CSS*/
-.link {
+/* Form field style using Tailwind CSS*/
+.field {
     @apply text-grey text-xl font-semibold;
 
     &:hover {
-        @apply text-darkgrey cursor-pointer;
+        @apply text-darkgrey;
     }
 
     &:focus {

@@ -1,11 +1,11 @@
 /* Import Tailwind */
-@import "tailwindcss/base";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
+@use "tailwindcss/base" as *;
+@use "tailwindcss/components" as *;
+@use "tailwindcss/utilities" as *;
 
 /* Import custom layout styles */
-@import "layouts/layout";
+@use "layouts/layout" as *;
 
 /* Import custom component styles */
-@import "components/button";
-@import "components/link"
+@use "components/button" as *;
+@use "components/link" as *;

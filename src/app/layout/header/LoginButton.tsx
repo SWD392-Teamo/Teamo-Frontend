@@ -6,7 +6,7 @@ import { AiOutlineLogin } from 'react-icons/ai'
 
 export default function LoginButton() {
   return (
-    <Button className="btn btn--secondary">
+    <Button className="btn btn--secondary" href='/auth/login'>
       <div className="btn--icon">
         <AiOutlineLogin size={20}/>
         <div>Login</div>
