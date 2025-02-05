@@ -2,9 +2,10 @@
 
 import { fetchWrapper } from "@/lib/fetchWrapper";
 import { cookies } from 'next/headers';
+import { FieldValues } from "react-hook-form";
 
-export async function login(email: string, password: string) {
-    const response = await fetchWrapper.post(`account/login`, {email: email, password: password});
+export async function login(data: FieldValues) {
+    const response = await fetchWrapper.post(`account/login`, data);
 
     if (response.cookies) {
         const cookieStore = await cookies();
