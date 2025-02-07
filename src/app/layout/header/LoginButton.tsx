@@ -1,6 +1,7 @@
 'use client'
 
 import { Button } from 'flowbite-react'
+import { signIn } from 'next-auth/react'
 import React from 'react'
 import { AiOutlineLogin } from 'react-icons/ai'
 

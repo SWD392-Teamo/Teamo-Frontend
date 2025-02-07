@@ -8,6 +8,7 @@ import Input from '@/app/components/Input';
 import { login } from '@/app/actions/authActions';
 import toast from 'react-hot-toast';
 import { AiFillGoogleCircle } from 'react-icons/ai';
+import { signIn } from 'next-auth/react';
 
 export default function LoginForm() {
   // Next navigation
@@ -22,7 +23,11 @@ export default function LoginForm() {
   // On submit logic
   async function onSubmit(data: FieldValues) {
         try {
-            const res = await login(data)
+            const res = await signIn('dotnet-identity', {
+                ...data,
+                redirect: true,
+                callbackUrl: '/'
+            });
 
             if(res?.error) {
                 throw res.error;
