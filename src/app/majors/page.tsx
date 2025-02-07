@@ -1,7 +1,12 @@
-import React from 'react'
+import React from "react";
+import MajorHeader from "./MajorHeader";
+import MajorCard from "./MajorCard";
 
 export default function Listings() {
   return (
-    <div>Majors list here</div>
-  )
+    <div className=" mb-10">
+      <MajorHeader />
+      <MajorCard />
+    </div>
+  );
 }

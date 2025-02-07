@@ -2,24 +2,25 @@
 
 import { useRouter } from 'next/navigation';
 import React from 'react'
-import { AiFillBackward, AiOutlineArrowLeft } from 'react-icons/ai'
+import { GoArrowLeft } from 'react-icons/go';
 
-type Props = {
-    url: string
-}
+// type Props = {
+//     url: string
+// }
 
-export default function BackButton({url}: Props) {
+
+export default function BackButton() {
 
     const router = useRouter();
 
     // Go back to a specific page
     async function goBack() {
-        router.push(url);
+        router.back();
     }
 
   return (
     <div className='mb-5'>
-        <AiOutlineArrowLeft size={25} className='link' onClick={goBack}/>
+        <GoArrowLeft size={30} className='link text-gray-500 hover:text-black' onClick={goBack}/>
     </div>
   )
 }

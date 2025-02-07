@@ -1,8 +1,11 @@
 /* Main layout style using Tailwind CSS*/
+@import url('https://fonts.googleapis.com/css2?family=Righteous&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
 .body {
-    @apply w-full h-full overflow-hidden;
+    @apply w-full h-full;
 }
 
 .main {
-    @apply container mx-auto px-5 pt-10;
+    @apply container mx-auto px-14 pt-10 font-poppins;
 }
