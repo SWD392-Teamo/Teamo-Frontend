@@ -7,9 +7,9 @@ import SearchBar from "../components/SearchBar";
 export default function MajorHeader() {
   return (
     <div>
-      <BackButton />
-      <div className="mt-3">
-        <h1 className="text-3xl font-semibold text-black">Choose Major</h1>
+      <BackButton url="/" />
+      <div className="">
+        <h1 className="page-title">Choose Major</h1>
       </div>
       <div className="my-10">
         <SearchBar />

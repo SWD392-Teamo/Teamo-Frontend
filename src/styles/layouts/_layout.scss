@@ -9,3 +9,11 @@
 .main {
     @apply container mx-auto px-14 pt-10 font-poppins flex-grow;
 }
+
+.page-title {
+    @apply text-3xl font-semibold text-black mt-3;
+}
+
+.subject-back-text {
+    @apply text-2xl font-semibold text-black;
+}

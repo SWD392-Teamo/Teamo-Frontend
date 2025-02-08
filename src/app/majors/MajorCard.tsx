@@ -5,21 +5,22 @@ import { useState } from "react";
 import { FaChevronDown } from "react-icons/fa";
 
 const Home: React.FC = () => {
-  const majors: string[] = [
-    "Software Engineer",
-    "Artificial Intelligence",
-    "International Business",
-    "Digital Marketing",
-    "Graphic Design",
-    "Software Engineer",
-    "Artificial Intelligence",
-    "International Business",
-    "Digital Marketing",
-    "Graphic Design",
-    "Software Engineer",
-    "Artificial Intelligence",
-    "International Business",
-    "Digital Marketing",
+  const majors = [
+    { title: "Software Engineer", link: "/se/subjects" },
+    { title: "Artificial Intelligence", link: "/ai/subjects" },
+    { title: "International Business", link: "/ib/subjects" },
+    { title: "Digital Marketing", link: "/mkt/subjects" },
+    { title: "Graphic Design", link: "/gd/subjects" },
+    { title: "Software Engineer", link: "/se/subjects" },
+    { title: "Artificial Intelligence", link: "/ai/subjects" },
+    { title: "International Business", link: "/ib/subjects" },
+    { title: "Digital Marketing", link: "/mkt/subjects" },
+    { title: "Graphic Design", link: "/gd/subjects" },
+    { title: "Software Engineer", link: "/se/subjects" },
+    { title: "Artificial Intelligence", link: "/ai/subjects" },
+    { title: "International Business", link: "/ib/subjects" },
+    { title: "Digital Marketing", link: "/mkt/subjects" },
+    { title: "Graphic Design", link: "/gd/subjects" },
   ];
 
   const [visibleMajors, setVisibleMajors] = useState<number>(6);
@@ -38,7 +39,7 @@ const Home: React.FC = () => {
 
       <div className="grid grid-cols-3 gap-6 ">
         {majors.slice(0, visibleMajors).map((major) => (
-          <MajorCard key={major} title={major} />
+          <MajorCard key={major.title} title={major.title} link={major.link} />
         ))}
       </div>
 
