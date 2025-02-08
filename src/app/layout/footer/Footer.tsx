@@ -4,7 +4,7 @@ import { LiaApple, LiaGooglePlay } from "react-icons/lia";
 
 export default async function Footer() {
   return (
-    <div>
+    <div className="">
       <footer className="bg-white border border-gray-200 flex flex-wrap justify-evenly items-center ">
         <div className="my-4">
           <FooterSection
