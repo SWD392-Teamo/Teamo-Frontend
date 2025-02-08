@@ -3,6 +3,7 @@ import "./globals.css";
 import "../styles/main.scss"
 import Header from "./layout/header/Header";
 import ToasterProvider from "./providers/ToastProvider";
+import Footer from "./layout/footer/Footer";
 
 export const metadata: Metadata = {
   title: "Teamo",
@@ -22,6 +23,7 @@ export default function RootLayout({
         <main className='main'>
             {children}
         </main>
+        <Footer/>
       </body>
     </html>
   );

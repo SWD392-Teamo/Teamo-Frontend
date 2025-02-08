@@ -15,8 +15,11 @@ export default function Logo() {
     }
 
     return (
-        <div onClick={doReset} className='flex items-center text-3xl text-logo cursor-pointer font-righteous'>
+        <div className='w-1/5'>
+            <div onClick={doReset} className='flex align-middle justify-self-start items-center text-4xl text-logo cursor-pointer font-righteous'>
             <div>Teamo</div>
         </div>
+        </div>
+        
     )
 }
