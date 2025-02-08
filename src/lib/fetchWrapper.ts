@@ -1,3 +1,6 @@
+import { auth } from "../auth";
+
+
 const baseUrl = process.env.API_URL;
 
 // GET request
@@ -50,11 +53,20 @@ async function del(url: string) {
 }
 
 async function getHeaders() {
+
+    // Get session from next auth session
+    const session = await auth();
+
     // Set header attributes
     const headers: Record<string, string> = {
         'Content-Type': 'application/json',
-    };
+    } as any;
 
+    // If the session has token then added Authorization header with the token as value
+    if (session?.accessToken) {
+        headers.Authorization = 'Bearer ' + session.accessToken
+    }
+    
     return headers;
 }
 

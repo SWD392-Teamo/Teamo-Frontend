@@ -38,6 +38,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     })
   ],
   callbacks: {
+    // Used for protecting routes in the middleware
     async authorized({auth}) {
       return !!auth
     },
@@ -65,7 +66,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
 
       return session;
-    },
+    }
+  },
+  pages: {
+    // Specify the next app login page
+    signIn: '/auth/login',  
   },
   secret: process.env.NEXTAUTH_SECRET
 })
