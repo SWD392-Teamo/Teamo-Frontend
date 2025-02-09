@@ -1,0 +1,12 @@
+/* Form field style using Tailwind CSS*/
+.field {
+    @apply text-grey text-xl font-semibold;
+
+    &:hover {
+        @apply text-darkgrey;
+    }
+
+    &:focus {
+        @apply text-primary;
+    }
+}

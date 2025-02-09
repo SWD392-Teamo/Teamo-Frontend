@@ -1,5 +1,11 @@
+'use client'
+
+import Title from "./components/Title";
+
 export default function Home() {
   return (
-    <h1 className="text-3xl">Teamo</h1>
+    <div>
+      <Title title='Teamo'/>
+    </div> 
   );
 }
