@@ -5,7 +5,6 @@ import React from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
 import { useRouter } from 'next/navigation';
 import Input from '@/app/components/Input';
-import { login } from '@/app/actions/authActions';
 import toast from 'react-hot-toast';
 import { AiFillGoogleCircle } from 'react-icons/ai';
 import { signIn } from 'next-auth/react';
@@ -15,7 +14,7 @@ export default function LoginForm() {
   const router = useRouter();
 
   // Set up form state
-  const {control, handleSubmit, setFocus, reset, 
+  const {control, handleSubmit,
         formState: {isSubmitting, isValid}} = useForm({
             mode: 'onTouched'
         });

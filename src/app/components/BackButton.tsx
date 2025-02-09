@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import React from 'react'
-import { AiFillBackward, AiOutlineArrowLeft } from 'react-icons/ai'
+import { AiOutlineArrowLeft } from 'react-icons/ai'
 
 type Props = {
     url: string

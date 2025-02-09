@@ -38,11 +38,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     })
   ],
   callbacks: {
-    // Used for protecting routes in the middleware
-    async authorized({auth}) {
-      return !!auth
-    },
-
     // Populate session object with username
     // Handle the JWT callback
     async jwt({ token, user }) {

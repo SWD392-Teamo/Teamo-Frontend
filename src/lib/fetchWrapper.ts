@@ -1,4 +1,4 @@
-import { auth } from "../auth";
+import { auth } from "@/auth";
 
 
 const baseUrl = process.env.API_URL;
@@ -60,7 +60,7 @@ async function getHeaders() {
     // Set header attributes
     const headers: Record<string, string> = {
         'Content-Type': 'application/json',
-    } as any;
+    } as Record<string, string>;
 
     // If the session has token then added Authorization header with the token as value
     if (session?.accessToken) {
@@ -80,6 +80,7 @@ async function handleResponse(response: Response) {
         data = JSON.parse(text);
     } catch (error) {
         data = text;
+        console.log(error);
     }
 
     if (response.ok) {
