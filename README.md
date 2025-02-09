@@ -31,4 +31,4 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 
 ## Deploy on Vercel
 
-App is deployed on vercel at [https://teamo-app.vercel.app](teamo-app.vercel.app)
+### App is deployed on vercel at [teamo-app.vercel.app](https://teamo-app.vercel.app)
