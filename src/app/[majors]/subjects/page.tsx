@@ -4,6 +4,7 @@ import React from "react";
 import SubjectCard from "./SubjectCard";
 
 export default async function Listings({ params }: { params: { majors: string } }) {
+  console.log ("params:", params);
   const subjectData: Record<string, string> = {
     se: "Software Engineer",
     ai: "Artificial Intelligence",
