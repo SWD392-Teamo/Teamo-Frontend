@@ -1,8 +1,8 @@
 "use client";
 
-import { Button } from "flowbite-react";
-import React from "react";
-import { AiOutlineLogin } from "react-icons/ai";
+import { Button } from 'flowbite-react'
+import React from 'react'
+import { AiOutlineLogin } from 'react-icons/ai'
 
 export default function LoginButton() {
   return (
