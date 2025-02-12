@@ -22,9 +22,9 @@ export const useMajorStore = create<State & Actions>((set) => ({
 
     setData: (data: PagedResult<Major>) => {
         set(() => ({
-            majors: data.results,
-            totalCount: data.totalCount,
-            pageCount: data.pageCount
+            majors: data.data,
+            totalCount: data.count,
+            pageCount: data.pageSize
         }))
     }
 }))

@@ -13,6 +13,7 @@ import MajorCard from "./MajorCard";
 export default function Listings() {
   const [loading, setLoading] = useState(true);
   const [visibleMajors, setVisibleMajors] = useState<number>(6);
+  const [search, setSearch] = useState<string>("");
 
 
   const params = useParamsStore(
@@ -34,18 +35,23 @@ export default function Listings() {
   const setData = useMajorStore((state) => state.setData);
   const setParams = useParamsStore((state) => state.setParams);
 
-  const url = queryString.stringifyUrl({ url: "", query: params });
-
-  function setPageIndex(pageIndex: number) {
-    setParams({ pageIndex });
-  }
+  const url = queryString.stringifyUrl({
+    url: "",
+    query: {
+      ...params,
+      ...(search.trim() ? { search } : {}),
+    },
+  });
 
   useEffect(() => {
     getData(url).then((data) => {
-      setData(data);
+      console.log("data", data);
+      setData(data.data);
       setLoading(false);
     });
   }, [url, setData]);
+
+  console.log(data);
 
 
   const handleSeeMore = () => {
@@ -56,7 +62,7 @@ export default function Listings() {
 
   return (
     <div className=" mb-10">
-      <MajorHeader />
+      <MajorHeader setSearch={setSearch} />
       <div>
         <div className="grid grid-cols-3 gap-6 ">
           {data.majors && data.majors.slice(0, visibleMajors).map((major) => (

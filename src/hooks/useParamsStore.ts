@@ -3,7 +3,7 @@ import { create } from "zustand"
 type State = {
     pageIndex: number
     pageSize: number
-    search: string
+    search?: string
     majorId?: number
 }
 
@@ -15,7 +15,6 @@ type Actions = {
 const initialState: State = {
     pageIndex: 1,
     pageSize: 12,
-    search: '',
 }
 
 export const useParamsStore = create<State & Actions>()((set) => ({
