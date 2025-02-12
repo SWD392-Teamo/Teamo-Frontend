@@ -1,9 +1,7 @@
 import { auth } from '@/auth';
-import { auth } from '@/auth';
 import LoginButton from './LoginButton';
 import Logo from './Logo';
 import NavLinks from './NavLinks';
-import LogoutButton from './LogoutButton';
 import LogoutButton from './LogoutButton';
 
 export default async function Header() {
