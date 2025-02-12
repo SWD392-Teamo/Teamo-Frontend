@@ -1,35 +1,19 @@
-"use client";
-
-import MajorCard from "@/app/components/MajorCard";
-import { useState } from "react";
-import { FaChevronDown } from "react-icons/fa";
-import { MajorList } from "../models/Major";
-
-const Home: React.FC<MajorList> = ({ majors }) => {
-  const [visibleMajors, setVisibleMajors] = useState<number>(6);
-
-  const handleSeeMore = () => {
-    setVisibleMajors((prev) => prev + 6);
-  };
-
-  return (
-    <div>
-      <div className="grid grid-cols-3 gap-6 ">
-        {majors.slice(0, visibleMajors).map((major) => (
-          <MajorCard key={major.id} {...major} />
-        ))}
-      </div>
-
-      {visibleMajors < majors.length && (
-      <div className="mt-8 flex justify-center">
-        <button className="text-logo text-lg hover:underline flex flex-row items-center gap-2" onClick={handleSeeMore}>
-          <div>See More</div>
-          <FaChevronDown color="gray" />
+import { Major } from "@/types";
+import Link from "next/link";
+ 
+const MajorCard: React.FC<{major: Major}> = ({ major }) => {
+  const link = `/${major.code}/subjects`;
+   return (
+     <div className="border border-gray-200 rounded-lg shadow-sm p-14 flex flex-col items-start justify-between text-center hover:shadow-lg transition">
+       <h2 className="text-xl font-semibold text-black">{major.name}</h2>
+       <Link href={link}>
+        <button className="mt-4 px-6 py-2 text-base text-logo border border-logo rounded-full hover:bg-blue-100 font-semibold">
+          Details
         </button>
-      </div>
-      )}
-    </div>
-  );
-};
-
-export default Home;
+      </Link>
+     </div>
+   );
+ };
+ 
+ export default MajorCard;
+ 

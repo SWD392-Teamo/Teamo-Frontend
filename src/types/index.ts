@@ -11,3 +11,10 @@ export type Subject = {
     description: string
     createdDate: string
 }
+
+export type Major = {
+    id: number;
+    code: string;
+    name: string;
+    createdDate: Date;
+}
