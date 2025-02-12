@@ -17,11 +17,6 @@ export default async function Header() {
                 ) : (
                     <LoginButton />
                 )}
-                {session ? (
-                    <LogoutButton />
-                ) : (
-                    <LoginButton />
-                )}
             </div>
             <div className='flex justify-center items-center py-4'>
                 <NavLinks />
