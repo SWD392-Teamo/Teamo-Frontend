@@ -22,9 +22,9 @@ export const useSubjectStore = create<State & Actions>((set) => ({
 
     setData: (data: PagedResult<Subject>) => {
         set(() => ({
-            subjects: data.results,
-            totalCount: data.totalCount,
-            pageCount: data.pageCount
+            subjects: data.data,
+            totalCount: data.count,
+            pageCount: data.pageSize
         }))
     }
 }))

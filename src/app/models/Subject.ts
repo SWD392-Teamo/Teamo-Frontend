@@ -1,5 +1,5 @@
+import { Major } from "@/types";
 import { Field } from "./Field";
-import { Major } from "./Major";
 
 export interface Subject {
    id: number;

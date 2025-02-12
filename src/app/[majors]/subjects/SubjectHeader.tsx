@@ -1,6 +1,6 @@
 import BackButton from "@/app/components/BackButton";
 import SearchBar from "@/app/components/SearchBar";
-import { Major } from "@/app/models/Major";
+import { Major } from "@/types";
 import React from "react";
 
 const Home: React.FC<Major> = ({ name }) => {
@@ -15,7 +15,7 @@ const Home: React.FC<Major> = ({ name }) => {
         <h1 className="page-title">Choose Subjects</h1>
       </div>
       <div className="my-10">
-        <SearchBar />
+        <SearchBar setSearch={() => {}} />
       </div>
     </div>
   );
