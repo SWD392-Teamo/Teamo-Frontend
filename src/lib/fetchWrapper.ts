@@ -80,11 +80,10 @@ async function handleResponse(response: Response) {
         data = JSON.parse(text);
     } catch (error) {
         data = text;
-        console.log(error);
     }
 
     if (response.ok) {
-        return { data: data || response.statusText };
+        return data || response.statusText;
     } else {
         const error = {
             status: response.status,
