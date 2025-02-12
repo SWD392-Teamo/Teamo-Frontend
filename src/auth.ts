@@ -21,14 +21,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           return null; 
         }
 
-        console.log(credentials)
         // Add logic here to look up the user from the credentials supplied
         const response = await fetchWrapper.post('account/login', {
           email: credentials.email,
           password: credentials.password
         })
-      
-        console.log(response)
 
         if (response) {
           // Any object returned will be saved in `user` property of the JWT
