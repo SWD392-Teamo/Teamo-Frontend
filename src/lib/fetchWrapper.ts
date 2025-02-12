@@ -83,7 +83,7 @@ async function handleResponse(response: Response) {
     }
 
     if (response.ok) {
-        return {data: data || response.statusText};
+        return data || response.statusText;
     } else {
         const error = {
             status: response.status,

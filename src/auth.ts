@@ -30,10 +30,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       
         console.log(response)
 
-        if (response && response.data) {
+        if (response) {
           // Any object returned will be saved in `user` property of the JWT
-          console.log(response.data)
-          return response.data
+          return response
         } else {
           // If you return null then an error will be displayed advising the user to check their details.
           return null
