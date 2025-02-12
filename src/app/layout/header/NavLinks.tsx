@@ -5,9 +5,9 @@ export default function NavLinks() {
   return (
     <div className='flex justify-between gap-8'>
         <Link href='/majors' className='link'>Major</Link>
-        <Link href='/groups' className='link'>Your Group</Link>
+        <Link href='/groups' className='link'>Groups</Link>
         <Link href='/groups/details/1' className='link'>Profile</Link>
-        <Link href='/admin' className='link'>Admin</Link>
+        <Link href='/applications' className='link'>Applications</Link>
     </div>
   )
 }
