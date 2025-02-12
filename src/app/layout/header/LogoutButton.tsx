@@ -1,24 +1,23 @@
-'use client';
+'use client'
 
-import { logout } from '@/app/actions/authActions';
-import { signOut } from '@/auth';
-import { Button } from 'flowbite-react';
-import React from 'react';
-import { AiOutlineLogout } from 'react-icons/ai';
+import { logout } from '@/app/actions/authActions'
+import { Button } from 'flowbite-react'
+import { signOut } from 'next-auth/react'
+import React from 'react'
+import { AiOutlineLogout } from 'react-icons/ai'
 
 export default function LogoutButton() {
-  function onLogout() {
-    logout().then(() => {
-      signOut();
-    });
-  }
+    async function onLogout() {
+        await logout();
+        signOut({redirect: true, callbackUrl: '/auth/login'});
+    }
 
   return (
     <Button className="btn btn--secondary--outline" onClick={onLogout}>
-      <div className="btn--icon">
-        <AiOutlineLogout size={20} />
-        <div>Logout</div>
-      </div>
+        <div className="btn--icon">
+            <AiOutlineLogout size={20}/>
+            <div>Logout</div>
+        </div>
     </Button>
-  );
+  )
 }

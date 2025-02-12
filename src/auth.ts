@@ -21,15 +21,18 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           return null; 
         }
 
+        console.log(credentials)
         // Add logic here to look up the user from the credentials supplied
         const response = await fetchWrapper.post('account/login', {
           email: credentials.email,
           password: credentials.password
         })
-  
-        if (response && response.data) {
+      
+        console.log(response)
+
+        if (response) {
           // Any object returned will be saved in `user` property of the JWT
-          return response.data
+          return response
         } else {
           // If you return null then an error will be displayed advising the user to check their details.
           return null
@@ -47,6 +50,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.expires = new Date(Date.parse(user.expires)); // Store expiry as a timestamp
         token.email = user.email!;
         token.role = user.role;
+        token.userId = user.userId;
       }
 
       return token;
@@ -54,6 +58,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     
     async session({ session, token }) {
       if (token) {
+        session.user.userId = token.userId;
         session.user.email = token.email;
         session.user.role = token.role;
         session.accessToken = token.accessToken;
