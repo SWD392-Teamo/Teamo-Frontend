@@ -1,7 +1,8 @@
 export type PagedResult<T> = {
-    results: T[]
-    pageCount: number
-    totalCount: number
+    data: T[]
+    pageIndex: number
+    pageSize: number
+    count: number
 }
 
 export type Subject = {
@@ -10,4 +11,11 @@ export type Subject = {
     name: string
     description: string
     createdDate: string
+}
+
+export type Major = {
+    id: number;
+    code: string;
+    name: string;
+    createdDate: Date;
 }

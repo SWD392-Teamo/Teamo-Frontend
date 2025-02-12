@@ -2,7 +2,9 @@
 
 import { usePathname } from 'next/navigation';
 import { useRouter } from 'next/navigation';
-import React from 'react'
+import React from 'react';
+import '@/app/globals.css';
+
 
 export default function Logo() {
     const router = useRouter();
@@ -13,8 +15,11 @@ export default function Logo() {
     }
 
     return (
-        <div onClick={doReset} className='flex items-center text-3xl font-bold text-primary cursor-pointer'>
+        <div className='w-1/5'>
+            <div onClick={doReset} className='flex align-middle justify-self-start items-center text-4xl text-logo cursor-pointer font-righteous'>
             <div>Teamo</div>
         </div>
+        </div>
+        
     )
 }
