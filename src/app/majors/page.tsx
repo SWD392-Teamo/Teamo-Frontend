@@ -9,6 +9,7 @@ import queryString from "query-string";
 import { getData } from "../actions/majorActions";
 import { FaChevronDown } from "react-icons/fa";
 import MajorCard from "./MajorCard";
+import Loading from "../components/Loading";
 
 export default function Listings() {
   const [loading, setLoading] = useState(true);
@@ -20,7 +21,7 @@ export default function Listings() {
     useShallow((state) => ({
       pageIndex: state.pageIndex,
       pageSize: state.pageSize,
-      search: state.search,
+      // search: state.search,
     }))
   );
 
@@ -58,7 +59,7 @@ export default function Listings() {
     setVisibleMajors((prev) => prev + 6);
   };
 
-  if (loading) return <h3>Loading...</h3>;
+  if (loading) return <Loading />;
 
   return (
     <div className=" mb-10">

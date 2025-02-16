@@ -11,7 +11,8 @@ import { getData } from "@/app/actions/subjectAction";
 import SubjectCard from "./SubjectCard";
 import { useSubjectStore } from "@/hooks/useSubjectStore";
 import { FaChevronDown } from "react-icons/fa";
-import { useRouter } from "next/router";
+import SubjectHeader from "./SubjectHeader";
+import Loading from "@/app/components/Loading";
 
 export default function Listings() {
   const { selectedMajor } = useMajorStore(
@@ -20,20 +21,18 @@ export default function Listings() {
     }))
   );
 
-  
-
   console.log("selectedMajor", selectedMajor)
 
   const [loading, setLoading] = useState(true);
-  const [visibleMajors, setVisibleMajors] = useState<number>(8);
+  const [visibleSubject, setVisibleSubject] = useState<number>(8);
   const [search, setSearch] = useState<string>("");
-
+  
   const params = useParamsStore(
     useShallow((state) => ({
       pageIndex: state.pageIndex,
       pageSize: state.pageSize,
       majorId: selectedMajor?.id,
-      // search: state.search,
+      search: state.search,
     }))
   );
 
@@ -69,33 +68,22 @@ export default function Listings() {
   console.log(data);
 
   const handleSeeMore = () => {
-    setVisibleMajors((prev) => prev + 8);
+    setVisibleSubject((prev) => prev + 8);
   };
 
-  if (loading) return <h3>Loading...</h3>;
+  if (loading) return <Loading/>;
 
   return (
     <div className="mb-10">
-      <div className="flex items-center">
-        <BackButton url="/majors" />
-        <h1 className="subject-back-text ml-4">
-          {selectedMajor && selectedMajor.name}
-        </h1>
-      </div>
-      <div className="">
-        <h1 className="page-title">Choose Subjects</h1>
-      </div>
-      <div className="my-10">
-        <SearchBar setSearch={setSearch} />
-      </div>
+      {selectedMajor && <SubjectHeader major={selectedMajor} setSearch={setSearch}/>}
       <div>
-        <div className="grid grid-cols-3 gap-6 ">
-          {data.subjects && data.subjects.slice(0, visibleMajors).map((subject) => (
+        <div className="grid grid-cols-4 gap-6 ">
+          {data.subjects && data.subjects.slice(0, visibleSubject).map((subject) => (
             <SubjectCard key={subject.id} subject={subject} />
           ))}
         </div>
 
-        {data.subjects && visibleMajors < data.subjects.length && (
+        {data.subjects && visibleSubject < data.subjects.length && (
           <div className="mt-8 flex justify-center">
             <button
               className="text-logo text-lg hover:underline flex flex-row items-center gap-2"
