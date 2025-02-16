@@ -1,67 +1,16 @@
-"use client";
+import { Subject } from "@/types";
 
-import SubjectCard from "@/app/components/SubjectCard";
-import { useState } from "react";
-import { FaChevronDown } from "react-icons/fa";
-
-const Home: React.FC = () => {
-  const subjects = [
-    { title: "EXE101", link: "EXE101/groups" },
-    { title: "SWP391", link: "SWP391/groups" },
-    { title: "SWD392", link: "SWD392/groups" },
-    { title: "SSG104", link: "SSG104/groups" },
-    { title: "EXE201", link: "EXE201/groups" },
-    { title: "PRM392", link: "PRM392/groups" },
-    { title: "IOT102", link: "IOT102/groups" },
-    { title: "SEP490", link: "SEP490/groups" },
-    { title: "EXE101", link: "EXE101/groups" },
-    { title: "SWP391", link: "SWP391/groups" },
-    { title: "SWD392", link: "SWD392/groups" },
-    { title: "SSG104", link: "SSG104/groups" },
-    { title: "EXE201", link: "EXE201/groups" },
-    { title: "PRM392", link: "PRM392/groups" },
-    { title: "IOT102", link: "IOT102/groups" },
-    { title: "SEP490", link: "SEP490/groups" },
-    { title: "EXE101", link: "EXE101/groups" },
-    { title: "SWP391", link: "SWP391/groups" },
-    { title: "SWD392", link: "SWD392/groups" },
-    { title: "SSG104", link: "SSG104/groups" },
-    { title: "EXE201", link: "EXE201/groups" },
-    { title: "PRM392", link: "PRM392/groups" },
-    { title: "IOT102", link: "IOT102/groups" },
-    { title: "SEP490", link: "SEP490/groups" },
-  ];
-
-  const [visibleMajors, setVisibleMajors] = useState<number>(8);
-
-  const handleSeeMore = () => {
-    setVisibleMajors((prev) => prev + 6);
-  };
-
+const SubjectCard: React.FC<{ subject: Subject }> = ({ subject }) => {
   return (
-    <div>
-      <div className="flex flex-row-reverse">
-        <select className=" border border-gray-300 rounded-lg px-4 py-2 text-black mb-4">
-          <option>All Subjects</option>
-        </select>
-      </div>
-
-      <div className="grid grid-cols-4 gap-6 ">
-        {subjects.slice(0, visibleMajors).map((subject) => (
-          <SubjectCard key={subject.title} title={subject.title} link={subject.link} />
-        ))}
-      </div>
-
-      {visibleMajors < subjects.length && (
-      <div className="mt-8 flex justify-center">
-        <button className="text-logo text-lg hover:underline flex flex-row items-center gap-2" onClick={handleSeeMore}>
-          <div>See More</div>
-          <FaChevronDown color="gray" />
-        </button>
-      </div>
-      )}
+    <div className="border border-gray-200 rounded-lg shadow-sm p-10 flex flex-col items-start justify-between text-center hover:shadow-lg transition">
+      <h2 className="text-xl font-semibold text-black">{subject.name}</h2>
+      {/* <Link href={link}> */}
+      <button className="mt-4 px-6 py-2 text-base text-logo border border-logo rounded-full hover:bg-blue-100 font-semibold">
+        Details
+      </button>
+      {/* </Link> */}
     </div>
   );
 };
 
-export default Home;
+export default SubjectCard
