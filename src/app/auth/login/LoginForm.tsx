@@ -10,6 +10,7 @@ import { AiFillGoogleCircle } from 'react-icons/ai';
 import { signIn } from 'next-auth/react';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { firebaseAuth } from '../../../../firebase';
+import { useLoading } from '@/providers/LoadingProvider';
 
 export default function LoginForm() {
   // Next navigation
