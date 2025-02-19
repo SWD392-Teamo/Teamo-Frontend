@@ -22,7 +22,12 @@ export type Major = {
 
 export type Skill = {
     id: number;
-    code: string;
     name: string;
-    createdDate: Date;
+    type: string;
+}
+
+export type Field = {
+    id: number;
+    name: string;
+    description: string;
 }
