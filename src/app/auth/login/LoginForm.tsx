@@ -4,7 +4,7 @@ import { Button } from 'flowbite-react';
 import React from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
 import { useRouter } from 'next/navigation';
-import Input from '@/app/components/Input';
+import Input from '@/components/Input';
 import toast from 'react-hot-toast';
 import { AiFillGoogleCircle } from 'react-icons/ai';
 import { signIn } from 'next-auth/react';

@@ -1,5 +1,5 @@
-import BackButton from "@/app/components/BackButton";
-import SearchBar from "@/app/components/SearchBar";
+import BackButton from "@/components/BackButton";
+import SearchBar from "@/components/SearchBar";
 import { Major } from "@/types";
 import React from "react";
 

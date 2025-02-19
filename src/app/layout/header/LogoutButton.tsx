@@ -1,6 +1,6 @@
 'use client'
 
-import { logout } from '@/app/actions/authActions'
+import { logout } from '@/actions/authActions'
 import { Button } from 'flowbite-react'
 import { signOut } from 'next-auth/react'
 import React from 'react'

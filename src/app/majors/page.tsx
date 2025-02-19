@@ -6,10 +6,10 @@ import { useParamsStore } from "@/hooks/useParamsStore";
 import { useShallow } from "zustand/shallow";
 import { useMajorStore } from "@/hooks/useMajorStore";
 import queryString from "query-string";
-import { getData } from "../actions/majorActions";
+import { getData } from "../../actions/majorActions";
 import { FaChevronDown } from "react-icons/fa";
 import MajorCard from "./MajorCard";
-import Loading from "../components/Loading";
+import Loading from "../../components/Loading";
 
 export default function Listings() {
   const [loading, setLoading] = useState(true);

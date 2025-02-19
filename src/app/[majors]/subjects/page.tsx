@@ -1,18 +1,18 @@
 'use client'
 
-import BackButton from "@/app/components/BackButton";
-import SearchBar from "@/app/components/SearchBar";
+import BackButton from "@/components/BackButton";
+import SearchBar from "@/components/SearchBar";
 import React, { useEffect, useMemo, useState } from "react";
 import { useMajorStore } from "@/hooks/useMajorStore";
 import { useParamsStore } from "@/hooks/useParamsStore";
 import { useShallow } from "zustand/shallow";
 import queryString from "query-string";
-import { getData } from "@/app/actions/subjectAction";
+import { getData } from "@/actions/subjectAction";
 import SubjectCard from "./SubjectCard";
 import { useSubjectStore } from "@/hooks/useSubjectStore";
 import { FaChevronDown } from "react-icons/fa";
 import SubjectHeader from "./SubjectHeader";
-import Loading from "@/app/components/Loading";
+import Loading from "@/components/Loading";
 
 export default function Listings() {
   const { selectedMajor } = useMajorStore(

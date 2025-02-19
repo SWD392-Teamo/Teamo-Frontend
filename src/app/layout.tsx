@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import "../styles/main.scss"
 import Header from "./layout/header/Header";
-import ToasterProvider from "./providers/ToastProvider";
+import ToasterProvider from "@/providers/ToastProvider";
 import Footer from "./layout/footer/Footer";
 
 export const metadata: Metadata = {

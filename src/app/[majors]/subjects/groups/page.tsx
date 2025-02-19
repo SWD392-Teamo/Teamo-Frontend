@@ -1,5 +1,5 @@
-import BackButton from '@/app/components/BackButton';
-import SearchBar from '@/app/components/SearchBar';
+import BackButton from '@/components/BackButton';
+import SearchBar from '@/components/SearchBar';
 import { GroupList } from '@/app/interfaces/Group';
 import React from 'react'
 

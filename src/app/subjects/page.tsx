@@ -6,8 +6,8 @@ import React, { useEffect, useState } from 'react'
 import { useShallow } from 'zustand/shallow';
 import { Subject } from '@/types';
 import queryString from 'query-string';
-import { getData } from '../actions/subjectAction';
-import Paginator from '../components/Paginator';
+import { getData } from '../../actions/subjectAction';
+import Paginator from '../../components/Paginator';
 
 export default function Listings() {
   // Loading state
