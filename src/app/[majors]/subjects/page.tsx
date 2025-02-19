@@ -1,7 +1,5 @@
 'use client'
 
-import BackButton from "@/components/BackButton";
-import SearchBar from "@/components/SearchBar";
 import React, { useEffect, useMemo, useState } from "react";
 import { useMajorStore } from "@/hooks/useMajorStore";
 import { useParamsStore } from "@/hooks/useParamsStore";
@@ -12,7 +10,8 @@ import SubjectCard from "./SubjectCard";
 import { useSubjectStore } from "@/hooks/useSubjectStore";
 import { FaChevronDown } from "react-icons/fa";
 import SubjectHeader from "./SubjectHeader";
-import Loading from "@/components/Loading";
+import { useLoading } from "@/providers/LoadingProvider";
+import toast from "react-hot-toast";
 
 export default function Listings() {
   const { selectedMajor } = useMajorStore(
@@ -23,7 +22,7 @@ export default function Listings() {
 
   console.log("selectedMajor", selectedMajor)
 
-  const [loading, setLoading] = useState(true);
+  const { showLoading, hideLoading } = useLoading();
   const [visibleSubject, setVisibleSubject] = useState<number>(8);
   const [search, setSearch] = useState<string>("");
   
@@ -56,13 +55,18 @@ export default function Listings() {
   });
 
   useEffect(() => {
-    setLoading(true);
+    showLoading();
     getData(url).then((data) => {
-      console.log("Fetched data:", data);
+      console.log("data", data);
       setData(data);
-      setLoading(false);
+    })
+    .catch((error) => {
+      toast.error(error.status + ' ' + error.message);
+    })
+    .finally(() => {
+      hideLoading();
     });
-  }, [url, setData]); 
+  }, [url, setData, showLoading, hideLoading]);
   
 
   console.log(data);
@@ -70,8 +74,6 @@ export default function Listings() {
   const handleSeeMore = () => {
     setVisibleSubject((prev) => prev + 8);
   };
-
-  if (loading) return <Loading/>;
 
   return (
     <div className="mb-10">
