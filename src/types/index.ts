@@ -1,3 +1,5 @@
+import { Group } from './../models/Group';
+import { GroupPositionStatus, GroupStatus } from './enum';
 export type PagedResult<T> = {
     data: T[]
     pageIndex: number
@@ -30,4 +32,30 @@ export type Field = {
     id: number;
     name: string;
     description: string;
+}
+
+export type GroupPosition = {
+    id: string;
+    name: string;
+    count: number;
+    status: GroupPositionStatus;
+}
+
+export type GroupGeneral = {
+    id: number;
+    name: string;
+    title: string;
+    semesterName: string;
+    description: string;
+    createdAt: Date;
+    createdByUserName: string;
+    maxMember: number;
+    // groupMembers: [];
+    status: GroupStatus;
+    fieldName: string;
+    subjectCode: string;
+    totalMembers: number;
+    totalGroupPositions: number;
+    totalApplications: number;
+    groupPositions: GroupPosition[];
 }
