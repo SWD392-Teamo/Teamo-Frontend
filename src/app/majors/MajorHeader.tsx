@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import BackButton from "../components/BackButton";
-import SearchBar from "../components/SearchBar";
+import BackButton from "../../components/BackButton";
+import SearchBar from "../../components/SearchBar";
 
 export default function MajorHeader({ setSearch }: { setSearch: React.Dispatch<React.SetStateAction<string>> }) {
   return (

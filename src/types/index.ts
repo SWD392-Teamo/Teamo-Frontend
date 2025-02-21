@@ -19,3 +19,15 @@ export type Major = {
     name: string;
     createdDate: Date;
 }
+
+export type Skill = {
+    id: number;
+    name: string;
+    type: string;
+}
+
+export type Field = {
+    id: number;
+    name: string;
+    description: string;
+}

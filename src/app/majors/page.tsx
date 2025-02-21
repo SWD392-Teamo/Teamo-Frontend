@@ -6,13 +6,14 @@ import { useParamsStore } from "@/hooks/useParamsStore";
 import { useShallow } from "zustand/shallow";
 import { useMajorStore } from "@/hooks/useMajorStore";
 import queryString from "query-string";
-import { getData } from "../actions/majorActions";
+import { getData } from "../../actions/majorActions";
 import { FaChevronDown } from "react-icons/fa";
 import MajorCard from "./MajorCard";
-import Loading from "../components/Loading";
+import { useLoading } from "@/providers/LoadingProvider";
+import toast from "react-hot-toast";
 
 export default function Listings() {
-  const [loading, setLoading] = useState(true);
+  const { showLoading, hideLoading } = useLoading();
   const [visibleMajors, setVisibleMajors] = useState<number>(6);
   const [search, setSearch] = useState<string>("");
 
@@ -45,21 +46,24 @@ export default function Listings() {
   });
 
   useEffect(() => {
+    showLoading();
     getData(url).then((data) => {
       console.log("data", data);
       setData(data);
-      setLoading(false);
+    })
+    .catch((error) => {
+      toast.error(error.status + ' ' + error.message);
+    })
+    .finally(() => {
+      hideLoading();
     });
-  }, [url, setData]);
+  }, [url, setData, showLoading, hideLoading]);
 
   console.log(data);
-
 
   const handleSeeMore = () => {
     setVisibleMajors((prev) => prev + 6);
   };
-
-  if (loading) return <Loading />;
 
   return (
     <div className=" mb-10">

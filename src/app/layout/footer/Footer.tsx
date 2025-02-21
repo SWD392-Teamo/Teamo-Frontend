@@ -1,4 +1,4 @@
-import FooterSection from "@/app/components/FooterSection";
+import FooterSection from "@/components/FooterSection";
 import React from "react";
 import { LiaApple, LiaGooglePlay } from "react-icons/lia";
 

@@ -4,7 +4,7 @@ import Logo from "./Logo";
 import NavLinks from "./NavLinks";
 import LogoutButton from "./LogoutButton";
 import Image from "next/image";
-import NavDeco from "../../assets/NavDecor.png";
+import NavDeco from "@/assets/NavDecor.png";
 
 export default async function Header() {
   const session = await auth();

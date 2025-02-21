@@ -2,8 +2,8 @@
 
 import React from 'react'
 import LoginForm from './LoginForm'
-import Title from '@/app/components/Title'
-import BackButton from '@/app/components/BackButton'
+import Title from '@/components/Title'
+import BackButton from '@/components/BackButton'
 
 export default function page() {
   return (
