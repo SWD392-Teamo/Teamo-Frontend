@@ -1,6 +1,8 @@
 /* Main layout style using Tailwind CSS*/
 @import url('https://fonts.googleapis.com/css2?family=Righteous&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap');
+
 
 .body {
     @apply w-full h-full flex flex-col min-h-screen;
@@ -12,6 +14,14 @@
 
 .page-title {
     @apply text-3xl font-semibold text-black mt-3;
+}
+
+.page-subtitle {
+    @apply text-xl font-semibold text-black mt-1;
+}
+
+.page-description {
+    @apply text-lg font-normal text-black mt-1;
 }
 
 .subject-back-text {

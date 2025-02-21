@@ -87,7 +87,7 @@ export default function Listings() {
         <GroupHeader subject={selectedSubject} major={selectedMajor} setSearch={setSearch} />
       )}
       <div>
-        <div className="grid grid-cols-4 gap-6 ">
+        <div className="grid grid-cols-2 gap-6 ">
           {data.groups &&
             data.groups
               // .slice(0, visibleSubject)
