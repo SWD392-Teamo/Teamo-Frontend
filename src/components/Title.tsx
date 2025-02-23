@@ -7,7 +7,7 @@ type Props = {
 
 export default function Title({title, subtitle}: Props) {
   return (
-    <div className='text-start'>
+    <div className='text-start mb-5'>
         <div className='text-3xl font-bold text-secondary'>
             {title}
         </div>

@@ -5,5 +5,7 @@ module.exports = {
             fullUrl: true,
         },
     },
-    
+    images: {
+        domains: ['www.mgp.net.au']
+    },
 }

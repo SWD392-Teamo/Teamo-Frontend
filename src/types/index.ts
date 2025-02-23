@@ -31,3 +31,16 @@ export type Field = {
     name: string;
     description: string;
 }
+
+export type Application = {
+    id: number
+    groupId: number
+    groupName: string
+    studentName: string
+    studentEmail: string
+    imgUrl: string
+    requestTime: string
+    requestContent: string
+    groupPositionName: string
+    status: string
+  }
