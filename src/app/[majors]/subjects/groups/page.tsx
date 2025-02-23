@@ -3,7 +3,7 @@ import SearchBar from '@/components/SearchBar';
 import { GroupList } from '@/app/interfaces/Group';
 import React from 'react'
 
-export const Listings: React.FC<GroupList> = ({ subjects, groups }) => {  
+export const Listings: React.FC<GroupList> = ({ subjects, groups }) => {
   // const groupData: Record<string, string[]> = {
   //   EXE101: ["Group 1", "Group 2", "Group 3", "Group 4", "Group 1", "Group 2", "Group 3", "Group 4", "Group 1", "Group 2", "Group 3", "Group 4",],
   //   SWP391: ["Group 1", "Group 2", "Group 3", "Group 4", "Group 1", "Group 2", "Group 3", "Group 4", "Group 1", "Group 2", "Group 3", "Group 4",],
