@@ -24,6 +24,7 @@ module.exports = {
       fontFamily: {
         poppins: ["Poppins", "regular"],
         righteous: ["Righteous", "regular"],
+        beVietnam: ["Be Vietnam Pro", "regular"],
       },
     },
   },

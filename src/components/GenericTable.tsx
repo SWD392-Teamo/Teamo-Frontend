@@ -2,6 +2,7 @@ import { dateFormatter } from "@/utils/dateFormatter";
 import { Button } from "flowbite-react";
 import Image from "next/image";
 import React from "react";
+import MemberAvatar from "./MemberAvatar";
 
 // Define a type for action buttons
 type ActionButton = {
@@ -48,13 +49,7 @@ export default function GenericTable<T>({
                   } ${colIndex === columns.length - 1 ? "border-r" : "border-r-0"}`}
                 >
                   {column.header === "" ? (
-                    <Image
-                      src={String(item[column.key])}
-                      width={60}
-                      height={60}
-                      className="rounded-full"
-                      alt="image"
-                    />
+                    <MemberAvatar imgUrl={`${String(item[column.key])}`}/>
                   ) : column.header === "Date" ? (
                     dateFormatter(String(item[column.key]))
                   ) : column.header === "Action" && actions ? (
