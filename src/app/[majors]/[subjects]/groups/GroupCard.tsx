@@ -1,6 +1,5 @@
 import { useMajorStore } from "@/hooks/useMajorStore";
 import { useSubjectStore } from "@/hooks/useSubjectStore";
-import { GroupGeneral, Subject } from "@/types";
 import Link from "next/link";
 import { useShallow } from "zustand/shallow";
 import defaultAvatar from "@/assets/defaultAvatar.jpg";
@@ -8,20 +7,28 @@ import Image from "next/image";
 import LeaderAvatar from "@/components/UserAvatar";
 import MemberAvatar from "@/components/MemberAvatar";
 import PositionCard from "./PositionCard";
+import { useGroupStore } from "@/hooks/useGroupStore";
+import { Group } from "@/types";
 
-const GroupCard: React.FC<{ group: GroupGeneral }> = ({ group }) => {
-  //   const { selectedMajor } = useMajorStore(
-  //     useShallow((state) => ({
-  //       selectedMajor: state.selectedMajor,
-  //     }))
-  //   );
+const GroupCard: React.FC<{ group: Group }> = ({ group }) => {
+  const { selectedMajor } = useMajorStore(
+    useShallow((state) => ({
+      selectedMajor: state.selectedMajor,
+    }))
+  );
 
-  // const link = `/${selectedMajor?.code}/${subject.code}/groups`;
-  // const { setSelectedSubject } = useSubjectStore();
+  const { selectedSubject } = useSubjectStore(
+    useShallow((state) => ({
+      selectedSubject: state.selectedSubject,
+    }))
+  );
 
-  // const handleDetailsClick = () => {
-  //   setSelectedSubject(subject);
-  // }
+  const link = `/${selectedMajor?.code}/${selectedSubject?.code}/groups/details/${group.id}`;
+  const { setSelectedGroup } = useGroupStore();
+
+  const handleDetailsClick = () => {
+    setSelectedGroup(group);
+  };
 
   const leader = group.groupMembers.find((member) => member.role === "Leader");
   const groupMember = group.groupMembers.filter(
@@ -32,7 +39,6 @@ const GroupCard: React.FC<{ group: GroupGeneral }> = ({ group }) => {
   return (
     <div className="border border-gray-200 rounded-lg shadow-sm p-10 flex flex-col items-start hover:shadow-lg transition flex-1">
       <h2 className="text-xl font-semibold text-black">{group.title}</h2>
-      {/* <Link href={link}> */}
       <i className="text-left w-full font-thin text-xl">{group.name}</i>
       <div className="flex items-center space-x-2">
         <i className="font-thin text-base text-gray-500">Leader:</i>
@@ -71,22 +77,20 @@ const GroupCard: React.FC<{ group: GroupGeneral }> = ({ group }) => {
           </div>
         ))}
       </div>
+      <Link href={link}>
+        <button
+          className="mt-4 px-6 py-2 text-base text-logo border border-logo rounded-full hover:bg-blue-100 font-semibold"
+          onClick={handleDetailsClick}
+        >
+          Details
+        </button>
+      </Link>
 
-      <button className="mt-4 px-6 py-2 text-base text-logo border border-logo rounded-full hover:bg-blue-100 font-semibold">
-        Details
-      </button>
       <div className="flex flex-wrap gap-2 mt-4">
         {groupPosition.map((position) => (
           <PositionCard key={position.id} position={position} />
-          // <span
-          //   key={position.id}
-          //   className="text-xs px-3 py-1 border border-gray-300 text-center flex-1"
-          // >
-          //   {position.name} ({position.count})
-          // </span>
         ))}
       </div>
-      {/* </Link> */}
     </div>
   );
 };

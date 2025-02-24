@@ -51,7 +51,20 @@ export type GroupMember = {
     role: string;
 }
 
-export type GroupGeneral = {
+export type Application = {
+    id: number;
+    groupId: number;
+    groupName: string;
+    studentName: string;
+    studentEmail: string;
+    imgUrl: string;
+    requestTime: Date;
+    requestContent: string;
+    groupPositionName: string;
+    status: string;
+}
+
+export type Group = {
     id: number;
     name: string;
     title: string;
@@ -68,4 +81,5 @@ export type GroupGeneral = {
     totalGroupPositions: number;
     totalApplications: number;
     groupPositions: GroupPosition[];
+    applications: Application[];
 }
