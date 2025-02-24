@@ -16,9 +16,10 @@ const PositionCard: React.FC<{ position: GroupPosition }> = ({ position }) => {
  
  
    return (
-     <div className="text-xs px-3 py-1 border border-gray-300 text-left flex-1">
+     <div className="badge">
+      <div className="badge-icon">{position.count}</div>
        {position.name}
-       <div >{position.count} </div>
+       {/* <div >{position.count} </div> */}
        {/* <button className="mt-4 px-6 py-2 text-base text-logo border border-logo rounded-full hover:bg-blue-100 font-semibold">
          Details
        </button> */}

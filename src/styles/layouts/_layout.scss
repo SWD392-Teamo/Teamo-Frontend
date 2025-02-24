@@ -1,6 +1,5 @@
 /* Main layout style using Tailwind CSS*/
 @import url('https://fonts.googleapis.com/css2?family=Righteous&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap');
 
 
@@ -9,7 +8,7 @@
 }
 
 .main {
-    @apply container mx-auto px-14 pt-10 font-poppins flex-grow;
+    @apply container mx-auto px-14 pt-10 font-beVietnam flex-grow;
 }
 
 .page-title {

@@ -30,7 +30,7 @@ const GroupCard: React.FC<{ group: GroupGeneral }> = ({ group }) => {
   const groupPosition = group.groupPositions;
 
   return (
-    <div className="border border-gray-200 rounded-lg shadow-sm p-10 flex flex-col items-start justify-between hover:shadow-lg transition">
+    <div className="border border-gray-200 rounded-lg shadow-sm p-10 flex flex-col items-start hover:shadow-lg transition flex-1">
       <h2 className="text-xl font-semibold text-black">{group.title}</h2>
       {/* <Link href={link}> */}
       <i className="text-left w-full font-thin text-xl">{group.name}</i>
@@ -75,7 +75,7 @@ const GroupCard: React.FC<{ group: GroupGeneral }> = ({ group }) => {
       <button className="mt-4 px-6 py-2 text-base text-logo border border-logo rounded-full hover:bg-blue-100 font-semibold">
         Details
       </button>
-      <div className="flex flex-wrap mt-2 pt-2">
+      <div className="flex flex-wrap gap-2 mt-4">
         {groupPosition.map((position) => (
           <PositionCard key={position.id} position={position} />
           // <span
