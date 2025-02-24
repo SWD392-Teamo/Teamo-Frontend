@@ -1,7 +1,17 @@
-import React from 'react'
+"use client";
+
+import BackButton from "@/components/BackButton";
+import ProfileCard from "./ProfileCard";
+
 
 export default function Details() {
+
   return (
-    <div>My profile page</div>
+    <div>
+      <div><BackButton url="/" /></div>
+      
+        <ProfileCard/>
+      
+    </div>
   )
 }
