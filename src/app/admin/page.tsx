@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
+import AdminNavbar from "@/app/admin/navbar/page"; // Đảm bảo đúng đường dẫn
 
 export default function AdminPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -16,6 +17,9 @@ export default function AdminPage() {
 
   return (
     <div className="min-h-screen bg-white">
+      {/* Navbar Admin */}
+      <AdminNavbar />
+
       {/* Search Section */}
       <div className="text-center mt-12">
         <h2 className="text-2xl font-semibold">Start Your Team Journey</h2>
