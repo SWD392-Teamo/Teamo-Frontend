@@ -1,3 +1,5 @@
+import { GroupPositionStatus, GroupStatus } from './enum';
+
 export type PagedResult<T> = {
     data: T[]
     pageIndex: number
@@ -31,29 +33,4 @@ export type Field = {
     id: number;
     name: string;
     description: string;
-}
-
-export type User = {
-    id: number;
-    code: string;
-    firstName: string;
-    lastName: string;
-    username: string;
-    email: string;
-    gender: string;
-    dob: Date;
-    phone: string;
-    imgUrl: string;
-    status: string;
-    description: string;
-    majorCode: string;
-    link: string[];
-    studentSkills: StudentSkill[];
-}
-
-export type StudentSkill = {
-    id: number;
-    skillName: string;
-    skillType: string;
-    skillLevel: string;
 }

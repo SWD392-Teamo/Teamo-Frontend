@@ -5,6 +5,7 @@ type State = {
     pageSize: number
     search?: string
     majorId?: number
+    subjectId?: number
 }
 
 type Actions = {

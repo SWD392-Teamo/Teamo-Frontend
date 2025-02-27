@@ -1,0 +1,31 @@
+
+   .badge {
+     background-color: #DCEAFF; 
+     color: #0004A2; 
+     padding: 6px 12px;
+     border-radius: 20px; 
+     font-size: 14px;
+     font-weight: 600;
+     display: flex;
+     align-items: center;
+     gap: 8px; 
+     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+     .badge-icon {
+       width: 20px;
+       height: 20px;
+       background-color: #3683FF;
+       border-radius: 50%;
+       display: flex;
+       font-size: small;
+       color: #DCEAFF;
+       justify-content: center;
+       align-items: center;
+     }
+
+     &:hover {
+       background-color: #76b7f8; 
+       cursor: pointer;
+     }
+   }
+ 
