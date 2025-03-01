@@ -1,3 +1,3 @@
-export interface UserAvatarProps  {
+export interface imgProps  {
    imgUrl: string;
 }

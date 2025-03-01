@@ -3,12 +3,16 @@ import { useSubjectStore } from "@/hooks/useSubjectStore";
 import Link from "next/link";
 import { useShallow } from "zustand/shallow";
 import defaultAvatar from "@/assets/defaultAvatar.jpg";
+import defaultGroup from "@/assets/defaultGroup.png";
 import Image from "next/image";
 import LeaderAvatar from "@/components/UserAvatar";
 import MemberAvatar from "@/components/MemberAvatar";
 import PositionCard from "./PositionCard";
 import { useGroupStore } from "@/hooks/useGroupStore";
 import { Group } from "@/types";
+import MedGroupImage from "@/components/MedGroupImage";
+import SmallGroupImage from "@/components/SmallGroupImage";
+import GroupStatusBadge from "@/components/GroupStatus";
 
 const GroupCard: React.FC<{ group: Group }> = ({ group }) => {
   const { selectedMajor } = useMajorStore(
@@ -38,8 +42,28 @@ const GroupCard: React.FC<{ group: Group }> = ({ group }) => {
 
   return (
     <div className="border border-gray-200 rounded-lg shadow-sm p-10 flex flex-col items-start hover:shadow-lg transition flex-1">
-      <h2 className="text-xl font-semibold text-black">{group.title}</h2>
-      <i className="text-left w-full font-thin text-xl">{group.name}</i>
+      <div className="flex flex-row items-center w-15 h-15 gap-4 mb-3">
+        {group?.imgUrl ? (
+          <SmallGroupImage imgUrl={group?.imgUrl} />
+        ) : (
+          <Image
+            src={defaultGroup}
+            alt={group?.name || "none"}
+            className="w-12 h-12 rounded-full object-cover border-2 border-gray-300 shadow-sm"
+          />
+        )}
+        <div className="text-left w-full font-bold text-[#54B8F0] text-lg my-2">
+          {group?.name}
+        </div>
+      </div>
+        <div className="flex flex-row gap-4 items-center">
+          <h2 className="text-xl font-bold text-black">
+            {group?.title}
+          </h2>
+          {group?.status && (
+            <GroupStatusBadge status={group?.status} />
+          )}
+        </div>
       <div className="flex items-center space-x-2">
         <i className="font-thin text-base text-gray-500">Leader:</i>
         <div className="text-lg font-semibold text-black font-beVietnam">

@@ -70,11 +70,12 @@ export type Group = {
     title: string;
     semesterName: string;
     description: string;
-    createdAt: Date;
+    createdAt: string;
     createdByUserName: string;
     maxMember: number;
+    imgUrl: string;
     groupMembers: GroupMember[];
-    status: GroupStatus;
+    status: string;
     fieldName: string;
     subjectCode: string;
     totalMembers: number;

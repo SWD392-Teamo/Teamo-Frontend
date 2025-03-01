@@ -2,7 +2,7 @@ import { getFirebaseImageUrl } from "@/lib/firebaseImage";
 import { imgProps } from "@/types/interface";
 import { useEffect, useState } from "react";
 
-const MemberAvatar: React.FC<imgProps> = ({ imgUrl }) => {
+const MedGroupImage: React.FC<imgProps> = ({ imgUrl }) => {
    const [imageUrl, setImageUrl] = useState<string | null>(null);
  
    useEffect(() => {
@@ -29,4 +29,4 @@ const MemberAvatar: React.FC<imgProps> = ({ imgUrl }) => {
    );
  };
  
- export default MemberAvatar;
+ export default MedGroupImage;
