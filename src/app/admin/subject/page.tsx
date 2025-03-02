@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, ChangeEvent, FormEvent } from "react";
-import AdminNavbar from "@/app/admin/navbar/page";
 
 export default function CreateSubjects() {
     const [formData, setFormData] = useState({
@@ -22,49 +21,52 @@ export default function CreateSubjects() {
     };
 
     return (
-        <div className="min-h-screen bg-white">
-            <AdminNavbar />
-            <div className="max-w-3xl mx-auto p-8">
-                <button className="text-gray-600 mb-4">&larr; Back</button>
-                <h2 className="text-2xl font-semibold">Create Subjects</h2>
-                <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+        <div className="min-h-screen flex flex-col items-center bg-white">
+            {/* Navbar */}
+            <nav className="w-full flex justify-between items-center px-8 py-4 border-b shadow-sm">
+                <div className="flex space-x-6 text-gray-600">
+                    <a href="#" className="hover:text-black">Fields</a>
+                    <a href="#" className="hover:text-black">Semesters</a>
+                    <a href="#" className="hover:text-black">Majors</a>
+                    <a href="#" className="text-black font-semibold border-b-2 border-blue-500">Subjects</a>
+                </div>
+            </nav>
+
+            {/* Content */}
+            <div className="w-full max-w-md mt-16">
+                <button className="flex items-center text-gray-500 hover:text-black mb-4">
+                    ← Back
+                </button>
+                <h2 className="text-2xl font-bold mb-6">Create Subjects</h2>
+
+                {/* Form */}
+
+                <form className="space-y-4">
+                    Name
                     <input
                         type="text"
-                        name="name"
                         placeholder="Write Your Name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        className="w-full border border-gray-300 rounded-lg py-2 px-4 focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
+                    Field
                     <input
                         type="text"
-                        name="field"
                         placeholder="Write Your Field"
-                        value={formData.field}
-                        onChange={handleChange}
-                        className="w-full border border-gray-300 rounded-lg py-2 px-4 focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
-                    <select
-                        name="semester"
-                        value={formData.semester}
-                        onChange={handleChange}
-                        className="w-full border border-gray-300 rounded-lg py-2 px-4 focus:ring-2 focus:ring-blue-500"
-                    >
-                        <option value="">Select Your Semester</option>
-                        <option value="Spring">Spring</option>
-                        <option value="Fall">Fall</option>
+                    Semester
+                    <select className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option>Select Your Semester</option>
                     </select>
+                    Major
                     <input
                         type="text"
-                        name="major"
                         placeholder="Write Your Major"
-                        value={formData.major}
-                        onChange={handleChange}
-                        className="w-full border border-gray-300 rounded-lg py-2 px-4 focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                     <button
                         type="submit"
-                        className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+                        className="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition"
                     >
                         Create
                     </button>

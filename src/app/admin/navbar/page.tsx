@@ -4,9 +4,7 @@ import React from "react";
 export default function NavLinksAdmin() {
     return (
         <div className="flex justify-between content-around gap-32">
-            <Link href="/university-information" className="link">
-                University Information
-            </Link>
+            <Link href="/admin/subject" className="link">University Information</Link>
             <Link href="/profile" className="link">Profile</Link>
             <Link href="/group" className="link">Groups</Link>
             <Link href="/dashboard" className="link">Dashboard</Link>
