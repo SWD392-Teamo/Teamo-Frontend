@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
-import AdminNavbar from "@/app/admin/navbar/page"; // Đảm bảo đúng đường dẫn
+import AdminNavbar from "@/app/admin/navbar/page";
 
 export default function AdminPage() {
   const [searchQuery, setSearchQuery] = useState("");
