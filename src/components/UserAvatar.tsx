@@ -15,12 +15,12 @@ const LeaderAvatar: React.FC<imgProps> = ({ imgUrl }) => {
    }, [imgUrl]);
  
    return (
-     <div className="flex flex-col items-center">
+    <div className="w-1/12">
        {imageUrl ? (
          <img
            src={imageUrl}
            alt="User Avatar"
-           className="w-12 h-12 rounded-full object-cover border-2 border-gray-300 shadow-sm"
+           className="w-full h-full rounded-full object-cover border-2 border-gray-300 shadow-sm"
          />
        ) : (
          <p>Loading image...</p>

@@ -52,18 +52,14 @@ const GroupCard: React.FC<{ group: Group }> = ({ group }) => {
             className="w-12 h-12 rounded-full object-cover border-2 border-gray-300 shadow-sm"
           />
         )}
-        <div className="text-left w-full font-bold text-[#54B8F0] text-lg my-2">
+        <div className="text-left w-full font-bold text-[#54B8F0] text-xl my-2">
           {group?.name}
         </div>
       </div>
-        <div className="flex flex-row gap-4 items-center">
-          <h2 className="text-xl font-bold text-black">
-            {group?.title}
-          </h2>
-          {group?.status && (
-            <GroupStatusBadge status={group?.status} />
-          )}
-        </div>
+      <div className="flex flex-row gap-4 items-center">
+        <h2 className="text-xl font-bold text-black">{group?.title}</h2>
+        {group?.status && <GroupStatusBadge status={group?.status} />}
+      </div>
       <div className="flex items-center space-x-2">
         <i className="font-thin text-base text-gray-500">Leader:</i>
         <div className="text-lg font-semibold text-black font-beVietnam">
@@ -71,8 +67,7 @@ const GroupCard: React.FC<{ group: Group }> = ({ group }) => {
         </div>
       </div>
 
-      <div className="flex items-center space-x-2">
-        <div className="flex flex-col items-center mt-2 w-15 h-15">
+      <div className="flex items-center space-x-2 mt-2">
           {leader?.imgUrl ? (
             <LeaderAvatar imgUrl={leader?.imgUrl} />
           ) : (
@@ -82,12 +77,10 @@ const GroupCard: React.FC<{ group: Group }> = ({ group }) => {
               className="w-12 h-12 rounded-full object-cover border-2 border-gray-300 shadow-sm"
             />
           )}
-        </div>
 
         {groupMember.map((member) => (
           <div
             key={member.studentId}
-            className="flex flex-col items-center mt-2"
           >
             {member?.imgUrl ? (
               <MemberAvatar imgUrl={member?.imgUrl} />
@@ -101,6 +94,7 @@ const GroupCard: React.FC<{ group: Group }> = ({ group }) => {
           </div>
         ))}
       </div>
+
       <Link href={link}>
         <button
           className="mt-4 px-6 py-2 text-base text-logo border border-logo rounded-full hover:bg-blue-100 font-semibold"

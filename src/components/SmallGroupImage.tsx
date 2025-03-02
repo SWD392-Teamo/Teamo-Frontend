@@ -15,13 +15,15 @@ const SmallGroupImage: React.FC<imgProps> = ({ imgUrl }) => {
    }, [imgUrl]);
  
    return (
-     <div className="flex flex-col items-center">
+     <div className="w-1/6">
        {imageUrl ? (
          <img
            src={imageUrl}
            alt="User Avatar"
-           className="w-5 h-5 rounded-full object-cover border-2 border-gray-300 shadow-sm"
-         />
+           aspect-square
+
+           className="w-full h-full object-cover rounded-full border-2 border-gray-300 shadow-sm"
+           />
        ) : (
          <p>Loading image...</p>
        )}

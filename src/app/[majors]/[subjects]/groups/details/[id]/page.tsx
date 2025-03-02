@@ -16,6 +16,7 @@ import GroupStatusBadge from "@/components/GroupStatus";
 import PositionCard from "../../PositionCard";
 import { FaStar } from "react-icons/fa";
 import { IoIosStar } from "react-icons/io";
+import { HiOutlineLightningBolt } from "react-icons/hi";
 
 const GroupDetail: React.FC = () => {
   const { selectedgroup } = useGroupStore(
@@ -66,7 +67,7 @@ const GroupDetail: React.FC = () => {
               className="w-12 h-12 rounded-full object-cover border-2 border-gray-300 shadow-sm"
             />
           )}
-          <div className="text-left w-full font-bold text-[#54B8F0] text-xl my-2">
+          <div className="text-left w-full font-bold text-[#54B8F0] text-2xl my-2">
             {selectedgroup?.name}
           </div>
         </div>
@@ -117,19 +118,7 @@ const GroupDetail: React.FC = () => {
         </div>
 
         <div className="text-left w-full font-normal text-lg">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc nec
-          sagittis nunc. Praesent vitae malesuada ante. Interdum et malesuada
-          fames ac ante ipsum primis in faucibus. Pellentesque habitant morbi
-          tristique senectus et netus et malesuada fames ac turpis egestas.
-          Vestibulum ante ipsum primis in faucibus orci luctus et ultrices
-          posuere cubilia curae; Aliquam vel gravida nibh, eget vulputate
-          mauris. Proin fermentum vitae diam in faucibus. Sed et risus sit amet
-          erat scelerisque auctor sed quis est. In quis iaculis sapien. Fusce
-          auctor hendrerit dui, vitae posuere elit sodales quis. Duis a lacus
-          venenatis, euismod turpis at, faucibus metus. Suspendisse potenti. Nam
-          sed risus luctus, sollicitudin lectus eu, consectetur lacus. Vivamus
-          imperdiet turpis vitae est bibendum posuere. Nulla at semper enim. Nam
-          nisl magna, pretium a odio malesuada, auctor luctus risus.
+          {selectedgroup?.description}
         </div>
       </div>
 
@@ -155,7 +144,7 @@ const GroupDetail: React.FC = () => {
         <div className="text-left w-full font-semibold text-2xl text-[#8C8F8E] my-5">
           Member
         </div>
-
+        {/*Member */}
         <div className="text-left w-full font-normal text-lg">
           <div className="grid grid-cols-2 gap-4 mt-4">
             {selectedgroup?.groupMembers.map((member, index) => (
@@ -186,6 +175,12 @@ const GroupDetail: React.FC = () => {
               </div>
             ))}
           </div>
+        </div>
+        <div className="flex items-center justify-center">
+          <button className="mt-8 flex items-center justify-center gap-2 bg-blue-500 text-white font-semibold py-4 px-10 rounded-full shadow-md hover:bg-blue-600 transition">
+            <HiOutlineLightningBolt className="w-5 h-5" />
+            Easy Apply
+          </button>
         </div>
       </div>
     </div>
