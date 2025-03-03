@@ -15,7 +15,7 @@ const MemberAvatar: React.FC<imgProps> = ({ imgUrl }) => {
    }, [imgUrl]);
  
    return (
-     <div className="flex flex-col items-center">
+     <div className="flex flex-col">
        {imageUrl ? (
          <img
            src={imageUrl}

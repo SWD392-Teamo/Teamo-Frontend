@@ -17,6 +17,8 @@ import PositionCard from "../../PositionCard";
 import { FaStar } from "react-icons/fa";
 import { IoIosStar } from "react-icons/io";
 import { HiOutlineLightningBolt } from "react-icons/hi";
+import PositionStatusBadge from "@/components/PositionStatus";
+import GroupPositionCard from "./GroupPosition";
 
 const GroupDetail: React.FC = () => {
   const { selectedgroup } = useGroupStore(
@@ -25,13 +27,8 @@ const GroupDetail: React.FC = () => {
     }))
   );
 
-  const leader = selectedgroup?.groupMembers.find(
-    (member) => member.role === "Leader"
-  );
-  const groupMember = selectedgroup?.groupMembers.filter(
-    (member) => member.role === "Member"
-  );
-  const groupPosition = selectedgroup?.groupPositions;
+  const groupMembers = selectedgroup?.groupMembers;
+  const groupPositions = selectedgroup?.groupPositions;
 
   // const { selectedSubject } = useSubjectStore(
   //   useShallow((state) => ({
@@ -61,11 +58,13 @@ const GroupDetail: React.FC = () => {
           {selectedgroup?.imgUrl ? (
             <MedGroupImage imgUrl={selectedgroup?.imgUrl} />
           ) : (
-            <Image
-              src={defaultGroup}
-              alt={selectedgroup?.name || "none"}
-              className="w-12 h-12 rounded-full object-cover border-2 border-gray-300 shadow-sm"
-            />
+            <div className="w-1/12">
+              <Image
+                src={defaultGroup}
+                alt={selectedgroup?.name || "none"}
+                className="w-full h-full rounded-full object-cover border-2 border-gray-300 shadow-sm"
+              />
+            </div>
           )}
           <div className="text-left w-full font-bold text-[#54B8F0] text-2xl my-2">
             {selectedgroup?.name}
@@ -124,19 +123,25 @@ const GroupDetail: React.FC = () => {
 
       <div className="w-full h-[1px] bg-gray-300 my-8"></div>
 
-      {/*requirement */}
+      {/*position */}
       <div className="container">
         <div className="text-left w-full font-semibold text-2xl text-[#8C8F8E] my-5">
-          Requirement
+          Position
         </div>
+        {groupPositions && groupMembers && (
+          <GroupPositionCard
+            positions={groupPositions}
+            members={groupMembers}
+          />
+        )}
 
-        <div className="text-left w-full font-normal text-lg">
+        {/* <div className="text-left w-full font-normal text-lg">
           <div className="flex flex-wrap gap-2 mt-4">
             {groupPosition?.map((position) => (
               <PositionCard key={position.id} position={position} />
             ))}
           </div>
-        </div>
+        </div> */}
       </div>
 
       <div className="w-full h-[1px] bg-gray-300 my-8"></div>
@@ -177,7 +182,8 @@ const GroupDetail: React.FC = () => {
           </div>
         </div>
         <div className="flex items-center justify-center">
-          <button className="mt-8 flex items-center justify-center gap-2 bg-blue-500 text-white font-semibold py-4 px-10 rounded-full shadow-md hover:bg-blue-600 transition">
+          <button className="mt-8 flex items-center justify-center gap-2 bg-[#54B1EC] text-white font-semibold py-4 px-10 rounded-full shadow-md hover:bg-[#1681C7]
+           transition">
             <HiOutlineLightningBolt className="w-5 h-5" />
             Easy Apply
           </button>

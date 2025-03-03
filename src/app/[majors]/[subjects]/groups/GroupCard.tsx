@@ -46,11 +46,13 @@ const GroupCard: React.FC<{ group: Group }> = ({ group }) => {
         {group?.imgUrl ? (
           <SmallGroupImage imgUrl={group?.imgUrl} />
         ) : (
-          <Image
-            src={defaultGroup}
-            alt={group?.name || "none"}
-            className="w-12 h-12 rounded-full object-cover border-2 border-gray-300 shadow-sm"
-          />
+          <div className="w-1/6">
+            <Image
+              src={defaultGroup}
+              alt={group?.name || "none"}
+              className="w-full h-full object-cover rounded-full border-2 border-gray-300 shadow-sm"
+            />
+          </div>
         )}
         <div className="text-left w-full font-bold text-[#54B8F0] text-xl my-2">
           {group?.name}
@@ -68,20 +70,18 @@ const GroupCard: React.FC<{ group: Group }> = ({ group }) => {
       </div>
 
       <div className="flex items-center space-x-2 mt-2">
-          {leader?.imgUrl ? (
-            <LeaderAvatar imgUrl={leader?.imgUrl} />
-          ) : (
-            <Image
-              src={defaultAvatar}
-              alt={leader?.studentName || "none"}
-              className="w-12 h-12 rounded-full object-cover border-2 border-gray-300 shadow-sm"
-            />
-          )}
+        {leader?.imgUrl ? (
+          <LeaderAvatar imgUrl={leader?.imgUrl} />
+        ) : (
+          <Image
+            src={defaultAvatar}
+            alt={leader?.studentName || "none"}
+            className="w-12 h-12 rounded-full object-cover border-2 border-gray-300 shadow-sm"
+          />
+        )}
 
         {groupMember.map((member) => (
-          <div
-            key={member.studentId}
-          >
+          <div key={member.studentId}>
             {member?.imgUrl ? (
               <MemberAvatar imgUrl={member?.imgUrl} />
             ) : (

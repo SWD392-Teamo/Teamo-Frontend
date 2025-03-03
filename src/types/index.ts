@@ -38,7 +38,7 @@ export type GroupPosition = {
     id: string;
     name: string;
     count: number;
-    status: GroupPositionStatus;
+    status: string;
 }
 
 export type GroupMember = {

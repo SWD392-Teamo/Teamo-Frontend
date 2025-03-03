@@ -20,8 +20,6 @@ const SmallGroupImage: React.FC<imgProps> = ({ imgUrl }) => {
          <img
            src={imageUrl}
            alt="User Avatar"
-           aspect-square
-
            className="w-full h-full object-cover rounded-full border-2 border-gray-300 shadow-sm"
            />
        ) : (
