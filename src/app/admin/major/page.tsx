@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
-
-export default function CreateMajors() {
+import NavbarUni from "@/app/admin/navbaruni/page"; // Đảm bảo đúng đường dẫn
+export default function CreateMajor() {
     const [formData, setFormData] = useState({
         name: "",
         field: "",
@@ -18,52 +18,38 @@ export default function CreateMajors() {
     };
 
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
-            <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg">
-                <h2 className="text-2xl font-semibold text-gray-800 mb-4">Create Majors</h2>
-                <form onSubmit={handleSubmit} className="space-y-4">
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700">Name</label>
-                        <input
-                            type="text"
-                            name="name"
-                            value={formData.name}
-                            onChange={handleChange}
-                            placeholder="Write Your Name"
-                            className="mt-1 p-2 w-full border rounded-lg"
-                            required
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700">Field</label>
-                        <input
-                            type="text"
-                            name="field"
-                            value={formData.field}
-                            onChange={handleChange}
-                            placeholder="Write Your Field"
-                            className="mt-1 p-2 w-full border rounded-lg"
-                            required
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700">Semester</label>
-                        <select
-                            name="semester"
-                            value={formData.semester}
-                            onChange={handleChange}
-                            className="mt-1 p-2 w-full border rounded-lg"
-                            required
-                        >
-                            <option value="">Select Your Semester</option>
-                            <option value="Fall 2025">Fall 2025</option>
-                            <option value="Spring 2026">Spring 2026</option>
-                            <option value="Summer 2026">Summer 2026</option>
-                        </select>
-                    </div>
+        <div className="min-h-screen flex flex-col items-center bg-white">
+            <NavbarUni />
+
+            <div className="w-full max-w-md mt-[10px]"> { }
+                <button className="flex items-center text-gray-500 hover:text-black mb-4">
+                    ← Back
+                </button>
+                <h2 className="text-2xl font-bold mb-6">Create Majors</h2>
+
+                <form className="space-y-2">
+                    <label className="block">Name</label>
+                    <input
+                        type="text"
+                        placeholder="Write Your Name"
+                        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    <label className="block mt-2">Field</label>
+                    <input
+                        type="text"
+                        placeholder="Write Your Field"
+                        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    <label className="block mt-2">Semester</label>
+                    <select className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option disabled selected>Select Your Semester</option>
+                        {[...Array(9)].map((_, i) => (
+                            <option key={i + 1} value={i + 1}>{i + 1}</option>
+                        ))}
+                    </select>
                     <button
                         type="submit"
-                        className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition"
+                        className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition mt-2"
                     >
                         Create
                     </button>

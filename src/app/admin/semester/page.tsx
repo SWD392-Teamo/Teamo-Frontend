@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, ChangeEvent, FormEvent } from "react";
-import AdminNavbar from "@/app/admin/navbar/page";
+import NavbarUni from "@/app/admin/navbaruni/page"; // Đảm bảo đúng đường dẫn
 
 export default function CreateSemester() {
     const [formData, setFormData] = useState({
@@ -21,20 +21,22 @@ export default function CreateSemester() {
     };
 
     return (
-        <div className="min-h-screen bg-white">
-            <AdminNavbar />
+        <div className="min-h-screen flex flex-col items-center bg-white">
+            <NavbarUni />
             <div className="max-w-3xl mx-auto p-8">
                 <button className="text-gray-600 mb-4">&larr; Back</button>
                 <h2 className="text-2xl font-semibold">Create Semester</h2>
-                <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+                <form onSubmit={handleSubmit} className="mt-6 space-y-2">
+                    <label className="block">Name</label>
                     <input
                         type="text"
                         name="name"
                         placeholder="Write Your Name"
                         value={formData.name}
                         onChange={handleChange}
-                        className="w-full border border-gray-300 rounded-lg py-2 px-4 focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
+                    <label className="block">Semester</label>
                     <input
                         type="text"
                         name="duration"
@@ -43,6 +45,8 @@ export default function CreateSemester() {
                         onChange={handleChange}
                         className="w-full border border-gray-300 rounded-lg py-2 px-4 focus:ring-2 focus:ring-blue-500"
                     />
+                    <label className="block">Staus</label>
+
                     <select
                         name="status"
                         value={formData.status}
