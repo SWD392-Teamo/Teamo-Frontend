@@ -2,7 +2,7 @@ import { getFirebaseImageUrl } from "@/lib/firebaseImage";
 import { imgProps } from "@/types/interface";
 import { useEffect, useState } from "react";
 
-const MemberAvatar: React.FC<imgProps> = ({ imgUrl }) => {
+const MedGroupImage: React.FC<imgProps> = ({ imgUrl }) => {
    const [imageUrl, setImageUrl] = useState<string | null>(null);
  
    useEffect(() => {
@@ -15,12 +15,12 @@ const MemberAvatar: React.FC<imgProps> = ({ imgUrl }) => {
    }, [imgUrl]);
  
    return (
-     <div className="flex flex-col">
+    <div className="w-1/12">
        {imageUrl ? (
          <img
            src={imageUrl}
            alt="User Avatar"
-           className="w-10 h-10 rounded-full object-cover border-2 border-gray-300 shadow-sm"
+           className="w-full h-full rounded-full object-cover border-2 border-gray-300 shadow-sm"
          />
        ) : (
          <p>Loading image...</p>
@@ -29,4 +29,4 @@ const MemberAvatar: React.FC<imgProps> = ({ imgUrl }) => {
    );
  };
  
- export default MemberAvatar;
+ export default MedGroupImage;
