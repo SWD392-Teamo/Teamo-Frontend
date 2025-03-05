@@ -1,24 +1,28 @@
 import { User } from "@/types";
+import Link from "next/link";
+import ProfileAvatar from "./ProfileAvatar";
+import { useState } from "react";
 
 
 const ProfileCard: React.FC<{user: User}> = ({ user }) => {
-
-  console.log("img", user.imgUrl);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const link = `/profile/update/${user.id}`;
 
   return (
     <main className="min-h-screen bg-white p-8">
-      <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-sm p-6">
-            <section className="flex items-center space-x-4">
-            <img 
-              src={user.imgUrl} 
-              alt="Profile Picture" 
-              className="w-24 h-24 rounded-full object-cover border border-gray-300 shadow-sm"/>
+      <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-sm p-6 relative">
+        <section className="flex items-center justify-between mb-2">
+            <ProfileAvatar imgUrl={user.imgUrl}/>
+            <div className="absolute top-4 right-4">
+            <Link href={link}>
+              <button className=" px-6 py-2 text-base text-logo border border-logo rounded-full hover:bg-blue-100 font-semibold">
+                Edit
+              </button>
+            </Link>
+            </div>
             </section>
-
-            
-
         <section>
-          <h1 className="text-3xl font-bold text-gray-800">{user.firstName}</h1>
+          <h1 className="text-3xl font-bold text-gray-800">{user.lastName} {user.firstName}</h1>
         </section>
 
         {/* About Section */}
@@ -42,7 +46,36 @@ const ProfileCard: React.FC<{user: User}> = ({ user }) => {
                 <td className="py-2 text-gray-600">{user.lastName} {user.firstName}</td>
                 <td className="py-2 text-gray-600">{user.email}</td>
                 <td className="py-2 text-gray-600">{user.majorCode}</td>
-                <td className="py-2 text-gray-600">{user.phone || "N/A"}</td>
+                <td className="py-2 text-gray-600">
+                  {user.links && user.links.length > 0 ? (
+                    <div>
+                      <button
+                        className="px-4 py-2 border rounded bg-gray-200 hover:bg-gray-300"
+                        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                      >
+                        Contacts ▼
+                      </button>
+                      {isDropdownOpen && (
+                        <ul className="mt-2 bg-white shadow-md rounded p-2">
+                          {user.links.map((contact) => (
+                            <li key={contact.id} className="py-1">
+                              <a
+                                href={contact.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-blue-500 hover:underline"
+                              >
+                                {contact.url}
+                              </a>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                  ) : (
+                    <span>No contacts added</span>
+                  )}
+                </td>
               </tr>
             </tbody>
           </table>
@@ -51,11 +84,13 @@ const ProfileCard: React.FC<{user: User}> = ({ user }) => {
         {/* Skills Section */}
         <section className="mt-8">
           <h2 className="text-xl font-semibold text-gray-700 mb-4">Skills</h2>
-          <ul className="list-disc pl-5 space-y-2">
+          <ul className="list-disc space-y-2">
           {user.studentSkills && user.studentSkills.length > 0 ? (
               user.studentSkills.map((skill) => (
-                <button key={user.id} className="mt-4 px-6 py-2 text-base text-logo border border-logo rounded-full hover:bg-blue-100 font-semibold mr-4">
+                <button key={skill.id} className="mt-4 px-6 py-2 text-base text-logo border border-logo rounded-full hover:bg-blue-100 font-semibold mr-4">
                   {skill.skillName}
+                  <br/>
+                  {skill.skillLevel && <span className="ml-2 text-xs bg-blue-200 text-blue-800 px-2 py-1 rounded-full">{skill.skillLevel}</span>}
                 </button>
               ))
             ) : (

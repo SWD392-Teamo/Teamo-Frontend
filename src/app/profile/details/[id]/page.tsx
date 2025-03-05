@@ -6,7 +6,7 @@ import BackButton from "@/components/BackButton";
 import { fetchUserProfile } from "@/actions/userActions";
 import { useUserStore } from "@/hooks/useUserStore";
 import { useParams } from "next/navigation";
-import { stringify } from "querystring";
+
 
 export default function ProfilePage() {
   const data = useUserStore((state) => state.user);
