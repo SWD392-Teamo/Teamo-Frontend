@@ -62,6 +62,10 @@
     }
   }
 
+  &--round {
+    @apply py-3 px-3;
+  }
+
   /* Style for button with icon */
   &--icon {
     @apply flex items-center justify-center gap-2;
