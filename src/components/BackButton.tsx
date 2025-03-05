@@ -22,7 +22,7 @@
       }
 
     return (
-      <div className=''>
+      <div className='mb-5'>
           <GoArrowLeft size={30} className='link text-gray-500 hover:text-black' onClick={goBack}/>
       </div>
     )
