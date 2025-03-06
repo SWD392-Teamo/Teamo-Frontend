@@ -2,6 +2,7 @@
 
 import { useState, ChangeEvent, FormEvent } from "react";
 import NavbarUni from "@/app/admin/navbaruni/page"; // Đảm bảo đúng đường dẫn
+import BackButton from "@/components/BackButton"; // Import component BackButton
 
 export default function CreateSemester() {
     const [formData, setFormData] = useState({
@@ -24,8 +25,10 @@ export default function CreateSemester() {
         <div className="min-h-screen flex flex-col items-center bg-white">
             <NavbarUni />
             <div className="max-w-3xl mx-auto p-8">
-                <button className="text-gray-600 mb-4">&larr; Back</button>
-                <h2 className="text-2xl font-semibold">Create Semester</h2>
+                {/* Dùng BackButton thay cho button cũ */}
+                <BackButton />
+
+                <h2 className="text-2xl font-semibold mt-4">Create Semester</h2>
                 <form onSubmit={handleSubmit} className="mt-6 space-y-2">
                     <label className="block">Name</label>
                     <input
@@ -45,7 +48,7 @@ export default function CreateSemester() {
                         onChange={handleChange}
                         className="w-full border border-gray-300 rounded-lg py-2 px-4 focus:ring-2 focus:ring-blue-500"
                     />
-                    <label className="block">Staus</label>
+                    <label className="block">Status</label>
 
                     <select
                         name="status"

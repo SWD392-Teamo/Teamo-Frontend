@@ -10,13 +10,13 @@ export default function ImportStudentProfiles() {
         firstName: "",
         lastName: "",
         email: "",
-        gender: "",
         phoneNumber: "",
+        gender: "",
         major: "",
         image: ""
     });
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
@@ -37,10 +37,7 @@ export default function ImportStudentProfiles() {
                         { label: "First Name", name: "firstName" },
                         { label: "Last Name", name: "lastName" },
                         { label: "Email", name: "email" },
-                        { label: "Gender", name: "gender" },
-                        { label: "Phone Number", name: "phoneNumber" },
-                        { label: "Major", name: "major" },
-                        { label: "Image", name: "image" }
+                        { label: "Phone Number", name: "phoneNumber" }
                     ].map((field, index) => (
                         <div key={index}>
                             <label className="block text-gray-700 font-medium">{field.label}</label>
@@ -54,6 +51,48 @@ export default function ImportStudentProfiles() {
                             />
                         </div>
                     ))}
+
+                    {/* Dropdown Gender */}
+                    <div>
+                        <label className="block text-gray-700 font-medium">Gender</label>
+                        <select
+                            name="gender"
+                            value={formData.gender}
+                            onChange={handleChange}
+                            className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                        >
+                            <option value="">Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                    </div>
+
+                    {/* Major */}
+                    <div>
+                        <label className="block text-gray-700 font-medium">Major</label>
+                        <input
+                            type="text"
+                            name="major"
+                            value={formData.major}
+                            onChange={handleChange}
+                            className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="Enter Student Major"
+                        />
+                    </div>
+
+                    {/* Image */}
+                    <div>
+                        <label className="block text-gray-700 font-medium">Image</label>
+                        <input
+                            type="text"
+                            name="image"
+                            value={formData.image}
+                            onChange={handleChange}
+                            className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="Enter Image URL"
+                        />
+                    </div>
+
                     <button
                         type="submit"
                         className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition"
