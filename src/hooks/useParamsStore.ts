@@ -6,6 +6,8 @@ type State = {
     search?: string
     majorId?: number
     subjectId?: number
+    status?: string
+    sort?: string
 }
 
 type Actions = {
@@ -15,7 +17,7 @@ type Actions = {
 
 const initialState: State = {
     pageIndex: 1,
-    pageSize: 12,
+    pageSize: 6,
 }
 
 export const useParamsStore = create<State & Actions>()((set) => ({
@@ -25,7 +27,7 @@ export const useParamsStore = create<State & Actions>()((set) => ({
     setParams: (newParams: Partial<State>) => {
         set((state) => {
             if(newParams.pageIndex) {
-                return {...state, pageNumber: newParams.pageIndex}
+                return {...state, pageIndex: newParams.pageIndex}
             } else {
                 return {...state, ...newParams, pageNumber: 1}
             }

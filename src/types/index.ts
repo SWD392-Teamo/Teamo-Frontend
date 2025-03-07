@@ -2,9 +2,8 @@ import { GroupPositionStatus, GroupStatus } from './enum';
 
 export type PagedResult<T> = {
     data: T[]
-    pageIndex: number
-    pageSize: number
     count: number
+    pageSize: number
 }
 
 export type Subject = {
@@ -62,19 +61,6 @@ export type GroupMember = {
     imgUrl: string;
     positions: string[];
     role: string;
-}
-
-export type Application = {
-    id: number;
-    groupId: number;
-    groupName: string;
-    studentName: string;
-    studentEmail: string;
-    imgUrl: string;
-    requestTime: Date;
-    requestContent: string;
-    groupPositionName: string;
-    status: string;
 }
 
 export type Group = {

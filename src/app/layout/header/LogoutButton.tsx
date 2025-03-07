@@ -8,9 +8,13 @@ import React from 'react'
 import { AiOutlineLogout } from 'react-icons/ai'
 
 export default function LogoutButton() {
+  const { showLoading, hideLoading } = useLoading();
+
   async function onLogout() {
+      showLoading();
       await logout();
-      signOut({redirect: true, callbackUrl: '/auth/login'});
+      await signOut({redirect: true, callbackUrl: '/auth/login'});
+      hideLoading();
   }
 
   return (

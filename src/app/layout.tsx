@@ -20,13 +20,13 @@ export default function RootLayout({
     <html lang="en">
       <body className='body'>
         <ToasterProvider />
-          <Header/>
-          <main className='main'>
-            <LoadingProvider>
-                {children}
-            </LoadingProvider>
-          </main>
-          <Footer/>
+          <LoadingProvider>
+            <Header/>
+              <main className='main'>
+                    {children}
+              </main>
+            <Footer/>
+          </LoadingProvider>
       </body>
     </html>
   );

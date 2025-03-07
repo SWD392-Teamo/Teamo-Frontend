@@ -1,6 +1,5 @@
 import { dateFormatter } from "@/utils/dateFormatter";
 import { Button } from "flowbite-react";
-import Image from "next/image";
 import React from "react";
 import MemberAvatar from "./MemberAvatar";
 
@@ -15,7 +14,7 @@ type ActionButton = {
 type GenericTableProps<T> = {
   data: T[];
   columns: { header: string; key: keyof T }[];
-  actions?: ActionButton[]; // Optional array of action buttons
+  actions?: ActionButton[];
 };
 
 export default function GenericTable<T>({ 
