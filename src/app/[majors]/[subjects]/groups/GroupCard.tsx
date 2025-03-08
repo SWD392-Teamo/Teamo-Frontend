@@ -10,8 +10,7 @@ import MemberAvatar from "@/components/groups/MemberAvatar";
 import PositionCard from "./PositionCard";
 import { useGroupStore } from "@/hooks/useGroupStore";
 import { Group } from "@/types";
-import MedGroupImage from "@/components/groups/MedGroupImage";
-import SmallGroupImage from "@/components/SmallGroupImage";
+import SmallGroupImage from "@/components/groups/SmallGroupImage";
 import GroupStatusBadge from "@/components/groups/GroupStatus";
 
 const GroupCard: React.FC<{ group: Group }> = ({ group }) => {
