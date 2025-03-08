@@ -10,7 +10,6 @@ import MemberAvatar from "@/components/groups/MemberAvatar";
 import { useGroupStore } from "@/hooks/useGroupStore";
 import Image from "next/image";
 import React from "react";
-import { HiOutlineLightningBolt } from "react-icons/hi";
 import { IoIosStar } from "react-icons/io";
 import { useShallow } from "zustand/shallow";
 import GroupPositionCard from "./GroupPosition";
@@ -149,13 +148,6 @@ const GroupDetail: React.FC = () => {
               </div>
             ))}
           </div>
-        </div>
-        <div className="flex items-center justify-center">
-          <button className="mt-8 flex items-center justify-center gap-2 bg-[#54B1EC] text-white font-semibold py-4 px-10 rounded-full shadow-md hover:bg-[#1681C7]
-           transition">
-            <HiOutlineLightningBolt className="w-5 h-5" />
-            Easy Apply
-          </button>
         </div>
       </div>
     </div>

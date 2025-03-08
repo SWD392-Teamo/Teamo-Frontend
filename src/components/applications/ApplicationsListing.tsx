@@ -1,6 +1,6 @@
 'use client'
 
-import { getGroupApplications, getUserApplications, reviewApplication } from "@/actions/applicationActions";
+import { getGroupApplicationById, getGroupApplications, getUserApplications, reviewApplication } from "@/actions/applicationActions";
 import ApplicationFilter from "@/components/applications/ApplicationFilter";
 import AppPagination from "@/components/AppPagination";
 import BackButton from "@/components/BackButton";
@@ -12,16 +12,21 @@ import { useLoading } from "@/providers/LoadingProvider";
 import { Application } from "@/types";
 import { useParams } from "next/navigation";
 import queryString from "query-string";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useShallow } from "zustand/shallow";
+import AppModal from "../AppModal";
+import ApplicationDetails from "./ApplicationDetails";
 
 interface Props {
   isForUser: boolean;
 }
 
 export default function ApplicationsListing({isForUser}: Props) {
+  const [showModal, setShowModal] = useState(false);
   const { showLoading, hideLoading } = useLoading();
+  const [selectedApplication, setSelectedApplication] = useState<Application>();
+
   const params = useParams();
   const groupId = Number(params.groupId);
 
@@ -55,6 +60,20 @@ export default function ApplicationsListing({isForUser}: Props) {
   // Set page index
   function setPageIndex(pageIndex: number) {
     setParams({pageIndex})
+  }
+
+  function handleRowClick(id: number) {
+    setShowModal(true);
+    showLoading();
+    getGroupApplicationById(groupId, id).then((data) => {
+      setSelectedApplication(data);
+    })
+      .catch((error) => {
+        toast.error(error.status + ' ' + error.message);
+      })
+      .finally(() => {
+        hideLoading();
+      });
   }
 
   // Get applications for group
@@ -157,6 +176,7 @@ export default function ApplicationsListing({isForUser}: Props) {
           data={data.applications}
           columns={columns}
           actions={actions}
+          onRowClick={handleRowClick}
         />
       )}
       <div className='flex justify-end mt-5'>
@@ -167,6 +187,17 @@ export default function ApplicationsListing({isForUser}: Props) {
           totalCount={data.totalCount}
         />
       </div>
+
+      {/* Application Details Modal */}
+      <AppModal
+        show={showModal}
+        onClose={() => setShowModal(false)}
+        title="Application Details"
+        size="3xl"
+      >
+        <ApplicationDetails 
+          application={selectedApplication!} />
+      </AppModal>
     </div>
   );
 }

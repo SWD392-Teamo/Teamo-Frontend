@@ -2,10 +2,9 @@
 
 import { useParamsStore } from '@/hooks/useParamsStore';
 import { useSubjectStore } from '@/hooks/useSubjectStore';
-import React, { useEffect, useState } from 'react'
-import { useShallow } from 'zustand/shallow';
-import { Subject } from '@/types';
 import queryString from 'query-string';
+import { useEffect, useState } from 'react';
+import { useShallow } from 'zustand/shallow';
 import { getData } from '../../actions/subjectAction';
 import Paginator from '../../components/Paginator';
 
@@ -28,7 +27,8 @@ export default function Listings() {
   })))
 
   const setData = useSubjectStore(state => state.setData);
-  const setParams = useParamsStore(state => state.setParams)
+  const setParams = useParamsStore(state => state.setParams);
+  const resetParams = useParamsStore(state => state.reset);
   
   // Create a query string for fetching data with filters
   const url = queryString.stringifyUrl({url: '', query: params})
@@ -39,6 +39,7 @@ export default function Listings() {
 
   // Rerender component depends on pageNumber
   useEffect(() => {
+    resetParams();
     getData(url).then(data => {
       setData(data);
       setLoading(false);
