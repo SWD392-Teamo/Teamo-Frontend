@@ -2,6 +2,7 @@ import Image from "next/image";
 import React from "react";
 import BgLanding from "@/assets/BgLanding.png";
 import { BiSearch } from "react-icons/bi";
+import { motion } from "framer-motion";
 
 type Props = {
   title: string;
@@ -10,7 +11,7 @@ type Props = {
 
 export default function Title({ title, subtitle }: Props) {
   return (
-    <div className=" relative w-full h-screen flex flex-col items-center content-start justify-center px-6">
+    <div className="relative w-full h-screen flex flex-col items-center justify-center px-6">
       <Image
         src={BgLanding}
         alt="Background"
@@ -20,25 +21,37 @@ export default function Title({ title, subtitle }: Props) {
       />
       <div className="absolute inset-0 bg-white opacity-40 z-1" />
 
-      <div className="absolute w-1/2 flex items-center flex-col">
-        <div
+      <div className="absolute w-1/2 flex items-center flex-col z-10">
+        <motion.div
           className="text-6xl font-bold text-[#ECF7FD] py-5"
           style={{ textShadow: "6px 6px 12px #105F94" }}
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1 }}
         >
           {title}
-        </div>
-        <div
-          className=" text-[#3E424A] text-center text-xl font-normal mt-2 "
+        </motion.div>
+
+        <motion.div
+          className="text-[#3E424A] text-center text-xl font-normal mt-2"
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.3 }}
         >
           {subtitle}
-        </div>
-        <div className="mt-7 text-3xl text-[#3E424A] font-bold">
-          Start your team journey!
-        </div>
-        <form className="mt-6 relative w-full">
+        </motion.div>
+
+
+        <motion.form
+          className="mt-6 relative w-full"
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.7 }}
+        >
           <input
             type="text"
-            className="w-full pl-10 pr-24 py-4 rounded-full  border border-gray-300 focus:ring-2 focus:ring-logo focus:outline-none text-lg text-gray-600"
+            className="w-full pl-10 pr-24 py-4 rounded-full border border-gray-300 focus:ring-2 focus:ring-logo focus:outline-none text-lg text-gray-600"
+            placeholder="Search for majors"
           />
           <button
             type="submit"
@@ -46,7 +59,7 @@ export default function Title({ title, subtitle }: Props) {
           >
             <BiSearch className="text-white" size={24} />
           </button>
-        </form>
+        </motion.form>
       </div>
     </div>
   );

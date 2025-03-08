@@ -20,7 +20,7 @@ export default async function Header() {
         objectFit="cover"
         className="absolute inset-0 z-0"
       />
-      <div className="absolute inset-0 bg-white opacity-30 z-10" />
+      <div className="absolute inset-0 bg-white opacity-40 z-10" />
 
       <div className="border-b-2 py-3 flex justify-around z-20 relative">
         <Logo />
