@@ -7,8 +7,12 @@
     @apply w-full h-full flex flex-col min-h-screen;
 }
 
-.main {
-    @apply container mx-auto px-14 pt-10 font-beVietnam flex-grow;
+// .main {
+//     @apply container mx-auto px-14 pt-10 font-beVietnam flex-grow;
+// }
+
+.container {
+    @apply mx-auto px-14 pt-10 font-beVietnam flex-grow;
 }
 
 .page-title {

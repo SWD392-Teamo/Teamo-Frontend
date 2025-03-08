@@ -5,7 +5,7 @@ import ApplicationFilter from "@/components/applications/ApplicationFilter";
 import AppPagination from "@/components/AppPagination";
 import BackButton from "@/components/BackButton";
 import GenericTable from "@/components/GenericTable";
-import Title from "@/components/Title";
+import Title from "@/components/Home/Title";
 import { useApplicationStore } from "@/hooks/useApplicationStore";
 import { useParamsStore } from "@/hooks/useParamsStore";
 import { useLoading } from "@/providers/LoadingProvider";

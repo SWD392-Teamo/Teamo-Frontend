@@ -1,11 +1,12 @@
 'use client'
 
-import Title from "../components/Title";
+import Title from "../components/Home/Title";
 
 export default function Home() {
   return (
     <div>
-      <Title title='Teamo'/>
+      <Title title='Find Your Team with Ease!' subtitle="Teamo helps FPT university students connect with peers for projects, assignments, and group work. Simply browse profiles by subject or major, and form your perfect team in no time."/>
+
     </div> 
   );
 }
