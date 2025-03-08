@@ -10,7 +10,7 @@ type Props = {
 
 export default function Title({ title, subtitle }: Props) {
   return (
-    <div className="mb-5 relative w-full h-screen flex flex-col items-center content-start justify-center px-6">
+    <div className=" relative w-full h-screen flex flex-col items-center content-start justify-center px-6">
       <Image
         src={BgLanding}
         alt="Background"
