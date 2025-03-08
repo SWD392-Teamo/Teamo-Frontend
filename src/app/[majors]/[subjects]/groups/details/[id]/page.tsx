@@ -1,7 +1,7 @@
 "use client";
 
 import BackButton from "@/components/BackButton";
-import MemberAvatar from "@/components/MemberAvatar";
+import MemberAvatar from "@/components/groups/MemberAvatar";
 import LeaderAvatar from "@/components/UserAvatar";
 import { useGroupStore } from "@/hooks/useGroupStore";
 import { Group } from "@/types";
@@ -10,9 +10,9 @@ import React from "react";
 import { useShallow } from "zustand/shallow";
 import defaultGroup from "@/assets/defaultGroup.png";
 import defaultAvatar from "@/assets/defaultAvatar.jpg";
-import MedGroupImage from "@/components/MedGroupImage";
+import MedGroupImage from "@/components/groups/MedGroupImage";
 import DateConverter from "@/components/DateConvert";
-import GroupStatusBadge from "@/components/GroupStatus";
+import GroupStatusBadge from "@/components/groups/GroupStatus";
 import PositionCard from "../../PositionCard";
 import { FaStar } from "react-icons/fa";
 import { IoIosStar } from "react-icons/io";

@@ -1,4 +1,4 @@
-import MemberAvatar from "@/components/MemberAvatar";
+import MemberAvatar from "@/components/groups/MemberAvatar";
 import PositionStatusBadge from "@/components/PositionStatus";
 import { Group, GroupMember, GroupPosition } from "@/types";
 import Image from "next/image";
