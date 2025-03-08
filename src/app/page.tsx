@@ -6,7 +6,7 @@ import MajorCarousel from "@/components/Home/MajorCarousel";
 
 export default function Home() {
   return (
-    <div>
+    <div  style={{ all: 'unset' }}>
       <Title
         title="Find Your Team with Ease!"
         subtitle="Teamo helps FPT university students connect with peers for projects, assignments, and group work. Simply browse profiles by subject or major, and form your perfect team in no time."

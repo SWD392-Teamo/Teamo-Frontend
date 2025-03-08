@@ -1,3 +1,4 @@
+"use client";
 import { getData } from "@/actions/majorActions";
 import { useMajorStore } from "@/hooks/useMajorStore";
 import { useParamsStore } from "@/hooks/useParamsStore";
