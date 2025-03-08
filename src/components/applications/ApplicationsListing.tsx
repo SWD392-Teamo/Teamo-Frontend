@@ -1,6 +1,6 @@
 'use client'
 
-import { getGroupApplications, getUserApplications, reviewApplication } from "@/actions/applicationActions";
+import { getGroupApplicationById, getGroupApplications, getUserApplicationById, getUserApplications, reviewApplication } from "@/actions/applicationActions";
 import ApplicationFilter from "@/components/applications/ApplicationFilter";
 import AppPagination from "@/components/AppPagination";
 import BackButton from "@/components/BackButton";
@@ -12,18 +12,38 @@ import { useLoading } from "@/providers/LoadingProvider";
 import { Application } from "@/types";
 import { useParams } from "next/navigation";
 import queryString from "query-string";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useShallow } from "zustand/shallow";
+import AppModal from "../AppModal";
+import ApplicationDetails from "./ApplicationDetails";
+import EmptyFilter from "../EmptyFilter";
 
 interface Props {
   isForUser: boolean;
 }
 
 export default function ApplicationsListing({isForUser}: Props) {
+
+  //=====================================
+  //      LOCAL STATE MANAGEMENT
+  //=====================================
+
+  const [showModal, setShowModal] = useState(false);
   const { showLoading, hideLoading } = useLoading();
+  const [selectedApplication, setSelectedApplication] = useState<Application>();
+
   const params = useParams();
   const groupId = Number(params.groupId);
+
+  // Set page index
+  function setPageIndex(pageIndex: number) {
+    setParams({pageIndex})
+  }
+
+  //=====================================
+  //      GLOBAL STATE MANAGEMENT
+  //=====================================
 
   // Rerender only on these params
   const applicationParams = useParamsStore(
@@ -52,10 +72,9 @@ export default function ApplicationsListing({isForUser}: Props) {
     query: applicationParams
   });
 
-  // Set page index
-  function setPageIndex(pageIndex: number) {
-    setParams({pageIndex})
-  }
+  //=====================================
+  //      GET APPLICATIONS LIST
+  //=====================================
 
   // Get applications for group
   function getApplicationsForGroup() {
@@ -94,19 +113,64 @@ export default function ApplicationsListing({isForUser}: Props) {
     }
   }, [url, setData, showLoading, hideLoading]);
 
+  //=====================================
+  //      GET APPLICATION BY ID
+  //=====================================
 
-  // Define the columns for the table
+  function handleRowClick(id: number) {
+    setShowModal(true);
+    showLoading();
+
+    if (!isForUser) {
+      getGroupApplication(id);
+    }
+    else {
+      getUserApplication(id);
+    }
+  }
+
+  function getGroupApplication(id: number) {
+    getGroupApplicationById(groupId, id).then((data) => {
+      setSelectedApplication(data);
+    })
+      .catch((error) => {
+        toast.error(error.status + ' ' + error.message);
+      })
+      .finally(() => {
+        hideLoading();
+      });
+  }
+
+  function getUserApplication(id: number) {
+    getUserApplicationById(id).then((data) => {
+      setSelectedApplication(data);
+    })
+      .catch((error) => {
+        toast.error(error.status + ' ' + error.message);
+      })
+      .finally(() => {
+        hideLoading();
+      });
+  }
+
+  //==============================================
+  //      APPLICATION TABLE CONFIGURATIONS
+  //==============================================
+
+  // COLUMNS
   const columns: { header: string; key: keyof Application }[] = [
     { header: "", key: "imgUrl" },
     { header: "Applicant", key: "studentName" },
     { header: "Position", key: "groupPositionName" },
     { header: "Date", key: "requestTime" },
+    { header: "Status", key: "status" },
   ];
 
-  if(!isForUser) {
+  if (!isForUser && !(applicationParams.status === 'rejected' || applicationParams.status === 'approved')) {
     columns.push({ header: "Action", key: "id" });
-  }
+  }  
   
+  // APPROVE ACTION
   const handleApprove = async (id: number) => {
     try {
       showLoading();
@@ -120,6 +184,8 @@ export default function ApplicationsListing({isForUser}: Props) {
     }
   };
 
+
+  // DECLINE ACTION
   const handleDecline = async (id: number) => {
     try {
       showLoading();
@@ -133,7 +199,7 @@ export default function ApplicationsListing({isForUser}: Props) {
     }
   };
 
-  // Define action buttons
+  // ACTION BUTTONS
   const actions = [
     {
       label: 'Approve',
@@ -151,22 +217,53 @@ export default function ApplicationsListing({isForUser}: Props) {
     <div className=" mb-10">
       <BackButton url="/" />
       <Title title="Group's Applications" />
+
+      {/* Application Filters */}
       <ApplicationFilter />
-      {data.applications && (
-        <GenericTable<Application>
-          data={data.applications}
-          columns={columns}
-          actions={actions}
-        />
+
+      {(data.totalCount > 0) ?
+      (
+        <>
+          {/* Application Table */}
+          {data.applications && (
+            <GenericTable<Application>
+              data={data.applications}
+              columns={columns}
+              actions={actions}
+              onRowClick={handleRowClick}
+            />
+          )}
+
+          {/* Application Pagination */}
+          <div className='flex justify-end mt-5'>
+            <AppPagination 
+              pageChanged={setPageIndex} 
+              currentPage={applicationParams.pageIndex}
+              pageSize={data.pageSize}
+              totalCount={data.totalCount}
+            />
+          </div>
+
+          {/* Application Details Modal */}
+          <AppModal
+            show={showModal}
+            onClose={() => setShowModal(false)}
+            title="Application Details"
+            size="3xl"
+          >
+            <ApplicationDetails 
+              application={selectedApplication!} />
+          </AppModal>
+        </>
+      ) : (
+        <>
+          {/*Empty Filter */}
+          <EmptyFilter 
+            title="No applications found" 
+            subtitle="Try changing the filters or reset it completely"
+            showReset={true} />
+        </>
       )}
-      <div className='flex justify-end mt-5'>
-        <AppPagination 
-          pageChanged={setPageIndex} 
-          currentPage={applicationParams.pageIndex}
-          pageSize={data.pageSize}
-          totalCount={data.totalCount}
-        />
-      </div>
     </div>
   );
 }
