@@ -1,23 +1,18 @@
 "use client";
 
-import BackButton from "@/components/BackButton";
-import MemberAvatar from "@/components/groups/MemberAvatar";
-import LeaderAvatar from "@/components/UserAvatar";
-import { useGroupStore } from "@/hooks/useGroupStore";
-import { Group } from "@/types";
-import Image from "next/image";
-import React from "react";
-import { useShallow } from "zustand/shallow";
-import defaultGroup from "@/assets/defaultGroup.png";
 import defaultAvatar from "@/assets/defaultAvatar.jpg";
-import MedGroupImage from "@/components/groups/MedGroupImage";
+import defaultGroup from "@/assets/defaultGroup.png";
+import BackButton from "@/components/BackButton";
 import DateConverter from "@/components/DateConvert";
 import GroupStatusBadge from "@/components/groups/GroupStatus";
-import PositionCard from "../../PositionCard";
-import { FaStar } from "react-icons/fa";
-import { IoIosStar } from "react-icons/io";
+import MedGroupImage from "@/components/groups/MedGroupImage";
+import MemberAvatar from "@/components/groups/MemberAvatar";
+import { useGroupStore } from "@/hooks/useGroupStore";
+import Image from "next/image";
+import React from "react";
 import { HiOutlineLightningBolt } from "react-icons/hi";
-import PositionStatusBadge from "@/components/PositionStatus";
+import { IoIosStar } from "react-icons/io";
+import { useShallow } from "zustand/shallow";
 import GroupPositionCard from "./GroupPosition";
 
 const GroupDetail: React.FC = () => {
@@ -29,25 +24,6 @@ const GroupDetail: React.FC = () => {
 
   const groupMembers = selectedgroup?.groupMembers;
   const groupPositions = selectedgroup?.groupPositions;
-
-  // const { selectedSubject } = useSubjectStore(
-  //   useShallow((state) => ({
-  //     selectedSubject: state.selectedSubject,
-  //   }))
-  // );
-
-  // const link = `/${selectedMajor?.code}/${selectedSubject?.code}/groups/details/${group.id}`;
-  // const { setSelectedGroup } = useGroupStore();
-
-  // const handleDetailsClick = () => {
-  //   setSelectedGroup(group);
-  // };
-
-  // const leader = group.groupMembers.find((member) => member.role === "Leader");
-  // const groupMember = group.groupMembers.filter(
-  //   (member) => member.role === "Member"
-  // );
-  // const groupPosition = group.groupPositions;
 
   return (
     <div className="border border-gray-200 rounded-lg shadow-sm p-12 flex flex-col items-start hover:shadow-lg transition flex-1 mb-16">
@@ -135,13 +111,6 @@ const GroupDetail: React.FC = () => {
           />
         )}
 
-        {/* <div className="text-left w-full font-normal text-lg">
-          <div className="flex flex-wrap gap-2 mt-4">
-            {groupPosition?.map((position) => (
-              <PositionCard key={position.id} position={position} />
-            ))}
-          </div>
-        </div> */}
       </div>
 
       <div className="w-full h-[1px] bg-gray-300 my-8"></div>
