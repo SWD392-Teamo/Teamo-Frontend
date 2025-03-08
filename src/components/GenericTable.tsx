@@ -1,7 +1,7 @@
 import { dateFormatter } from "@/utils/dateFormatter";
 import { Button } from "flowbite-react";
 import React from "react";
-import MemberAvatar from "./MemberAvatar";
+import MemberAvatar from "./groups/MemberAvatar";
 
 // Define a type for action buttons
 type ActionButton = {

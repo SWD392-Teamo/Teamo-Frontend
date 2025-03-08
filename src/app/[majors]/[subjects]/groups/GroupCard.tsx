@@ -6,13 +6,13 @@ import defaultAvatar from "@/assets/defaultAvatar.jpg";
 import defaultGroup from "@/assets/defaultGroup.png";
 import Image from "next/image";
 import LeaderAvatar from "@/components/UserAvatar";
-import MemberAvatar from "@/components/MemberAvatar";
+import MemberAvatar from "@/components/groups/MemberAvatar";
 import PositionCard from "./PositionCard";
 import { useGroupStore } from "@/hooks/useGroupStore";
 import { Group } from "@/types";
-import MedGroupImage from "@/components/MedGroupImage";
+import MedGroupImage from "@/components/groups/MedGroupImage";
 import SmallGroupImage from "@/components/SmallGroupImage";
-import GroupStatusBadge from "@/components/GroupStatus";
+import GroupStatusBadge from "@/components/groups/GroupStatus";
 
 const GroupCard: React.FC<{ group: Group }> = ({ group }) => {
   const { selectedMajor } = useMajorStore(
