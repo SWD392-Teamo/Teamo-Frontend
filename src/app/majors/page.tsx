@@ -35,7 +35,7 @@ export default function Listings() {
   );
 
   const setData = useMajorStore((state) => state.setData);
-  const setParams = useParamsStore((state) => state.setParams);
+  const resetParams = useParamsStore((state) => state.reset);
 
   const url = queryString.stringifyUrl({
     url: "",
@@ -47,6 +47,7 @@ export default function Listings() {
 
   useEffect(() => {
     showLoading();
+    resetParams();
     getData(url).then((data) => {
       console.log("data", data);
       setData(data);

@@ -43,12 +43,13 @@ export type Application = {
     imgUrl: string
     requestTime: string
     requestContent: string
+    documentUrl: string
     groupPositionName: string
     status: string
   }
 
 export type GroupPosition = {
-    id: string;
+    id: number;
     name: string;
     count: number;
     status: string;
