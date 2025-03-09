@@ -1,11 +1,16 @@
-'use client'
+"use client";
 
-import { getGroupApplicationById, getGroupApplications, getUserApplicationById, getUserApplications, reviewApplication } from "@/actions/applicationActions";
+import {
+  getGroupApplicationById,
+  getGroupApplications,
+  getUserApplicationById,
+  getUserApplications,
+  reviewApplication,
+} from "@/actions/applicationActions";
 import ApplicationFilter from "@/components/applications/ApplicationFilter";
 import AppPagination from "@/components/AppPagination";
 import BackButton from "@/components/BackButton";
 import GenericTable from "@/components/GenericTable";
-import Title from "@/components/Title";
 import { useApplicationStore } from "@/hooks/useApplicationStore";
 import { useParamsStore } from "@/hooks/useParamsStore";
 import { useLoading } from "@/providers/LoadingProvider";
@@ -23,8 +28,7 @@ interface Props {
   isForUser: boolean;
 }
 
-export default function ApplicationsListing({isForUser}: Props) {
-
+export default function ApplicationsListing({ isForUser }: Props) {
   //=====================================
   //      LOCAL STATE MANAGEMENT
   //=====================================
@@ -38,7 +42,7 @@ export default function ApplicationsListing({isForUser}: Props) {
 
   // Set page index
   function setPageIndex(pageIndex: number) {
-    setParams({pageIndex})
+    setParams({ pageIndex });
   }
 
   //=====================================
@@ -47,29 +51,29 @@ export default function ApplicationsListing({isForUser}: Props) {
 
   // Rerender only on these params
   const applicationParams = useParamsStore(
-    useShallow(state => ({
+    useShallow((state) => ({
       pageIndex: state.pageIndex,
       pageSize: state.pageSize,
       status: state.status,
-      sort: state.sort
+      sort: state.sort,
     }))
   );
 
   // Use application store
   const data = useApplicationStore(
-    useShallow(state => ({
+    useShallow((state) => ({
       applications: state.applications,
       totalCount: state.totalCount,
       pageSize: state.pageSize,
     }))
   );
 
-  const setData = useApplicationStore(state => state.setData);
-  const setParams = useParamsStore(state => state.setParams);
+  const setData = useApplicationStore((state) => state.setData);
+  const setParams = useParamsStore((state) => state.setParams);
 
   const url = queryString.stringifyUrl({
     url: "",
-    query: applicationParams
+    query: applicationParams,
   });
 
   //=====================================
@@ -78,11 +82,12 @@ export default function ApplicationsListing({isForUser}: Props) {
 
   // Get applications for group
   function getApplicationsForGroup() {
-    getGroupApplications(groupId, url).then((data) => {
-      setData(data);
-    })
+    getGroupApplications(groupId, url)
+      .then((data) => {
+        setData(data);
+      })
       .catch((error) => {
-        toast.error(error.status + ' ' + error.message);
+        toast.error(error.status + " " + error.message);
       })
       .finally(() => {
         hideLoading();
@@ -91,11 +96,12 @@ export default function ApplicationsListing({isForUser}: Props) {
 
   // Get applications for user
   function getApplicationsForUser() {
-    getUserApplications(url).then((data) => {
-      setData(data);
-    })
+    getUserApplications(url)
+      .then((data) => {
+        setData(data);
+      })
       .catch((error) => {
-        toast.error(error.status + ' ' + error.message);
+        toast.error(error.status + " " + error.message);
       })
       .finally(() => {
         hideLoading();
@@ -107,8 +113,7 @@ export default function ApplicationsListing({isForUser}: Props) {
     showLoading();
     if (!isForUser) {
       getApplicationsForGroup();
-    }
-    else {
+    } else {
       getApplicationsForUser();
     }
   }, [url, setData, showLoading, hideLoading]);
@@ -123,18 +128,18 @@ export default function ApplicationsListing({isForUser}: Props) {
 
     if (!isForUser) {
       getGroupApplication(id);
-    }
-    else {
+    } else {
       getUserApplication(id);
     }
   }
 
   function getGroupApplication(id: number) {
-    getGroupApplicationById(groupId, id).then((data) => {
-      setSelectedApplication(data);
-    })
+    getGroupApplicationById(groupId, id)
+      .then((data) => {
+        setSelectedApplication(data);
+      })
       .catch((error) => {
-        toast.error(error.status + ' ' + error.message);
+        toast.error(error.status + " " + error.message);
       })
       .finally(() => {
         hideLoading();
@@ -142,11 +147,12 @@ export default function ApplicationsListing({isForUser}: Props) {
   }
 
   function getUserApplication(id: number) {
-    getUserApplicationById(id).then((data) => {
-      setSelectedApplication(data);
-    })
+    getUserApplicationById(id)
+      .then((data) => {
+        setSelectedApplication(data);
+      })
       .catch((error) => {
-        toast.error(error.status + ' ' + error.message);
+        toast.error(error.status + " " + error.message);
       })
       .finally(() => {
         hideLoading();
@@ -166,34 +172,39 @@ export default function ApplicationsListing({isForUser}: Props) {
     { header: "Status", key: "status" },
   ];
 
-  if (!isForUser && !(applicationParams.status === 'rejected' || applicationParams.status === 'approved')) {
+  if (
+    !isForUser &&
+    !(
+      applicationParams.status === "rejected" ||
+      applicationParams.status === "approved"
+    )
+  ) {
     columns.push({ header: "Action", key: "id" });
-  }  
-  
+  }
+
   // APPROVE ACTION
   const handleApprove = async (id: number) => {
     try {
       showLoading();
       // Approve application
-      await reviewApplication(groupId, Number(id), {status: "Approved"})
-      toast.success('Application approved successfully');
+      await reviewApplication(groupId, Number(id), { status: "Approved" });
+      toast.success("Application approved successfully");
     } catch (error) {
-      toast.error('Failed to approve application');
+      toast.error("Failed to approve application");
     } finally {
       hideLoading();
     }
   };
-
 
   // DECLINE ACTION
   const handleDecline = async (id: number) => {
     try {
       showLoading();
       // Reject application
-      await reviewApplication(groupId, Number(id), {status: "Rejected"})
-      toast.success('Application rejected successfully');
+      await reviewApplication(groupId, Number(id), { status: "Rejected" });
+      toast.success("Application rejected successfully");
     } catch (error) {
-      toast.error('Failed to reject application');
+      toast.error("Failed to reject application");
     } finally {
       hideLoading();
     }
@@ -202,27 +213,25 @@ export default function ApplicationsListing({isForUser}: Props) {
   // ACTION BUTTONS
   const actions = [
     {
-      label: 'Approve',
+      label: "Approve",
       onClick: handleApprove,
-      className: 'btn btn--primary--outline'
+      className: "btn btn--primary--outline",
     },
     {
-      label: 'Decline',
+      label: "Decline",
       onClick: handleDecline,
-      className: 'btn btn--danger--outline'
-    }
+      className: "btn btn--danger--outline",
+    },
   ];
 
   return (
     <div className=" mb-10">
       <BackButton url="/" />
-      <Title title="Group's Applications" />
-
+      <h1 className="page-title">Group Application</h1>
       {/* Application Filters */}
       <ApplicationFilter />
 
-      {(data.totalCount > 0) ?
-      (
+      {data.totalCount > 0 ? (
         <>
           {/* Application Table */}
           {data.applications && (
@@ -235,9 +244,9 @@ export default function ApplicationsListing({isForUser}: Props) {
           )}
 
           {/* Application Pagination */}
-          <div className='flex justify-end mt-5'>
-            <AppPagination 
-              pageChanged={setPageIndex} 
+          <div className="flex justify-end mt-5">
+            <AppPagination
+              pageChanged={setPageIndex}
               currentPage={applicationParams.pageIndex}
               pageSize={data.pageSize}
               totalCount={data.totalCount}
@@ -251,17 +260,17 @@ export default function ApplicationsListing({isForUser}: Props) {
             title="Application Details"
             size="3xl"
           >
-            <ApplicationDetails 
-              application={selectedApplication!} />
+            <ApplicationDetails application={selectedApplication!} />
           </AppModal>
         </>
       ) : (
         <>
           {/*Empty Filter */}
-          <EmptyFilter 
-            title="No applications found" 
+          <EmptyFilter
+            title="No applications found"
             subtitle="Try changing the filters or reset it completely"
-            showReset={true} />
+            showReset={true}
+          />
         </>
       )}
     </div>

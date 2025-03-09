@@ -1,6 +1,6 @@
 /* Button style using Tailwind CSS*/
 .btn {
-  @apply uppercase no-underline py-1 px-6 w-max rounded-full text-sm font-medium cursor-pointer text-tertiary;
+  @apply uppercase no-underline py-1 px-3 w-max rounded-full text-sm font-medium cursor-pointer text-tertiary;
   
   &:hover {
     @apply shadow-lg;

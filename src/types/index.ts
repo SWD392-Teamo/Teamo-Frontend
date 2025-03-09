@@ -18,6 +18,7 @@ export type Major = {
     id: number;
     code: string;
     name: string;
+    imgUrl: string;
     createdDate: Date;
 }
 
