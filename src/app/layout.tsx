@@ -1,11 +1,10 @@
-import type { Metadata } from "next";
-import "./globals.css";
-import "../styles/main.scss";
-import Header from "./layout/header/Header";
-import ToasterProvider from "@/providers/ToastProvider";
-import Footer from "./layout/footer/Footer";
 import { LoadingProvider } from "@/providers/LoadingProvider";
-import { headers } from "next/headers";
+import ToasterProvider from "@/providers/ToastProvider";
+import type { Metadata } from "next";
+import "../styles/main.scss";
+import "./globals.css";
+import Footer from "./layout/footer/Footer";
+import Header from "./layout/header/Header";
 import MainWrapper from "./MainWrapper";
 
 export const metadata: Metadata = {
