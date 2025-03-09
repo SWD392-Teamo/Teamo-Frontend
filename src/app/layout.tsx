@@ -5,6 +5,7 @@ import Header from "./layout/header/Header";
 import ToasterProvider from "@/providers/ToastProvider";
 import Footer from "./layout/footer/Footer";
 import { LoadingProvider } from "@/providers/LoadingProvider";
+import ChatAgent from "@/components/ChatAgent";
 
 export const metadata: Metadata = {
   title: "Teamo",
@@ -24,6 +25,7 @@ export default function RootLayout({
             <Header/>
               <main className='main'>
                     {children}
+                    <ChatAgent />
               </main>
             <Footer/>
           </LoadingProvider>
