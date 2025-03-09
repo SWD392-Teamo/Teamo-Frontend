@@ -144,10 +144,10 @@ export default function ChatAgent() {
                 <div className="bg-white rounded-lg shadow-xl w-[700px] h-[700px] flex flex-col">
                     {/* Header */}
                     <div className="flex items-center justify-between p-4 border-b">
-                        <h2 className="text-lg text-primary font-semibold flex flex-row align-middle">
+                        <h1 className="text-lg text-primary font-semibold flex flex-row align-middle">
                             <AiOutlineMessage size={25} className='me-2' />
                             <div>Teamo Assistant</div>
-                        </h2>
+                        </h1>
                         <Button color="gray" size="sm" onClick={() => setIsOpen(false)}>
                             <HiX className="h-5 w-5" />
                         </Button>
