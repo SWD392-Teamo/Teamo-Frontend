@@ -150,8 +150,11 @@ export default function ApplicationsListing({isForUser}: Props) {
   return (
     <div className=" mb-10">
       <BackButton url="/" />
-      <Title title="Group's Applications" />
-      <ApplicationFilter />
+      <h1 className="page-title">
+          Group Application
+        </h1>
+        <div></div>      
+        <ApplicationFilter />
       {data.applications && (
         <GenericTable<Application>
           data={data.applications}

@@ -42,25 +42,6 @@ export default function Title({ title, subtitle }: Props) {
           {subtitle}
         </motion.div>
 
-
-        <motion.form
-          className="mt-6 relative w-full"
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.7 }}
-        >
-          <input
-            type="text"
-            className="w-full pl-10 pr-24 py-4 rounded-full border border-gray-300 focus:ring-2 focus:ring-logo focus:outline-none text-lg text-gray-600"
-            placeholder="Search for majors"
-          />
-          <button
-            type="submit"
-            className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-[#58A4E9] p-3 rounded-full"
-          >
-            <BiSearch className="text-white" size={24} />
-          </button>
-        </motion.form>
       </div>
     </div>
   );
