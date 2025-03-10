@@ -35,18 +35,6 @@ export type Field = {
     description: string;
 }
 
-export type Application = {
-    id: number
-    groupId: number
-    groupName: string
-    studentName: string
-    studentEmail: string
-    imgUrl: string
-    requestTime: string
-    requestContent: string
-    groupPositionName: string
-    status: string
-  }
 
 export type GroupPosition = {
     id: string;

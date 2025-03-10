@@ -1,7 +1,7 @@
 import { User } from "@/types";
 import Link from "next/link";
-import ProfileAvatar from "./ProfileAvatar";
 import { useState } from "react";
+import ProfileAvatar from "./ProfileAvatar";
 
 
 const ProfileCard: React.FC<{user: User}> = ({ user }) => {
@@ -14,6 +14,11 @@ const ProfileCard: React.FC<{user: User}> = ({ user }) => {
         <section className="flex items-center justify-between mb-2">
             <ProfileAvatar imgUrl={user.imgUrl}/>
             <div className="absolute top-4 right-4">
+            <Link href={"/"}>
+              <button className=" px-6 py-2 text-base text-logo border border-logo rounded-full hover:bg-blue-100 font-semibold mr-2">
+                Application
+              </button>
+            </Link>
             <Link href={link}>
               <button className=" px-6 py-2 text-base text-logo border border-logo rounded-full hover:bg-blue-100 font-semibold">
                 Edit
@@ -59,14 +64,7 @@ const ProfileCard: React.FC<{user: User}> = ({ user }) => {
                         <ul className="mt-2 bg-white shadow-md rounded p-2">
                           {user.links.map((contact) => (
                             <li key={contact.id} className="py-1">
-                              <a
-                                href={contact.url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-blue-500 hover:underline"
-                              >
-                                {contact.url}
-                              </a>
+                              <span className="py-2 text-gray-600">{contact.name}: {contact.url}</span>
                             </li>
                           ))}
                         </ul>
@@ -90,7 +88,7 @@ const ProfileCard: React.FC<{user: User}> = ({ user }) => {
                 <button key={skill.id} className="mt-4 px-6 py-2 text-base text-logo border border-logo rounded-full hover:bg-blue-100 font-semibold mr-4">
                   {skill.skillName}
                   <br/>
-                  {skill.skillLevel && <span className="ml-2 text-xs bg-blue-200 text-blue-800 px-2 py-1 rounded-full">{skill.skillLevel}</span>}
+                  {skill.skillLevel && <span className="text-xs bg-blue-200 text-blue-800 px-2 py-1 rounded-full">{skill.skillLevel}</span>}
                 </button>
               ))
             ) : (
