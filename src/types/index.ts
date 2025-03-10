@@ -31,3 +31,10 @@ export type Field = {
     name: string;
     description: string;
 }
+export type Semester = {
+    id: number;
+    name: string;
+    startDate: string;
+    endDate: string;
+}
+

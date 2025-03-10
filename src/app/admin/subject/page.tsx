@@ -3,6 +3,9 @@
 import { useState, ChangeEvent, FormEvent } from "react";
 import NavbarUni from "@/app/admin/navbaruni/page";
 import BackButton from "@/components/BackButton";
+import { createSubject } from "@/actions/subjectAction";
+import { FieldValues, useForm } from "react-hook-form";
+import Input from "@/components/Input";
 
 export default function CreateSubjects() {
     const [formData, setFormData] = useState({
@@ -11,13 +14,40 @@ export default function CreateSubjects() {
         description: "",
     });
 
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
+    const [success, setSuccess] = useState("");
+
     const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value.trim() });
     };
 
-    const handleSubmit = (e: FormEvent) => {
-        e.preventDefault();
-        console.log("Subject Created:", formData);
+    // Set up form state
+    const { control, handleSubmit,
+        formState: { isSubmitting, isValid } } = useForm({
+            mode: 'onTouched'
+        });
+
+    async function onSubmit(data: FieldValues) {
+        setLoading(true);
+        setError("");
+        setSuccess("");
+
+        try {
+            const response = await createSubject(data);
+
+            if (!response.ok) {
+                throw new Error("Failed to create subject");
+            }
+
+            setSuccess("Subject created successfully!");
+            console.log("Success:", data);
+            setFormData({ code: "", name: "", description: "" }); // Reset form
+        } catch (error: any) {
+            setError(error.message || "An error occurred");
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -28,41 +58,32 @@ export default function CreateSubjects() {
                 <BackButton />
                 <h2 className="text-2xl font-bold mb-6">Create Subjects</h2>
 
-                <form className="space-y-4" onSubmit={handleSubmit}>
-                    <label className="block">Code</label>
-                    <input
-                        type="text"
-                        name="code"
-                        placeholder="Enter Subject Code"
-                        value={formData.code}
-                        onChange={handleChange}
-                        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
+                {error && <p className="text-red-500">{error}</p>}
+                {success && <p className="text-green-500">{success}</p>}
 
-                    <label className="block">Name</label>
-                    <input
-                        type="text"
-                        name="name"
-                        placeholder="Enter Subject Name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
+                <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
 
-                    <label className="block">Description</label>
-                    <textarea
-                        name="description"
-                        placeholder="Enter Subject Description"
-                        value={formData.description}
-                        onChange={handleChange}
-                        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
+                    <Input label='Subject Code' name='code' control={control}
+                        type='text'
+                        showlabel='true'
+                        rules={{ required: 'Code is required' }} />
+
+                    <Input label='Subject Name' name='name' control={control}
+                        type='text'
+                        showlabel='true'
+                        rules={{ required: 'Name is required' }} />
+
+                    <Input label='Subject Description' name='description' control={control}
+                        type='text'
+                        showlabel='true'
+                        rules={{ required: 'Description is required' }} />
 
                     <button
                         type="submit"
-                        className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+                        className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition disabled:opacity-50"
+                        disabled={loading}
                     >
-                        Create
+                        {loading ? "Creating..." : "Create"}
                     </button>
                 </form>
             </div>
