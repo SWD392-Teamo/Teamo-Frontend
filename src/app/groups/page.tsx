@@ -11,6 +11,7 @@ import { useShallow } from "zustand/shallow";
 import GroupCard from "../[majors]/[subjects]/groups/GroupCard";
 import AppPagination from "@/components/AppPagination";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import HandlePaging from "@/components/HandlePaging";
 
 export default function Listings() {
   const [search, setSearch] = useState<string>("");
@@ -84,27 +85,8 @@ export default function Listings() {
         </div>
 
         {/* paging */}
-        {visibleData < data.totalCount ? (
-          <div className="mt-8 flex justify-center">
-            <button
-              className="text-logo text-lg hover:underline flex flex-row items-center gap-2"
-              onClick={handleSeeMore}
-            >
-              <div>See More</div>
-              <FaChevronDown color="gray" />
-            </button>
-          </div>
-        ) : (
-          <div className="mt-8 flex justify-center">
-            <button
-              className="text-logo text-lg hover:underline flex flex-row items-center gap-2"
-              onClick={handleSeeLess}
-            >
-              <div>See Less</div>
-              <FaChevronUp color="gray" />
-            </button>
-          </div>
-        )}
+        <HandlePaging visibleData={visibleData} totalItems={data.groups.length} 
+        handleSeeMore={handleSeeMore} handleSeeLess={handleSeeLess}/>
       </div>
     </div>
   );
