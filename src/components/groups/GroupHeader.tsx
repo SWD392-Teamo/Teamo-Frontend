@@ -8,7 +8,6 @@ export default function GroupHeader({
 }) {
   return (
     <div>
-      <BackButton url="/" />
       <div className="">
         <h1 className="page-title">Your Group</h1>
       </div>
