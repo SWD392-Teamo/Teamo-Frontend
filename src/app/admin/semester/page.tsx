@@ -2,64 +2,66 @@
 
 import { useState, ChangeEvent, FormEvent } from "react";
 import NavbarUni from "@/app/admin/navbaruni/page"; // Đảm bảo đúng đường dẫn
-import BackButton from "@/components/BackButton"; // Import component BackButton
+import BackButton from "@/components/BackButton";
 
 export default function CreateSemester() {
     const [formData, setFormData] = useState({
+        code: "",
         name: "",
-        duration: "",
-        status: "",
+        startDate: "",
+        endDate: "",
     });
 
-    const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
         console.log("Semester Created:", formData);
-        // Thêm logic lưu dữ liệu vào database
     };
 
     return (
         <div className="min-h-screen flex flex-col items-center bg-white">
             <NavbarUni />
-            <div className="max-w-3xl mx-auto p-8">
-                {/* Dùng BackButton thay cho button cũ */}
+            <div className="w-full max-w-md mt-[10px]">
                 <BackButton />
-
-                <h2 className="text-2xl font-semibold mt-4">Create Semester</h2>
-                <form onSubmit={handleSubmit} className="mt-6 space-y-2">
+                <h2 className="text-2xl font-bold mb-6">Create S</h2>
+                <form className="space-y-2" onSubmit={handleSubmit}>
+                    <label className="block">Code</label>
+                    <input
+                        type="text"
+                        name="code"
+                        placeholder="Enter Semester Code"
+                        value={formData.code}
+                        onChange={handleChange}
+                        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
                     <label className="block">Name</label>
                     <input
                         type="text"
                         name="name"
-                        placeholder="Write Your Name"
+                        placeholder="Enter Semester Name"
                         value={formData.name}
                         onChange={handleChange}
                         className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
-                    <label className="block">Semester</label>
+                    <label className="block">Start Date</label>
                     <input
-                        type="text"
-                        name="duration"
-                        placeholder="How Long is Your Semester"
-                        value={formData.duration}
+                        type="date"
+                        name="startDate"
+                        value={formData.startDate}
                         onChange={handleChange}
-                        className="w-full border border-gray-300 rounded-lg py-2 px-4 focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
-                    <label className="block">Status</label>
-
-                    <select
-                        name="status"
-                        value={formData.status}
+                    <label className="block">End Date</label>
+                    <input
+                        type="date"
+                        name="endDate"
+                        value={formData.endDate}
                         onChange={handleChange}
-                        className="w-full border border-gray-300 rounded-lg py-2 px-4 focus:ring-2 focus:ring-blue-500"
-                    >
-                        <option value="">What's Your Semester Status</option>
-                        <option value="Active">Active</option>
-                        <option value="Inactive">Inactive</option>
-                    </select>
+                        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
                     <button
                         type="submit"
                         className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"

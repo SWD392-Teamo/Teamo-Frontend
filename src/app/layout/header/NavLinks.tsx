@@ -13,6 +13,8 @@ const NavLinksStudent = ({ userId }: NavLinksStudentProps) => {
       <Link href="/groups" className="link">Groups</Link>
       <Link href={`/groups/details/${userId}`} className="link">Profile</Link>
       <Link href="/applications" className="link">Applications</Link>
+      <Link href="/admin" className="link">Admin</Link>
+
 
 
     </div>

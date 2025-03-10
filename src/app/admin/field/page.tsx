@@ -1,17 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import NavbarUni from "@/app/admin/navbaruni/page"; // Đảm bảo đúng đường dẫn
-import BackButton from "@/components/BackButton"; // Import component BackButton
+import NavbarUni from "@/app/admin/navbaruni/page";
+import BackButton from "@/components/BackButton";
 
 export default function CreateFields() {
     const [formData, setFormData] = useState({
         name: "",
-        major: "",
-        semester: "",
+        description: "",
     });
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
@@ -24,8 +23,7 @@ export default function CreateFields() {
         <div className="min-h-screen flex flex-col items-center bg-white">
             <NavbarUni />
 
-            <div className="w-full max-w-md mt-[10px]"> {/* Giảm khoảng cách từ navbar tới form */}
-                {/* Thay thế nút back cũ bằng component BackButton */}
+            <div className="w-full max-w-md mt-[10px]">
                 <BackButton />
 
                 <h2 className="text-2xl font-bold mb-6">Create Fields</h2>
@@ -41,25 +39,11 @@ export default function CreateFields() {
                         className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
 
-                    <label className="block mt-2">Semester</label>
-                    <select
-                        name="semester"
-                        value={formData.semester}
-                        onChange={handleChange}
-                        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                        <option disabled value="">Select Your Semester</option>
-                        {[...Array(9)].map((_, i) => (
-                            <option key={i + 1} value={i + 1}>{i + 1}</option>
-                        ))}
-                    </select>
-
-                    <label className="block mt-2">Major</label>
-                    <input
-                        type="text"
-                        name="major"
-                        placeholder="Write Your Major"
-                        value={formData.major}
+                    <label className="block mt-2">Description</label>
+                    <textarea
+                        name="description"
+                        placeholder="Write Description"
+                        value={formData.description}
                         onChange={handleChange}
                         className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
