@@ -34,15 +34,12 @@ export default function Listings() {
 
   const setData = useGroupStore((state) => state.setData);
 
-  const activeSemester = semesters.find(
-    (semester) => semester.status === "Ongoing"
-  );
   const url = queryString.stringifyUrl({
     url: "",
     query: {
       pageIndex,
       pageSize,
-      semesterId: selectedSemester?.id || activeSemester?.id,
+      semesterId: selectedSemester?.id,
       ...(search.trim() ? { search } : {}),
     },
   });

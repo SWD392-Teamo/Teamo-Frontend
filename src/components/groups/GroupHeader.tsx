@@ -29,7 +29,7 @@ export default function GroupHeader({
       {/* Navigation Bar */}
       <div className="w-full border-t border-b border-gray-200">
         <div className="overflow-x-auto">
-          <nav className="flex justify-center px-4">
+          <nav className="flex justify-start px-4">
             {semesters.map((semester, index) => {
               const isActive = semester.id === selectedSemester?.id;
               return (
