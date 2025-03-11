@@ -108,6 +108,7 @@ export default function Listings() {
         <HandlePaging
           visibleItems={visibleItems}
           totalItems={data.totalCount}
+          initialItems={incrementSize}
           handleSeeMore={handleSeeMore}
           handleSeeLess={handleSeeLess}
         />

@@ -29,7 +29,7 @@ export default function GroupHeader({
       {/* Navigation Bar */}
       <div className="w-full border-t border-b border-gray-200">
         <div className="overflow-x-auto">
-          <nav className="flex justify-start px-4">
+          <nav className="flex justify-start content-around gap-10 px-4">
             {semesters.map((semester, index) => {
               const isActive = semester.id === selectedSemester?.id;
               return (
@@ -37,11 +37,7 @@ export default function GroupHeader({
                   <Link
                     href="#"
                     onClick={() => setSelectedSemester(semester)}
-                    className={`whitespace-nowrap px-4 py-4 text-sm font-normal transition-colors border-b-2 ${
-                      isActive
-                        ? "text-blue-500 font-medium border-blue-500"
-                        : "text-gray-600 hover:text-blue-500 border-transparent"
-                    }`}
+                    className={`link ${isActive ? "active" : ""} p-5`}
                   >
                     {semester.name}
                   </Link>
