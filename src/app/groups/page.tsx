@@ -1,5 +1,6 @@
 "use client";
-import { getData } from "@/actions/groupActions";
+import { getData as getGroupData } from "@/actions/groupActions";
+import { getData as getSemesterData } from "@/actions/semesterActions";
 import GroupHeader from "@/components/groups/GroupHeader";
 import { useGroupStore } from "@/hooks/useGroupStore";
 import { useParamsStore } from "@/hooks/useParamsStore";
@@ -9,21 +10,19 @@ import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useShallow } from "zustand/shallow";
 import GroupCard from "../[majors]/[subjects]/groups/GroupCard";
-import AppPagination from "@/components/AppPagination";
-import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import HandlePaging from "@/components/HandlePaging";
+import { useSemesterStore } from "@/hooks/useSemesterStore";
 
 export default function Listings() {
   const [search, setSearch] = useState<string>("");
   const { showLoading, hideLoading } = useLoading();
-  const [visibleData, setVisibleData] = useState<number>(2);
+  const [visibleItems, setVisibleItems] = useState<number>(2);
+  const [pageSize, setPageSize] = useState(2);
+  const pageIndex = 1;
+  const incrementSize = 2;
 
-  const params = useParamsStore(
-    useShallow((state) => ({
-      pageIndex: state.pageIndex,
-      pageSize: state.pageSize,
-    }))
-  );
+  const { semesters, selectedSemester, setSelectedSemester, setSemesters } =
+    useSemesterStore();
 
   const data = useGroupStore(
     useShallow((state) => ({
@@ -34,22 +33,40 @@ export default function Listings() {
   );
 
   const setData = useGroupStore((state) => state.setData);
-  const setParams = useParamsStore((state) => state.setParams);
-  const resetParams = useParamsStore((state) => state.reset);
 
+  const activeSemester = semesters.find(
+    (semester) => semester.status === "Ongoing"
+  );
   const url = queryString.stringifyUrl({
     url: "",
     query: {
-      ...params,
+      pageIndex,
+      pageSize,
+      semesterId: selectedSemester?.id || activeSemester?.id,
       ...(search.trim() ? { search } : {}),
     },
   });
   console.log("url ", url);
 
+  //fetch semesters
   useEffect(() => {
     showLoading();
-    //resetParams();
-    getData(url, true)
+    getSemesterData("")
+      .then((data) => {
+        setSemesters(data);
+      })
+      .catch((error) => {
+        toast.error(error.status + " " + error.message);
+      })
+      .finally(() => {
+        hideLoading();
+      });
+  }, []);
+
+  // fetch groups
+  useEffect(() => {
+    showLoading();
+    getGroupData(url, true)
       .then((data) => {
         setData(data);
       })
@@ -62,31 +79,41 @@ export default function Listings() {
   }, [url]);
 
   const handleSeeMore = () => {
-    if(visibleData < data.totalCount) {
-      setVisibleData(visibleData => visibleData + 2);
+    // Check if we need to fetch more data
+    if (visibleItems >= data.groups.length && visibleItems < data.totalCount) {
+      setPageSize((prev) => prev + incrementSize);
     }
-    else {
-      setParams({pageSize: params.pageSize + 2});
-    }
+    // Increase visible items
+    setVisibleItems((prev) => Math.min(prev + incrementSize, data.totalCount));
   };
   const handleSeeLess = () => {
-    setVisibleData(2);
+    // Reset visible items to initial value
+    setVisibleItems(incrementSize);
   };
 
   return (
     <div className=" mb-10">
-      <GroupHeader setSearch={setSearch} />
+      <GroupHeader
+        semesters={semesters}
+        selectedSemester={selectedSemester}
+        setSearch={setSearch}
+        setSelectedSemester={setSelectedSemester}
+      />
       <div>
         <div className="grid grid-cols-2 gap-6">
           {data.groups &&
-            data.groups.slice(0,visibleData).map((group) => (
-              <GroupCard key={group.id} group={group} />
-            ))}
+            data.groups
+              .slice(0, visibleItems)
+              .map((group) => <GroupCard key={group.id} group={group} />)}
         </div>
 
         {/* paging */}
-        <HandlePaging visibleData={visibleData} totalItems={data.groups.length} 
-        handleSeeMore={handleSeeMore} handleSeeLess={handleSeeLess}/>
+        <HandlePaging
+          visibleItems={visibleItems}
+          totalItems={data.totalCount}
+          handleSeeMore={handleSeeMore}
+          handleSeeLess={handleSeeLess}
+        />
       </div>
     </div>
   );

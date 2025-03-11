@@ -85,3 +85,10 @@ export type Group = {
     groupPositions: GroupPosition[];
     applications: Application[];
 }
+
+export type Semester = {
+    id: number,
+    name: string,
+    code: string,
+    status: string
+}
