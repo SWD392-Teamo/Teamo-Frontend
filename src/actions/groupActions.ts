@@ -3,6 +3,7 @@
 import { fetchWrapper } from "@/lib/fetchWrapper"
 import { Group, PagedResult } from "@/types"
 
-export async function getData(query: string): Promise<PagedResult<Group>> {
-    return await fetchWrapper.get(`groups${query}`)
+export async function getData(query: string, isOwnGroup = false): Promise<PagedResult<Group>> {
+    const endpoint = isOwnGroup ? `groups/me${query}` : `groups${query}`;
+    return await fetchWrapper.get(endpoint)
 }

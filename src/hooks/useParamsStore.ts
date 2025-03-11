@@ -26,10 +26,10 @@ export const useParamsStore = create<State & Actions>()((set) => ({
     // Set the state in the store with the new param value
     setParams: (newParams: Partial<State>) => {
         set((state) => {
-            if(newParams.pageIndex) {
-                return {...state, pageIndex: newParams.pageIndex}
+            if (newParams.pageIndex) {
+                return { ...state, pageIndex: newParams.pageIndex }
             } else {
-                return {...state, ...newParams, pageNumber: 1}
+                return { ...state, ...newParams, pageNumber: 1 }
             }
         })
     },
