@@ -9,4 +9,7 @@
     &:focus {
         @apply text-primary underline underline-offset-8;
     }
+    &.active {
+        @apply text-primary underline underline-offset-8;
+    }
 }
