@@ -1,7 +1,7 @@
 import { ref, getDownloadURL } from "firebase/storage";
 import { storage } from "../../firebase";
 
-const DEFAULT_IMAGE_PATH = "teamo/images/placeholders/user.png";
+const DEFAULT_IMAGE_PATH = "teamo/images/placeholders/default-avatar.jpg";
 
 export const getFirebaseImageUrl = async (filePath: string | null) => {
    try {

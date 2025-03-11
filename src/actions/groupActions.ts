@@ -1,8 +1,8 @@
 'use server'
 
 import { fetchWrapper } from "@/lib/fetchWrapper"
-import { GroupGeneral, PagedResult } from "@/types"
+import { Group, PagedResult } from "@/types"
 
-export async function getData(query: string): Promise<PagedResult<GroupGeneral>> {
+export async function getData(query: string): Promise<PagedResult<Group>> {
     return await fetchWrapper.get(`groups${query}`)
 }
