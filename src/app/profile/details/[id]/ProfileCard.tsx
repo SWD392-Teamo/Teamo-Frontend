@@ -14,7 +14,7 @@ const ProfileCard: React.FC<{user: User}> = ({ user }) => {
         <section className="flex items-center justify-between mb-2">
             <ProfileAvatar imgUrl={user.imgUrl}/>
             <div className="absolute top-4 right-4">
-            <Link href={"/"}>
+            <Link href={"/applications"}>
               <button className=" px-6 py-2 text-base text-logo border border-logo rounded-full hover:bg-blue-100 font-semibold mr-2">
                 Application
               </button>

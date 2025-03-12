@@ -97,7 +97,7 @@ const ProfileCard: React.FC<{ user: User }> = ({ user }) => {
                 <td className="py-2 text-gray-600">{user.email}</td>
                 <td className="py-2 text-gray-600">{user.majorCode}</td>
                 <td className="py-2 text-gray-600">
-                  {user.links && user.links.length > 0 ? (
+                  {user.links && user.links.length >= 0 ? (
                     <div>
                       <button
                         className="px-4 py-2 border rounded bg-gray-200 hover:bg-gray-300"
