@@ -57,8 +57,8 @@ export default function Listing() {
                   <Image
                     src={imageUrl}
                     alt="Medium Group Image"
-                    width={1200}
-                    height={1200}
+                    width={120}
+                    height={120}
                     className="w-full h-full rounded-full object-cover border-2 border-gray-300 shadow-sm aspect-square"
                   />
                 ) : (
@@ -69,8 +69,8 @@ export default function Listing() {
               <div className="w-full h-full">
                 <Image
                   src={defaultAvatar}
-                  width={1200}
-                  height={1200}
+                  width={120}
+                  height={120}
                   alt={profile?.firstName || "none"}
                   className="w-full h-full rounded-full object-cover border-2 border-gray-300 shadow-sm aspect-square"
                 />
