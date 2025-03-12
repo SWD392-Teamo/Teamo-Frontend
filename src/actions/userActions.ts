@@ -54,3 +54,7 @@ export async function addContact(userId: number, body: {name: string, url: strin
 export async function updateContact(userId: number, id: number, body: {name: string, url: string}): Promise<any> {
   return await fetchWrapper.patch(`users/${userId}/profile/links/${id}`, body);
 }
+
+export async function uploadImage(userId: number, formData: FormData): Promise<any> {
+  return await fetchWrapper.post(`users/${userId}/profile/image`, formData)
+}

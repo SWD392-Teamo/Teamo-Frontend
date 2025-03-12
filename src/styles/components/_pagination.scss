@@ -1,0 +1,68 @@
+/* Pagination style using Tailwind CSS */
+.pagination {
+    @apply flex flex-col items-center gap-2;
+
+    &--pages {
+        @apply inline-flex items-center -space-x-px;
+    }
+
+    &--page {
+        @apply w-10 h-10 flex items-center justify-center text-sm font-medium;
+
+        /* Style for primary color pagination */
+        &--primary {
+            @apply bg-tertiary text-primary border border-primary;
+
+            &.active {
+                @apply bg-primary text-tertiary;
+            }
+
+            &:hover:not(.active) {
+                @apply bg-primary/10;
+            }
+        }
+
+        /* Style for secondary color pagination */
+        &--secondary {
+            @apply bg-tertiary text-secondary border border-secondary;
+
+            &.active {
+                @apply bg-secondary text-tertiary;
+            }
+
+            &:hover:not(.active) {
+                @apply bg-secondary/10;
+            }
+        }
+
+        /* Style for danger color pagination */
+        &--danger {
+            @apply bg-tertiary text-danger border border-danger;
+
+            &.active {
+                @apply bg-danger text-tertiary;
+            }
+
+            &:hover:not(.active) {
+                @apply bg-danger/10;
+            }
+        }
+    }
+
+    &--prev,
+    &--next {
+        @apply w-10 h-10 flex items-center justify-center text-sm font-medium;
+
+        svg {
+            @apply w-5 h-5;
+        }
+    }
+
+    &--prev {
+        @apply rounded-l-lg;
+    }
+
+    &--next {
+        @apply rounded-r-lg;
+    }
+}

@@ -1,8 +1,6 @@
 import { fetchWrapper } from "@/lib/fetchWrapper";
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import NextAuth from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"; 
-import { firebaseAuth } from "../firebase";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   session: {

@@ -2,7 +2,7 @@
 
 import React from 'react'
 import LoginForm from './LoginForm'
-import Title from '@/components/Title'
+import Title from '@/components/Home/Title'
 import BackButton from '@/components/BackButton'
 
 export default function page() {

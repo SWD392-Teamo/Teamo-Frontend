@@ -1,14 +1,16 @@
 import { ref, getDownloadURL } from "firebase/storage";
 import { storage } from "../../firebase";
-;
 
-export const getFirebaseImageUrl = async (filePath: string) => {
+const DEFAULT_IMAGE_PATH = "teamo/images/placeholders/user.png";
+
+export const getFirebaseImageUrl = async (filePath: string | null) => {
    try {
-     const imageRef = ref(storage, filePath);
+     const path = (!filePath || filePath === "null") ? DEFAULT_IMAGE_PATH : filePath;   
+     const imageRef = ref(storage, path);
      const url = await getDownloadURL(imageRef);
      return url;
    } catch (error) {
      console.error("Error getting Firebase image URL:", error);
-     return null;
+     return getDownloadURL(ref(storage, DEFAULT_IMAGE_PATH));
    }
- };
+};
