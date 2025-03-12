@@ -6,6 +6,7 @@ import { getFirebaseImageUrl } from '@/lib/firebaseImage';
 import { Badge } from 'flowbite-react';
 import { dateFormatter } from '@/utils/dateFormatter';
 import dynamic from 'next/dynamic'
+import Image from 'next/image';
  
 const PDFViewer = dynamic(() => import('@/components/PDFViewer'), {
   ssr: false,
@@ -45,9 +46,11 @@ export default function ApplicationDetails({application}: Props) {
             {/* Header with Profile */}
             <div className="flex items-center gap-4 pb-4 border-b">
                 {imageUrl && (
-                    <img
+                    <Image
                         src={imageUrl}
                         alt={application.studentName}
+                        width={40}
+                        height={40}
                         className="w-16 h-16 rounded-full object-cover"
                     />
                 )}

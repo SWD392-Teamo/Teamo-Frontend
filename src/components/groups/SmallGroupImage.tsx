@@ -1,5 +1,6 @@
 import { getFirebaseImageUrl } from "@/lib/firebaseImage";
 import { imgProps } from "@/types/interface";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 const SmallGroupImage: React.FC<imgProps> = ({ imgUrl }) => {
@@ -17,11 +18,13 @@ const SmallGroupImage: React.FC<imgProps> = ({ imgUrl }) => {
    return (
      <div className="w-1/6">
        {imageUrl ? (
-         <img
-           src={imageUrl}
-           alt="User Avatar"
-           className="w-full h-full object-cover rounded-full border-2 border-gray-300 shadow-sm"
-           />
+         <Image
+            src={imageUrl}
+            alt="Small Group Image"
+            width={400}
+            height={400}
+            className="w-full h-full rounded-full object-cover border-2 border-gray-300 shadow-sm"
+          />
        ) : (
          <p>Loading image...</p>
        )}
