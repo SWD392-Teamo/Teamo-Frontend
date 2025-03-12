@@ -53,11 +53,11 @@ export default function ApplicationForm({
             ...data,
           documentUrl
         })
-        if (res.statusCode == 200) {
+        if (res) {
             toast.success(res.message);
             onCancel();
         }
-        else {
+        else if(res.statusCode == 400) {
             toast.error(res.message);
         }
     } catch (error: any) {
