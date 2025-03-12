@@ -59,7 +59,7 @@ export default function Listing() {
                     alt="Medium Group Image"
                     width={120}
                     height={120}
-                    className="w-full h-full rounded-full object-cover border-2 border-gray-300 shadow-sm aspect-square"
+                    className="rounded-full object-cover border-2 border-gray-300 shadow-sm aspect-square"
                   />
                 ) : (
                   <p>Loading image...</p>

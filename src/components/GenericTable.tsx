@@ -49,11 +49,13 @@ export default function GenericTable<T>({
               className={`${onRowClick ? 'cursor-pointer hover:bg-gray-100' : ''}`}
             >
               {columns.map((column, colIndex) => (
-                <td
+                  <td
                   key={String(column.key)}
                   className={`px-4 py-2 border border-gray-300 bg-gray-50 ${
                     colIndex === 0 ? "border-l" : "border-l-0"
-                  } ${colIndex === columns.length - 1 ? "border-r" : "border-r-0"}`}
+                  } ${colIndex === columns.length - 1 ? "border-r" : "border-r-0"} ${
+                    column.header === "" ? "flex justify-center items-center" : ""
+                  }`}
                   onClick={(e) => {
                     // Prevent row click when clicking action buttons
                     if (column.header === "Action") {
@@ -65,10 +67,9 @@ export default function GenericTable<T>({
                     <Image
                       src={`${String(item[column.key])}`}
                       alt="Header Image"
-                      width={20}
-                      height={20}
-                      className="w-full h-full rounded-full object-cover border-2 border-gray-300 shadow-sm"
-                    />
+                      width={50}
+                      height={50}
+                      className="rounded-full object-cover border-2 border-gray-300 shadow-sm"                      />
                   ) : column.header === "Date" ? (
                     dateFormatter(String(item[column.key]))
                   ) : column.header === "Action" && actions ? (
