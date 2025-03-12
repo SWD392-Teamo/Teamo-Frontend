@@ -9,20 +9,36 @@ import MedGroupImage from "@/components/groups/MedGroupImage";
 import MemberAvatar from "@/components/groups/MemberAvatar";
 import { useGroupStore } from "@/hooks/useGroupStore";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { IoIosStar } from "react-icons/io";
 import { useShallow } from "zustand/shallow";
 import GroupPositionCard from "./GroupPosition";
+import { getUserId } from "@/actions/userActions";
+import { useRouter } from "next/router";
+import Link from "next/link";
 
 const GroupDetail: React.FC = () => {
+  const [userId, setUserId] = useState<number | null>(null);
+
   const { selectedgroup } = useGroupStore(
     useShallow((state) => ({
       selectedgroup: state.selectedGroup,
     }))
   );
 
+  useEffect(() => {
+    const fetchUserId = async () => {
+      const id = await getUserId();
+      setUserId(id);
+    };
+    fetchUserId();
+  }, []);
+
   const groupMembers = selectedgroup?.groupMembers;
   const groupPositions = selectedgroup?.groupPositions;
+  const isLeader = groupMembers?.some(
+    (member) => member.studentId === userId && member.role === "Leader"
+  );
 
   return (
     <div className="border border-gray-200 rounded-lg shadow-sm p-12 flex flex-col items-start hover:shadow-lg transition flex-1 mb-16">
@@ -48,7 +64,7 @@ const GroupDetail: React.FC = () => {
       </div>
       <div className="w-full flex justify-between items-center">
         <div className="flex flex-row gap-4 items-center">
-          <h2 className="text-2xl font-bold text-black">
+          <h2 className="text-xl font-bold text-black">
             {selectedgroup?.title}
           </h2>
           {selectedgroup?.status && (
@@ -56,42 +72,42 @@ const GroupDetail: React.FC = () => {
           )}
         </div>
 
-        <div className="font-semibold text-lg text-[#8C8F8E] ">
+        <div className="font-semibold text-base text-[#8C8F8E] ">
           {selectedgroup?.createdAt && (
             <DateConverter isoDate={selectedgroup?.createdAt} />
           )}
         </div>
       </div>
 
-      <div className="text-left w-full font-normal text-lg mt-1">
+      <div className="text-left w-full font-normal text-base mt-1">
         {selectedgroup?.semesterName}
       </div>
 
       {/*Field name */}
       <div className="mt-4 flex justify-start gap-2 items-center">
-        <h2 className="font-semibold text-xl">Field:</h2>
-        <p className="font-normal text-lg">{selectedgroup?.fieldName}</p>
+        <h2 className="font-semibold text-lg">Field:</h2>
+        <p className="font-normal text-base">{selectedgroup?.fieldName}</p>
       </div>
 
       {/*Max member */}
       <div className="mt-2 flex justify-start gap-2 items-center">
-        <h2 className="font-semibold text-xl">Max member:</h2>
-        <p className="font-normal text-lg">{selectedgroup?.maxMember}</p>
+        <h2 className="font-semibold text-lg">Max member:</h2>
+        <p className="font-normal text-base">{selectedgroup?.maxMember}</p>
       </div>
 
       {/*Total member */}
       <div className="mt-2 flex justify-start gap-2 items-center">
-        <h2 className="font-semibold text-xl">Total member:</h2>
-        <p className="font-normal text-lg">{selectedgroup?.totalMembers}</p>
+        <h2 className="font-semibold text-lg">Total member:</h2>
+        <p className="font-normal text-base">{selectedgroup?.totalMembers}</p>
       </div>
 
       {/*description */}
       <div className="container mt-5">
-        <div className="text-left w-full font-semibold text-2xl text-[#8C8F8E] my-5">
+        <div className="text-left w-full font-semibold text-xl text-[#8C8F8E] my-5">
           Description
         </div>
 
-        <div className="text-left w-full font-normal text-lg">
+        <div className="text-left w-full font-normal text-base">
           {selectedgroup?.description}
         </div>
       </div>
@@ -100,7 +116,7 @@ const GroupDetail: React.FC = () => {
 
       {/*position */}
       <div className="container">
-        <div className="text-left w-full font-semibold text-2xl text-[#8C8F8E] my-5">
+        <div className="text-left w-full font-semibold text-xl text-[#8C8F8E] my-5">
           Position
         </div>
         {groupPositions && groupMembers && (
@@ -109,12 +125,11 @@ const GroupDetail: React.FC = () => {
             members={groupMembers}
           />
         )}
-
       </div>
 
       <div className="w-full h-[1px] bg-gray-300 my-8"></div>
       <div className="container">
-        <div className="text-left w-full font-semibold text-2xl text-[#8C8F8E] my-5">
+        <div className="text-left w-full font-semibold text-xl text-[#8C8F8E] my-5">
           Member
         </div>
         {/*Member */}
@@ -148,6 +163,15 @@ const GroupDetail: React.FC = () => {
               </div>
             ))}
           </div>
+          {isLeader && (
+            <div className="mt-5 flex ">
+              <Link href={`/groups/${selectedgroup?.id}/applications`} className="w-full flex justify-center items-center h-full" passHref>
+                <button className="w-1/2 rounded-full  bg-gradient-to-r from-[#46afe9] to-[#c5e9f9] text-white py-4 text-xl font-bold flex justify-center items-center transition duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg">
+                  View Application
+                </button>
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </div>

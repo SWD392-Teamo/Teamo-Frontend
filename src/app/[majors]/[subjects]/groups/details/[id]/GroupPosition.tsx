@@ -38,7 +38,7 @@ const GroupPositionCard: React.FC<{
           className="p-5 rounded-lg shadow-md border w-full bg-[linear-gradient(to_right,#F2F9FD_10%,#FFFFFF_90%)]"
         >
           <div className="flex flex-col gap-3">
-            <h3 className="text-lg font-semibold">
+            <h3 className="text-base font-semibold">
               {position.name}
               <i className="font-normal"> ({position.count})</i>
             </h3>
