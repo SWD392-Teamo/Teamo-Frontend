@@ -1,8 +1,8 @@
 import { getFirebaseImageUrl } from "@/lib/firebaseImage";
-import { UserAvatarProps } from "@/types/interface";
+import { imgProps } from "@/types/interface";
 import { useEffect, useState } from "react";
 
-const ProfileAvatar: React.FC<UserAvatarProps> = ({ imgUrl }) => {
+const ProfileAvatar: React.FC<imgProps> = ({ imgUrl }) => {
    const [imageUrl, setImageUrl] = useState<string | null>(null);
  
    useEffect(() => {
