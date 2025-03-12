@@ -9,10 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@tailwindcss/typography": "^0.5.16",
     "autoprefixer": "^10.4.20",
+    "firebase": "^11.3.1",
     "flowbite-react": "^0.10.2",
+    "framer-motion": "^12.4.10",
     "next": "^15.1.6",
     "next-auth": "^5.0.0-beta.25",
+    "pdfjs-dist": "^4.2.67",
     "postcss-loader": "^8.1.1",
     "query-string": "^9.1.1",
     "react": "^19.0.0",
@@ -20,6 +24,7 @@
     "react-hook-form": "^7.54.2",
     "react-hot-toast": "^2.5.1",
     "react-icons": "^5.4.0",
+    "react-pdf": "^9.2.1",
     "sass": "^1.83.4",
     "teamo-frontend": "file:",
     "zustand": "^5.0.3"
@@ -29,6 +34,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/webpack": "^5.28.5",
     "eslint": "^9",
     "eslint-config-next": "15.1.6",
     "postcss": "^8.5.1",

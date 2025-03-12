@@ -12,6 +12,7 @@ module.exports = {
         primary: '#4CA4CD',
         secondary: '#1C1C1C',
         tertiary: '#FCFCFC',
+        danger: '#E90000',
         grey: '#606261',
         darkgrey: '#3E424A',
       },
@@ -23,10 +24,12 @@ module.exports = {
       fontFamily: {
         poppins: ["Poppins", "regular"],
         righteous: ["Righteous", "regular"],
+        beVietnam: ["Be Vietnam Pro", "regular"],
       },
     },
   },
   plugins: [
+    require('@tailwindcss/typography'),
     flowbite.plugin()
   ],
 };

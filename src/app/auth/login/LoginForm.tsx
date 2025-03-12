@@ -4,10 +4,13 @@ import { Button } from 'flowbite-react';
 import React from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
 import { useRouter } from 'next/navigation';
-import Input from '@/app/components/Input';
+import Input from '@/components/Input';
 import toast from 'react-hot-toast';
 import { AiFillGoogleCircle } from 'react-icons/ai';
 import { signIn } from 'next-auth/react';
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { firebaseAuth } from '../../../../firebase';
+import { useLoading } from '@/providers/LoadingProvider';
 
 export default function LoginForm() {
   // Next navigation
@@ -19,24 +22,50 @@ export default function LoginForm() {
             mode: 'onTouched'
         });
 
-  // On submit logic
-  async function onSubmit(data: FieldValues) {
-        try {
-            const res = await signIn('dotnet-identity', {
-                ...data,
-                redirect: true,
-                callbackUrl: '/'
-            });
+  // Google login
+  async function handleGoogleLogin() {
+    try {
+        // Trigger Google sign-in popup
+        const provider = new GoogleAuthProvider();
+        const result = await signInWithPopup(firebaseAuth, provider);
+        
+        // Get ID token
+        const idToken = await result.user.getIdToken();
 
-            if(res?.error) {
-                throw res.error;
-            }
-
-            router.push(`/`)
-        } catch (error: any) {
-            toast.error(error.status + ' ' + error.message)
+        const res = await signIn('google', { 
+            idToken,
+            redirect: true,
+            callbackUrl: '/'
+        });
+    
+        if(res?.error) {
+            throw res.error;
         }
+    
+        router.push('/')
+    } catch(error: any) {
+        toast.error(error.status + ' ' + error.message);
     }
+  }
+
+  // On submit login logic
+  async function onSubmit(data: FieldValues) {
+    try {
+        const res = await signIn('dotnet-identity', {
+            ...data,
+            redirect: true,
+            callbackUrl: '/'
+        });
+
+        if(res?.error) {
+            throw res.error;
+        }
+
+        router.push(`/`)
+    } catch (error: any) {
+        toast.error(error.status + ' ' + error.message)
+    }
+  }
 
   return (
     <form className='mt-8' onSubmit={handleSubmit(onSubmit)}>
@@ -64,7 +93,7 @@ export default function LoginForm() {
                 type='submit'>Submit</Button>
             <Button 
                 className='btn btn--primary'
-                type='submit'>
+                onClick={handleGoogleLogin}>
                     <div className='btn--icon'>
                         <div>Login with</div>
                         <AiFillGoogleCircle size={20}/>

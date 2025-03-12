@@ -35,6 +35,33 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           return null
         }
       }
+    }),
+    CredentialsProvider({
+      id: "google",
+      name: "Google",
+      credentials: {
+        idToken: { label: 'ID Token', type: 'text' }
+      },
+      async authorize(credentials, req) {
+        try {
+          if (!credentials?.idToken) return null;
+
+          // Send the ID token to your backend for verification
+          const response = await fetchWrapper.post('account/google-login', {
+            idToken: credentials.idToken
+          });
+
+          if (response) {
+            return response;
+          }
+
+          return null;
+          
+        } catch (error) {
+          console.error('Google sign-in error:', error);
+          return null;
+        }
+      }
     })
   ],
   callbacks: {

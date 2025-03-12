@@ -6,12 +6,14 @@ import { useParamsStore } from "@/hooks/useParamsStore";
 import { useShallow } from "zustand/shallow";
 import { useMajorStore } from "@/hooks/useMajorStore";
 import queryString from "query-string";
-import { getData } from "../actions/majorActions";
+import { getData } from "../../actions/majorActions";
 import { FaChevronDown } from "react-icons/fa";
 import MajorCard from "./MajorCard";
+import { useLoading } from "@/providers/LoadingProvider";
+import toast from "react-hot-toast";
 
 export default function Listings() {
-  const [loading, setLoading] = useState(true);
+  const { showLoading, hideLoading } = useLoading();
   const [visibleMajors, setVisibleMajors] = useState<number>(6);
   const [search, setSearch] = useState<string>("");
 
@@ -20,7 +22,7 @@ export default function Listings() {
     useShallow((state) => ({
       pageIndex: state.pageIndex,
       pageSize: state.pageSize,
-      search: state.search,
+      // search: state.search,
     }))
   );
 
@@ -33,7 +35,7 @@ export default function Listings() {
   );
 
   const setData = useMajorStore((state) => state.setData);
-  const setParams = useParamsStore((state) => state.setParams);
+  const resetParams = useParamsStore((state) => state.reset);
 
   const url = queryString.stringifyUrl({
     url: "",
@@ -44,21 +46,25 @@ export default function Listings() {
   });
 
   useEffect(() => {
+    showLoading();
+    resetParams();
     getData(url).then((data) => {
       console.log("data", data);
       setData(data);
-      setLoading(false);
+    })
+    .catch((error) => {
+      toast.error(error.status + ' ' + error.message);
+    })
+    .finally(() => {
+      hideLoading();
     });
-  }, [url, setData]);
+  }, [url, setData, showLoading, hideLoading]);
 
   console.log(data);
-
 
   const handleSeeMore = () => {
     setVisibleMajors((prev) => prev + 6);
   };
-
-  if (loading) return <h3>Loading...</h3>;
 
   return (
     <div className=" mb-10">

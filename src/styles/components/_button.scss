@@ -1,6 +1,6 @@
 /* Button style using Tailwind CSS*/
 .btn {
-  @apply uppercase no-underline py-1 px-6 w-max rounded-full text-sm font-medium cursor-pointer text-tertiary;
+  @apply uppercase no-underline py-1 px-3 w-max rounded-full text-sm font-medium cursor-pointer text-tertiary;
   
   &:hover {
     @apply shadow-lg;
@@ -44,6 +44,26 @@
         @apply bg-secondary text-tertiary !important;
       }
     }
+  }
+
+  /* Style for danger button */
+  &--danger {
+    @apply bg-danger;
+    &:hover {
+      @apply outline outline-2 outline-danger text-danger bg-tertiary !important;
+    }
+
+    /* Style for danger button outline type */
+    &--outline {
+      @apply bg-tertiary text-danger outline outline-2 outline-danger !important;
+      &:hover {
+        @apply bg-danger text-tertiary !important;
+      }
+    }
+  }
+
+  &--round {
+    @apply py-3 px-3;
   }
 
   /* Style for button with icon */
