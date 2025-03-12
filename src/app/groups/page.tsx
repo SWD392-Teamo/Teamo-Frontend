@@ -75,6 +75,8 @@ export default function Listings() {
       });
   }, [url]);
 
+  console.log("data ", data);
+
   const handleSeeMore = () => {
     // Check if we need to fetch more data
     if (visibleItems >= data.groups.length && visibleItems < data.totalCount) {
