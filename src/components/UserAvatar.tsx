@@ -1,5 +1,6 @@
 import { getFirebaseImageUrl } from "@/lib/firebaseImage";
 import { imgProps } from "@/types/interface";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 const LeaderAvatar: React.FC<imgProps> = ({ imgUrl }) => {
@@ -15,11 +16,13 @@ const LeaderAvatar: React.FC<imgProps> = ({ imgUrl }) => {
    }, [imgUrl]);
  
    return (
-    <div className="w-1/12">
+    <div className="w-1/6">
        {imageUrl ? (
-         <img
+         <Image
            src={imageUrl}
            alt="User Avatar"
+           width={400}
+           height={400}
            className="w-full h-full rounded-full object-cover border-2 border-gray-300 shadow-sm"
          />
        ) : (

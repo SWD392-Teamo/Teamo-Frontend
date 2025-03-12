@@ -124,7 +124,7 @@ const GroupPositionCard: React.FC<{
       >
         <ApplicationForm 
           groupPositionId={selectedPositionId}
-          groupId={selectedgroup?.id!}
+          groupId={selectedgroup?.id != undefined ? selectedgroup?.id : 0}
           onCancel={() => setShowModal(false)}
         />
       </AppModal>
