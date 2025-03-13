@@ -23,7 +23,7 @@ const SmallGroupImage: React.FC<imgProps> = ({ imgUrl }) => {
             alt="Small Group Image"
             width={400}
             height={400}
-            className="w-full h-full rounded-full object-cover border-2 border-gray-300 shadow-sm"
+            className=" rounded-full object-cover border-2 border-gray-300 shadow-sm"
           />
        ) : (
          <p>Loading image...</p>

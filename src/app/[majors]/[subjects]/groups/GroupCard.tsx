@@ -49,7 +49,9 @@ const GroupCard: React.FC<{ group: Group }> = ({ group }) => {
             <Image
               src={defaultGroup}
               alt={group?.name || "none"}
-              className="w-full h-full object-cover rounded-full border-2 border-gray-300 shadow-sm"
+              width={400}
+              height={400}
+              className=" object-cover rounded-full border-2 border-gray-300 shadow-sm"
             />
           </div>
         )}
@@ -87,7 +89,9 @@ const GroupCard: React.FC<{ group: Group }> = ({ group }) => {
               <Image
                 src={defaultAvatar}
                 alt={member?.studentName || "none"}
-                className="w-10 h-10 rounded-full object-cover border-2 border-gray-300 shadow-sm"
+                width={50}
+                height={50}
+                className=" rounded-full object-cover border-2 border-gray-300 shadow-sm"
               />
             )}
           </div>

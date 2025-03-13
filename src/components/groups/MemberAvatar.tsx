@@ -21,9 +21,9 @@ const MemberAvatar: React.FC<imgProps> = ({ imgUrl }) => {
          <Image
             src={imageUrl}
             alt="Member Avatar"
-            width={40}
-            height={40}
-            className="w-full h-full rounded-full object-cover border-2 border-gray-300 shadow-sm"
+            width={50}
+            height={50}
+            className="rounded-full object-cover border-2 border-gray-300 shadow-sm"
           />
        ) : (
          <p>Loading image...</p>
