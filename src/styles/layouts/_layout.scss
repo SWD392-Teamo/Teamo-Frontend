@@ -8,11 +8,11 @@
 }
 
 .main {
-    @apply container 
+    @apply container px-44
 }
 
 .container {
-    @apply mx-auto px-14 pt-10 font-beVietnam flex-grow;
+    @apply mx-auto pt-10 font-beVietnam flex-grow;
 }
 
 .page-title {

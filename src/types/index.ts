@@ -92,3 +92,31 @@ export type Semester = {
     code: string,
     status: string
 }
+
+export type User = {
+    id: number,
+    code: string,
+    firstName: string,
+    lastName: string,
+    email: string,
+    gender: string,
+    dob: string,
+    imgUrl: string,
+    description: string,
+    majorCode: string,
+    links: Link[];
+    studentSkills: StudentSkill[],
+}
+
+export type Link = {
+    id: number,
+    name: string,
+    url: string
+}
+
+export type StudentSkill = {
+    id: number,
+    skillName: string,
+    skillType: string,
+    skillLevel: string,
+}

@@ -1,105 +1,126 @@
-'use client'
+"use client";
 
-import { Button } from 'flowbite-react';
-import React from 'react'
-import { FieldValues, useForm } from 'react-hook-form'
-import { useRouter } from 'next/navigation';
-import Input from '@/components/Input';
-import toast from 'react-hot-toast';
-import { AiFillGoogleCircle } from 'react-icons/ai';
-import { signIn } from 'next-auth/react';
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { firebaseAuth } from '../../../../firebase';
-import { useLoading } from '@/providers/LoadingProvider';
+import React from "react";
+import { FieldValues, useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import Input from "@/components/Input";
+import toast from "react-hot-toast";
+import { AiFillGoogleCircle } from "react-icons/ai";
+import { signIn } from "next-auth/react";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { firebaseAuth } from "../../../../firebase";
+import { useLoading } from "@/providers/LoadingProvider";
+import { Button } from "flowbite-react";
 
 export default function LoginForm() {
   // Next navigation
   const router = useRouter();
 
   // Set up form state
-  const {control, handleSubmit,
-        formState: {isSubmitting, isValid}} = useForm({
-            mode: 'onTouched'
-        });
+  const {
+    control,
+    handleSubmit,
+    formState: { isSubmitting, isValid },
+  } = useForm({
+    mode: "onTouched",
+  });
 
   // Google login
   async function handleGoogleLogin() {
     try {
-        // Trigger Google sign-in popup
-        const provider = new GoogleAuthProvider();
-        const result = await signInWithPopup(firebaseAuth, provider);
-        
-        // Get ID token
-        const idToken = await result.user.getIdToken();
+      // Trigger Google sign-in popup
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(firebaseAuth, provider);
 
-        const res = await signIn('google', { 
-            idToken,
-            redirect: true,
-            callbackUrl: '/'
-        });
-    
-        if(res?.error) {
-            throw res.error;
-        }
-    
-        router.push('/')
-    } catch(error: any) {
-        toast.error(error.status + ' ' + error.message);
+      // Get ID token
+      const idToken = await result.user.getIdToken();
+
+      const res = await signIn("google", {
+        idToken,
+        redirect: true,
+        callbackUrl: "/",
+      });
+
+      if (res?.error) {
+        throw res.error;
+      }
+
+      router.push("/");
+    } catch (error: any) {
+      toast.error(error.status + " " + error.message);
     }
   }
 
   // On submit login logic
   async function onSubmit(data: FieldValues) {
     try {
-        const res = await signIn('dotnet-identity', {
-            ...data,
-            redirect: true,
-            callbackUrl: '/'
-        });
+      const res = await signIn("dotnet-identity", {
+        ...data,
+        redirect: true,
+        callbackUrl: "/",
+      });
 
-        if(res?.error) {
-            throw res.error;
-        }
+      if (res?.error) {
+        throw res.error;
+      }
 
-        router.push(`/`)
+      router.push(`/`);
     } catch (error: any) {
-        toast.error(error.status + ' ' + error.message)
+      toast.error(error.status + " " + error.message);
     }
   }
 
   return (
-    <form className='mt-8' onSubmit={handleSubmit(onSubmit)}>
-        <Input label='Email' name='email' control={control}
-            type='email'
-            showlabel='true'
-            rules={{
-                required: 'Email is required',
-                pattern: {
-                    value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
-                    message: 'Invalid email address'
-                }
-            }}/>
+    <form className="mt-8" onSubmit={handleSubmit(onSubmit)}>
+      <div className="mb-4">
+        <Input
+          label="Email"
+          name="email"
+          control={control}
+          type="email"
+          showlabel="true"
+          rules={{
+            required: "Email is required",
+            pattern: {
+              value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
+              message: "Invalid email address",
+            },
+          }}
+        />
+      </div>
 
-        <Input label='Password' name='password' control={control} 
-            type='password'
-            showlabel='true'
-            rules={{required: 'Password is required'}}/>
+      <div className="mb-6">
+        <Input
+          label="Password"
+          name="password"
+          control={control}
+          type="password"
+          showlabel="true"
+          rules={{ required: "Password is required" }}
+        />
+      </div>
 
-        <div className='flex gap-6'>
-            <Button 
-                className='btn btn--primary--outline'
-                isProcessing={isSubmitting} 
-                disabled={!isValid}
-                type='submit'>Submit</Button>
-            <Button 
-                className='btn btn--primary'
-                onClick={handleGoogleLogin}>
-                    <div className='btn--icon'>
-                        <div>Login with</div>
-                        <AiFillGoogleCircle size={20}/>
-                    </div>
-            </Button>
-        </div>
+      <div className="flex flex-col gap-6">
+        <Button
+          className="w-full rounded-full  bg-gradient-to-r from-[#46afe9] to-[#c5e9f9] text-black py-2 text-xl font-bold flex justify-center items-center transition duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg"
+          isProcessing={isSubmitting}
+          disabled={!isValid}
+          type="submit"
+          size=""
+        >
+          Submit
+        </Button>
+        <Button
+          className="w-full rounded-full  bg-gradient-to-r from-[#46afe9] to-[#c5e9f9] text-black py-2 text-xl font-bold flex justify-center items-center transition duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg"
+          onClick={handleGoogleLogin}
+          size=""
+        >
+          <div className="btn--icon">
+            <div>Login with</div>
+            <AiFillGoogleCircle size={20} />
+          </div>
+        </Button>
+      </div>
     </form>
-  )
+  );
 }

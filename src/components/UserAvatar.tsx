@@ -21,9 +21,9 @@ const LeaderAvatar: React.FC<imgProps> = ({ imgUrl }) => {
          <Image
            src={imageUrl}
            alt="User Avatar"
-           width={400}
-           height={400}
-           className="w-full h-full rounded-full object-cover border-2 border-gray-300 shadow-sm"
+           width={300}
+           height={300}
+           className="rounded-full object-cover border-2 border-gray-300 shadow-sm"
          />
        ) : (
          <p>Loading image...</p>

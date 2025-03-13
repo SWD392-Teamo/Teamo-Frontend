@@ -33,7 +33,7 @@ export default async function Header() {
           <Image src={NavDeco} alt="NavDeco" />
         </div>
         <div>
-          <NavLinks />
+          {session ? <NavLinks /> : <></>}
         </div>
         <div className="flex">
           <Image src={NavDeco} alt="NavDeco" />
