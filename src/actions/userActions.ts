@@ -20,7 +20,7 @@ export async function getProfile(userId: number): Promise<User> {
 }
 
 export async function updateDescriptions(userId: number, description: string): Promise<User>{
-    return await fetchWrapper.post(`users/${userId}/profile/descriptions`, description)
+    return await fetchWrapper.patch(`users/${userId}/profile/descriptions`, {description})
 }
 
 export async function addSkill(userId: number, addSkillProfile: addSkillProfile): Promise<User>{

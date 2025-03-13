@@ -5,22 +5,32 @@ import React, { useEffect, useState } from "react";
 import defaultAvatar from "@/assets/defaultAvatar.jpg";
 import BackButton from "@/components/BackButton";
 import { useSession } from "next-auth/react";
-import { getProfile, getUserId, uploadImage } from "@/actions/userActions";
+import {
+  getProfile,
+  getUserId,
+  updateDescriptions,
+  uploadImage,
+} from "@/actions/userActions";
 import { User } from "@/types";
 import MedGroupImage from "@/components/groups/MedGroupImage";
 import { getFirebaseImageUrl } from "@/lib/firebaseImage";
 import SkillBar from "@/components/SkillBar";
-import { FaCamera, FaExternalLinkAlt, FaLink } from "react-icons/fa";
+import { FaCamera, FaEdit, FaExternalLinkAlt, FaLink } from "react-icons/fa";
 import PopupModal from "@/components/PopupModal";
+import { AiOutlineEdit } from "react-icons/ai";
+import { updateProfile } from "firebase/auth";
 
 export default function Listing() {
   const [userId, setUserId] = useState<number | null>(null);
   const [profile, setProfile] = useState<User | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [isImgPopupOpen, setIsImgPopupOpen] = useState(false);
+  const [isDescPopupOpen, setIsDescPopupOpen] = useState(false);
   const [newImageUrl, setNewImageUrl] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [description, setDescription] = useState(profile?.description || "");
 
   useEffect(() => {
     getUserId().then((id) => {
@@ -58,6 +68,12 @@ export default function Listing() {
     fetchUserId();
   }, []);
 
+  useEffect(() => {
+    if (profile?.description !== undefined) {
+      setDescription(profile.description);
+    }
+  }, [profile?.description]);
+
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0];
     if (selectedFile) {
@@ -91,6 +107,24 @@ export default function Listing() {
       console.error("Error uploading image:", error);
     } finally {
       setIsUploading(false);
+    }
+  };
+
+  const handleDescriptionUpdate = async () => {
+    setIsUpdating(true);
+    try {
+      if (userId) {
+        const updatedProfile = await updateDescriptions(userId, description);
+        // onUpdate(updatedProfile);
+        if (updatedProfile) {
+          setDescription(updatedProfile.description);
+        }
+        setIsDescPopupOpen(false);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsUpdating(false);
     }
   };
 
@@ -142,7 +176,15 @@ export default function Listing() {
         </div>
 
         <div className="mt-6 border-t pt-4 w-full">
-          <h3 className="text-lg font-semibold">About</h3>
+          <div className="flex items-center gap-3 align-middle">
+            <h3 className="text-lg font-semibold">About</h3>
+            <button onClick={() => setIsDescPopupOpen(true)}>
+              <div className="inline-block bg-[#46afe9] rounded-full p-1 cursor-pointer hover:bg-[#41a4db]">
+                <AiOutlineEdit size={15} color="white" />
+              </div>
+            </button>
+          </div>
+
           <p className="text-gray-600 text-base">{profile?.description}</p>
         </div>
 
@@ -207,6 +249,23 @@ export default function Listing() {
             className="rounded-full w-28 h-28 object-cover mt-4"
           />
         )}
+      </PopupModal>
+
+      <PopupModal
+        isOpen={isDescPopupOpen}
+        title="Update Description"
+        onClose={() => setIsDescPopupOpen(false)}
+        onSave={handleDescriptionUpdate}
+        isSaving={isUpdating}
+        disableSave={!description}
+      >
+        <textarea
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          className="w-full border rounded-md p-2"
+          rows={4}
+          placeholder="Enter your new description..."
+        />
       </PopupModal>
     </div>
   );
