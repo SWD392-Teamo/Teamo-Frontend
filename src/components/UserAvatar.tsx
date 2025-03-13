@@ -23,7 +23,7 @@ const LeaderAvatar: React.FC<imgProps> = ({ imgUrl }) => {
            alt="User Avatar"
            width={300}
            height={300}
-           className="rounded-full object-cover border-2 border-gray-300 shadow-sm"
+           className="rounded-full object-cover border-2 border-gray-300 shadow-sm  aspect-square"
          />
        ) : (
          <p>Loading image...</p>

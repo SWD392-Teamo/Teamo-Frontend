@@ -69,7 +69,7 @@ export default function GenericTable<T>({
                       alt="Header Image"
                       width={50}
                       height={50}
-                      className="rounded-full object-cover border-2 border-gray-300 shadow-sm"                      />
+                      className="rounded-full object-cover border-2 border-gray-300 shadow-sm  aspect-square"                      />
                   ) : column.header === "Date" ? (
                     dateFormatter(String(item[column.key]))
                   ) : column.header === "Action" && actions ? (

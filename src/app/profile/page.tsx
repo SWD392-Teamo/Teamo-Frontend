@@ -11,16 +11,16 @@ import MedGroupImage from "@/components/groups/MedGroupImage";
 import { getFirebaseImageUrl } from "@/lib/firebaseImage";
 import SkillBar from "@/components/SkillBar";
 import { FaCamera, FaExternalLinkAlt, FaLink } from "react-icons/fa";
+import PopupModal from "@/components/PopupModal";
 
 export default function Listing() {
   const [userId, setUserId] = useState<number | null>(null);
   const [profile, setProfile] = useState<User | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [isImgPopupOpen, setIsImgPopupOpen] = useState(false);
   const [newImageUrl, setNewImageUrl] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
-    const [isUploading, setIsUploading] = useState(false);
-  
+  const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
     getUserId().then((id) => {
@@ -61,17 +61,16 @@ export default function Listing() {
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0];
     if (selectedFile) {
-      setFile(selectedFile); 
+      setFile(selectedFile);
       const reader = new FileReader();
-      
+
       reader.onloadend = () => {
-        setNewImageUrl(reader.result as string); 
+        setNewImageUrl(reader.result as string);
       };
-      
+
       reader.readAsDataURL(selectedFile);
     }
   };
-
 
   const handleSaveImage = async () => {
     if (!file) return;
@@ -81,21 +80,19 @@ export default function Listing() {
     formData.append("image", file);
 
     try {
-      if(userId){
+      if (userId) {
         const response = await uploadImage(userId, formData);
         if (response && response.imageUrl) {
           setNewImageUrl(response.imageUrl);
         }
-        setIsPopupOpen(false);
+        setIsImgPopupOpen(false);
       }
-      
     } catch (error) {
       console.error("Error uploading image:", error);
     } finally {
       setIsUploading(false);
     }
   };
-  
 
   console.log("profile", profile);
   return (
@@ -119,7 +116,7 @@ export default function Listing() {
               )}
               <button
                 className="absolute bottom-2 right-2 p-2 bg-white rounded-full shadow-md hover:bg-gray-200"
-                onClick={() => setIsPopupOpen(true)}
+                onClick={() => setIsImgPopupOpen(true)}
               >
                 <FaCamera className="text-gray-600" size={15} />
               </button>
@@ -193,43 +190,24 @@ export default function Listing() {
           </div>
         </div>
       </div>
-      {isPopupOpen && (
-        <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg">
-            <h3 className="text-xl font-semibold mb-4">Change Profile Image</h3>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleImageUpload}
-              className="mb-4"
-            />
-            {newImageUrl && (
-              <Image
-                src={newImageUrl}
-                alt="New Profile Image"
-                width={120}
-                height={120}
-                className="rounded-full object-cover"
-              />
-            )}
-            <div className="flex justify-end gap-3 mt-4">
-              <button
-                onClick={() => setIsPopupOpen(false)}
-                className="px-4 py-2 bg-gray-300 rounded-md hover:bg-gray-400"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleSaveImage}
-                disabled={isUploading}
-                className="px-4 py-2 bg-[#46afe9] text-white rounded-md hover:bg-[#d3eef9] hover:text-black"
-              >
-                {isUploading ? "Uploading..." : "Save"}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <PopupModal
+        isOpen={isImgPopupOpen}
+        title="Change Profile Image"
+        onClose={() => setIsImgPopupOpen(false)}
+        onSave={handleSaveImage}
+        isSaving={isUploading}
+        disableSave={!newImageUrl}
+        saveLabel="Upload"
+      >
+        <input type="file" accept="image/*" onChange={handleImageUpload} />
+        {newImageUrl && (
+          <img
+            src={newImageUrl}
+            alt="Preview"
+            className="rounded-full w-28 h-28 object-cover mt-4"
+          />
+        )}
+      </PopupModal>
     </div>
   );
 }

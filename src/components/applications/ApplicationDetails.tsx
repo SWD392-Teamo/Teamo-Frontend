@@ -51,7 +51,7 @@ export default function ApplicationDetails({application}: Props) {
                         alt={application.studentName}
                         width={40}
                         height={40}
-                        className="w-16 h-16 rounded-full object-cover"
+                        className="w-16 h-16 rounded-full object-cover  aspect-square"
                     />
                 )}
                 <div>

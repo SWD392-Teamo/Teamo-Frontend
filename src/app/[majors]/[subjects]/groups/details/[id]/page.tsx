@@ -53,7 +53,7 @@ const GroupDetail: React.FC = () => {
               <Image
                 src={defaultGroup}
                 alt={selectedgroup?.name || "none"}
-                className="w-full h-full rounded-full object-cover border-2 border-gray-300 shadow-sm"
+                className="w-full h-full rounded-full object-cover border-2 border-gray-300 shadow-sm  aspect-square"
               />
             </div>
           )}
@@ -145,7 +145,7 @@ const GroupDetail: React.FC = () => {
                       <Image
                         src={defaultAvatar}
                         alt={member?.studentName || "none"}
-                        className="w-10 h-10 rounded-full object-cover border-2 border-gray-300 shadow-sm"
+                        className="w-10 h-10 rounded-full object-cover border-2 border-gray-300 shadow-sm aspect-square"
                       />
                     )}
                   </div>
