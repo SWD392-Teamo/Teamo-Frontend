@@ -7,3 +7,7 @@ export async function getData(query: string, isOwnGroup = false): Promise<PagedR
     const endpoint = isOwnGroup ? `profile/groups${query}` : `groups${query}`;
     return await fetchWrapper.get(endpoint)
 }
+
+export async function getGroupById(groupId: number): Promise<Group> {
+    return await fetchWrapper.get(`groups/${groupId}`);
+}

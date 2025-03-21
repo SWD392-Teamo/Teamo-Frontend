@@ -1,32 +1,18 @@
-import { useMajorStore } from "@/hooks/useMajorStore";
-import { useSubjectStore } from "@/hooks/useSubjectStore";
-import Link from "next/link";
-import { useShallow } from "zustand/shallow";
 import defaultAvatar from "@/assets/defaultAvatar.jpg";
 import defaultGroup from "@/assets/defaultGroup.png";
-import Image from "next/image";
 import LeaderAvatar from "@/components/UserAvatar";
+import GroupStatusBadge from "@/components/groups/GroupStatus";
 import MemberAvatar from "@/components/groups/MemberAvatar";
-import PositionCard from "./PositionCard";
+import SmallGroupImage from "@/components/groups/SmallGroupImage";
 import { useGroupStore } from "@/hooks/useGroupStore";
 import { Group } from "@/types";
-import SmallGroupImage from "@/components/groups/SmallGroupImage";
-import GroupStatusBadge from "@/components/groups/GroupStatus";
+import Image from "next/image";
+import Link from "next/link";
+import PositionCard from "./PositionCard";
 
 const GroupCard: React.FC<{ group: Group }> = ({ group }) => {
-  const { selectedMajor } = useMajorStore(
-    useShallow((state) => ({
-      selectedMajor: state.selectedMajor,
-    }))
-  );
+  const link = `/groups/details/${group.id}`
 
-  const { selectedSubject } = useSubjectStore(
-    useShallow((state) => ({
-      selectedSubject: state.selectedSubject,
-    }))
-  );
-
-  const link = `/${selectedMajor?.code}/${selectedSubject?.code}/groups/details/${group.id}`;
   const { setSelectedGroup } = useGroupStore();
 
   const handleDetailsClick = () => {
