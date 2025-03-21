@@ -1,9 +1,8 @@
 "use client";
 
 import {
-  getGroupApplicationById,
+  getApplicationById,
   getGroupApplications,
-  getUserApplicationById,
   getUserApplications,
   reviewApplication,
 } from "@/actions/applicationActions";
@@ -125,29 +124,11 @@ export default function ApplicationsListing({ isForUser }: Props) {
   function handleRowClick(id: number) {
     setShowModal(true);
     showLoading();
-
-    if (!isForUser) {
-      getGroupApplication(id);
-    } else {
-      getUserApplication(id);
-    }
+    getApplication(id);
   }
 
-  function getGroupApplication(id: number) {
-    getGroupApplicationById(groupId, id)
-      .then((data) => {
-        setSelectedApplication(data);
-      })
-      .catch((error) => {
-        toast.error(error.status + " " + error.message);
-      })
-      .finally(() => {
-        hideLoading();
-      });
-  }
-
-  function getUserApplication(id: number) {
-    getUserApplicationById(id)
+  function getApplication(id: number) {
+    getApplicationById(id)
       .then((data) => {
         setSelectedApplication(data);
       })
