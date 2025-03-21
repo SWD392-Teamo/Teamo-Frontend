@@ -1,26 +1,35 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useLoading } from "@/providers/LoadingProvider";
-import { getAllUsers } from "@/actions/userActions";
+import { banUser, getAllUsers } from "@/actions/userActions";
 import toast from "react-hot-toast";
 import { User } from "@/types";
-import { HiOutlineTrash, HiOutlineUserGroup } from "react-icons/hi";
+import { HiBan, HiOutlineTrash, HiOutlineUserGroup } from "react-icons/hi";
 import GenericTable from "@/components/GenericTable";
 import AppPagination from "@/components/AppPagination";
 import queryString from "query-string";
 import { useUserstore } from "@/hooks/useUserStore";
 import SearchBar from "@/components/SearchBar";
+import AppModal from "@/components/AppModal";
 
 type UserTable = Pick<
   User,
-  "id" | "code" | "firstName" | "lastName" | "email" | "imgUrl"
+  "id" | "code" | "firstName" | "lastName" | "email" | "imgUrl" | "status"
 >;
 
 export default function Listings() {
   const { showLoading, hideLoading } = useLoading();
-  const { users, totalCount, pageSize, selectedUser, setData } = useUserstore();
+  const {
+    users,
+    totalCount,
+    pageSize,
+    selectedUser,
+    setData,
+    setSelectedUser,
+  } = useUserstore();
   const [search, setSearch] = useState<string>("");
   const [pageIndex, setPageIndex] = useState(1);
+  const [modelOpen, setModelOpen] = useState(false);
   const url = queryString.stringifyUrl({
     url: "",
     query: {
@@ -36,6 +45,7 @@ export default function Listings() {
     { header: "Student Code", key: "code" },
     { header: "Full Name", key: "fullName" },
     { header: "Email", key: "email" },
+    { header: "Status", key: "status" },
     { header: "Action", key: "action" },
   ];
 
@@ -58,12 +68,21 @@ export default function Listings() {
     fullName: `${user.firstName} ${user.lastName}`,
   }));
 
-  const handleDelete = (id: string | number) => {
-    if (confirm("Bạn có chắc chắn muốn xóa người dùng này không?")) {
-      // Call API xóa user ở đây
-      console.log("Delete user with id:", id);
-      toast.success("Đã xóa người dùng " + id);
-    }
+  const handlePopup = (id: number) => {
+    setSelectedUser(id);
+    setModelOpen(true);
+  };
+  const handleDelete = (id: number) => {
+    banUser(id)
+      .then(() => {
+        toast.success("Successfully banned this user");
+      })
+      .catch(() => {
+        toast.error("Failed to ban this user");
+      })
+      .finally(() => {
+        setModelOpen(false);
+      });
   };
 
   return (
@@ -80,9 +99,9 @@ export default function Listings() {
         columns={columns}
         actions={[
           {
-            label: <HiOutlineTrash />,
+            label: <HiBan />,
             className: "btn btn--danger--outline",
-            onClick: handleDelete,
+            onClick: (id) => handlePopup(id as number),
           },
         ]}
       />
@@ -97,6 +116,26 @@ export default function Listings() {
           />
         </div>
       )}
+
+      <AppModal
+        show={modelOpen}
+        onClose={() => setModelOpen(false)}
+        title="Confirmation"
+      >
+        <div className="flex flex-col items-center p-4 space-y-4">
+          <span className="text-lg font-medium text-gray-700 text-center">
+            Are you sure you want to ban this user?
+          </span>
+          <div className="flex justify-end space-x-3 w-full pt-2">
+            <button
+              onClick={() => handleDelete(selectedUser)}
+              className="btn btn--primary"
+            >
+              OK
+            </button>
+          </div>
+        </div>
+      </AppModal>
     </div>
   );
 }

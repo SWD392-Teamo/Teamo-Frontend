@@ -20,3 +20,6 @@ export async function getProfile(userId: number): Promise<User> {
 export async function getAllUsers(query: string): Promise<PagedResult<User>> {
     return await fetchWrapper.get(`users${query}`)
 }
+export async function banUser(userId: number): Promise<any> {
+    return await fetchWrapper.del(`users/${userId}`)
+}

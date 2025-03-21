@@ -104,6 +104,7 @@ export type User = {
     imgUrl: string,
     description: string,
     majorCode: string,
+    status: string,
     links: Link[];
     studentSkills: StudentSkill[],
 }
