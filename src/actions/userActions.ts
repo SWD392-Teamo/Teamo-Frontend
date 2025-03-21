@@ -16,3 +16,7 @@ export async function uploadImage(userId: number, formData: FormData): Promise<a
 export async function getProfile(userId: number): Promise<User> {
     return await fetchWrapper.get(`users/${userId}/profile`)
 }
+
+export async function getAllUsers(query: string): Promise<PagedResult<User>> {
+    return await fetchWrapper.get(`users${query}`)
+}
