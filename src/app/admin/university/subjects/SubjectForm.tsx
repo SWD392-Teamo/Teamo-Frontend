@@ -68,14 +68,14 @@ export default function SubjectForm({subject, onCancel, onSuccess}: Props) {
           res = await createSubject(formData);
         }
       
-        if (res) {
-            toast.success("Success");
-            onSuccess();
-            onCancel();
-        }
-        else if(res.statusCode == 400) {
-            toast.error(res.message);
-        }
+        if (res.error == undefined) {
+          toast.success((hasSubject ? "Update" : "Create") + " subject succeeded");
+          onSuccess();
+          onCancel();
+      }
+      else if(res.error.message.statusCode == 400) {
+          toast.error(res.error.message.message);
+      }
     } catch (error: any) {
         toast.error(error.status + ' ' + error.message)
     } finally {

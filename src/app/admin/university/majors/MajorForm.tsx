@@ -65,14 +65,14 @@ export default function MajorForm({major, onCancel, onSuccess}: Props) {
           res = await createMajor(formData);
         }
       
-        if (res) {
-            toast.success("Success");
-            onSuccess();
-            onCancel();
-        }
-        else if(res.statusCode == 400) {
-            toast.error(res.message);
-        }
+        if (res.error == undefined) {
+          toast.success((hasMajor ? "Update" : "Create") + " major succeeded");
+          onSuccess();
+          onCancel();
+      }
+      else if(res.error.message.statusCode == 400) {
+          toast.error(res.error.message.message);
+      }
     } catch (error: any) {
         toast.error(error.status + ' ' + error.message)
     } finally {

@@ -4,9 +4,10 @@ import React, { useState } from 'react';
 import UniversityInfoHeader from './UniversityInfoHeader';
 import MajorsListing from './majors/MajorsListing';
 import SubjectsListing from './subjects/SubjectsListing';
+import FieldsListing from './fields/FieldsListing';
 
 export default function UniversityInformation() {
-  const [activeTab, setActiveTab] = useState<'major' | 'subject' | 'field'>('major');
+  const [activeTab, setActiveTab] = useState<'major' | 'subject' | 'field' | 'semester' | 'skill'>('major');
   const [search, setSearch] = useState('');
 
   return (
@@ -21,7 +22,9 @@ export default function UniversityInformation() {
       <div className="mt-6">
         {activeTab === 'major' && <MajorsListing />}
         {activeTab === 'subject' && <SubjectsListing />}
-        {activeTab === 'field' && <div>Fields View</div>}
+        {activeTab === 'field' && <FieldsListing />}
+        {activeTab === 'semester' && <div>Semesters View</div>}
+        {activeTab === 'skill' && <div>Skills View</div>}
       </div>
     </div>
   );

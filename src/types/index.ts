@@ -13,6 +13,7 @@ export type Subject = {
     description: string
     createdDate: string
     imgUrl: string
+    status: string
 }
 
 export type Major = {

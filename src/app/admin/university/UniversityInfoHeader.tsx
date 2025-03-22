@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 
-type Tab = 'major' | 'subject' | 'field';
+type Tab = 'major' | 'subject' | 'field' | 'semester' | 'skill';
 
 interface UniversityInfoHeaderProps {
   activeTab: Tab;
@@ -19,6 +19,8 @@ export default function UniversityInfoHeader({
     { id: 'major', name: 'Majors' },
     { id: 'subject', name: 'Subjects' },
     { id: 'field', name: 'Fields' },
+    { id: 'semester', name: 'Semesters' },
+    { id: 'skill', name: 'Skills' },
   ];
 
   return (
