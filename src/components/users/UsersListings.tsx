@@ -85,8 +85,6 @@ export default function UsersListings() {
     fullName: `${user.firstName} ${user.lastName}`,
   }));
 
-  /** GET USERS BY ID*/
-
   /**
    * USER TABLE CONFIGURATIONS
    */
@@ -98,17 +96,16 @@ export default function UsersListings() {
   };
 
   // handle ban user
-  const handleBanUser = (id: number) => {
-    banUser(id)
-      .then(() => {
-        toast.success("Successfully banned this user");
-      })
-      .catch(() => {
-        toast.error("Failed to ban this user");
-      })
-      .finally(() => {
-        setShowModal(false);
-      });
+  const handleBanUser = async (id: number) => {
+    try {
+      await banUser(id);
+      setData(await getAllUsers(url));
+      toast.success("Successfully banned this user");
+    } catch (error) {
+      toast.error("Failed to ban this user");
+    } finally {
+      setShowModal(false);
+    }
   };
 
   const handleRowClick = (id: number) => {
@@ -152,7 +149,7 @@ export default function UsersListings() {
       <UserFilter />
 
       {/* User Table */}
-      {data.users && (
+      {data.users.length > 0 && (
         <div className="mb-5">
           <GenericTable<User>
             data={mappedData}

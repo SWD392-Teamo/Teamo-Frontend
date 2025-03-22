@@ -1,4 +1,4 @@
-import { getUserById } from "@/actions/userActions";
+import { banUser, getUserById, unbanUser } from "@/actions/userActions";
 import { useLoading } from "@/providers/LoadingProvider";
 import { User } from "@/types";
 import { useParams } from "next/navigation";
@@ -10,6 +10,8 @@ import Image from "next/image";
 import { FaCamera, FaLink } from "react-icons/fa";
 import defaultAvatar from "@/assets/defaultAvatar.jpg";
 import SkillBar from "../SkillBar";
+import AppModal from "../AppModal";
+import ConfirmationPopup from "./ConfirmationPopup";
 
 export default function UserDetails() {
   /** LOCAL STATE MANAGEMENT */
@@ -17,6 +19,7 @@ export default function UserDetails() {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const { showLoading, hideLoading } = useLoading();
+  const [showModel, setShowModal] = useState(false);
 
   /** GET USER DETAILS */
   useEffect(() => {
@@ -30,6 +33,7 @@ export default function UserDetails() {
   const getUserDetail = async (id: number) => {
     try {
       const data = await getUserById(id);
+      console.log(data);
       setSelectedUser(data);
 
       if (data.imgUrl) {
@@ -44,44 +48,95 @@ export default function UserDetails() {
     }
   };
 
+  /** HANDLE ACTIONS */
+  // BAN USER
+  const handleBanUser = async (id: number) => {
+    try {
+      showLoading();
+      let updatedUser;
+      if (selectedUser?.status === "Banned") {
+        updatedUser = await unbanUser(id);
+        toast.success("Successfully unban this user.");
+      } else {
+        updatedUser = await banUser(id);
+        toast.success("Successfully ban this user.");
+      }
+      setSelectedUser(updatedUser);
+    } catch (error) {
+      toast.error("Fail to ban this user!");
+    } finally {
+      setShowModal(false);
+      hideLoading();
+    }
+  };
+
   return (
     <div>
       {/* Header */}
       <BackButton />
-      <h1 className="page-title">Profile</h1>
+      <h1 className="page-title mb-5">Profile</h1>
 
       {/* User Detail */}
       <div className="border border-gray-200 rounded-lg shadow-sm p-10 flex flex-col items-start hover:shadow-lg transition flex-1 mb-10">
         {/* Personal Information */}
-        <div className="flex items-center flex-col gap-3">
-          <div className="relative w-full h-full">
-            {imageUrl ? (
-              <Image
-                src={imageUrl}
-                alt="Medium Group Image"
-                width={120}
-                height={120}
-                className="rounded-full object-cover border-2 border-gray-300 shadow-sm aspect-square"
-              />
-            ) : (
-              <div className="w-full h-full">
+        <div className="flex items-center justify-between w-full relative gap-4">
+          {/* Avatar + Info */}
+          <div className="flex items-center gap-4">
+            <div className="relative">
+              {imageUrl ? (
+                <Image
+                  src={imageUrl}
+                  alt="User Image"
+                  width={100}
+                  height={100}
+                  className="rounded-full object-cover border-2 border-gray-300 shadow-sm aspect-square"
+                />
+              ) : (
                 <Image
                   src={defaultAvatar}
-                  width={120}
-                  height={120}
+                  width={100}
+                  height={100}
                   alt={selectedUser?.firstName || "none"}
-                  className="w-full h-full rounded-full object-cover border-2 border-gray-300 shadow-sm aspect-square"
+                  className="rounded-full object-cover border-2 border-gray-300 shadow-sm aspect-square"
                 />
-              </div>
-            )}
+              )}
+            </div>
+            <div>
+              <h2 className="text-2xl font-semibold">
+                {selectedUser?.lastName} {selectedUser?.firstName}
+              </h2>
+              <p className="text-[#41a4db] text-sm ">{selectedUser?.gender}</p>
+              <p className="text-gray-600">{selectedUser?.code}</p>
+            </div>
           </div>
-          <div className="flex flex-col items-center">
-            <h2 className="text-2xl font-semibold">
-              {selectedUser?.lastName} {selectedUser?.firstName}
-            </h2>
-            <p className="text-[#41a4db] text-sm ">{selectedUser?.gender}</p>
-            <p className="text-gray-600">{selectedUser?.code}</p>
-          </div>
+
+          {/* Ban/Unban Button */}
+          {selectedUser && (
+            <div className="flex flex-col items-center gap-2">
+              {/* Status */}
+              <p
+                className={`font-medium ${
+                  selectedUser.status === "Banned"
+                    ? "text-danger"
+                    : "text-primary"
+                }`}
+              >
+                {selectedUser.status.toUpperCase()}
+              </p>
+
+              {/* Button */}
+              <button
+                onClick={() => setShowModal(true)}
+                className={`btn ${
+                  selectedUser.status === "Banned"
+                    ? "btn--primary"
+                    : "btn--danger--outline"
+                }`}
+              >
+                {selectedUser.status === "Banned" ? "Unban User" : "Ban User"}
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Detail information */}
@@ -136,6 +191,22 @@ export default function UserDetails() {
           </div>
         </div>
       </div>
+
+      {/* Popup Modal */}
+      <AppModal
+        show={showModel}
+        onClose={() => setShowModal(false)}
+        title="Confirmation"
+      >
+        <ConfirmationPopup
+          message={
+            selectedUser?.status === "Banned"
+              ? "Are you sure to unban this user?"
+              : "Are you sure to ban this user?"
+          }
+          onConfirm={() => handleBanUser(selectedUser?.id as number)}
+        />
+      </AppModal>
     </div>
   );
 }

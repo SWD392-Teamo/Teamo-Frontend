@@ -26,3 +26,6 @@ export async function banUser(userId: number): Promise<any> {
 export async function getUserById(userId: number): Promise<User> {
     return await fetchWrapper.get(`users/${userId}`)
 }
+export async function unbanUser(userId: number): Promise<any> {
+    return await fetchWrapper.patch(`users/${userId}`, {})
+}
