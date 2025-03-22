@@ -9,7 +9,7 @@ import queryString from "query-string";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useShallow } from "zustand/shallow";
-import GroupCard from "../[majors]/[subjects]/groups/GroupCard";
+import GroupCard from "../../components/groups/GroupCard";
 import HandlePaging from "@/components/HandlePaging";
 import { useSemesterStore } from "@/hooks/useSemesterStore";
 
