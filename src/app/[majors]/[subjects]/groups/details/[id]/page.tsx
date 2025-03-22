@@ -12,10 +12,10 @@ import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { IoIosStar } from "react-icons/io";
 import { useShallow } from "zustand/shallow";
-import GroupPositionCard from "./GroupPosition";
 import { getUserId } from "@/actions/userActions";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import GroupPositionCard from "@/app/groups/details/[id]/GroupPosition";
 
 const GroupDetail: React.FC = () => {
   const [userId, setUserId] = useState<number | null>(null);

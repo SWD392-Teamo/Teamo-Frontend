@@ -38,4 +38,15 @@ export async function addLink(userId: number, addLinkProfile: addLinkProfile): P
 
 export async function updateLink(userId: number, linkId: number, addLinkProfile: addLinkProfile): Promise<Link>{
     return await fetchWrapper.patch(`users/${userId}/profile/links/${linkId}`, addLinkProfile)
+export async function getAllUsers(query: string): Promise<PagedResult<User>> {
+    return await fetchWrapper.get(`users${query}`)
+}
+export async function banUser(userId: number): Promise<any> {
+    return await fetchWrapper.del(`users/${userId}`)
+}
+export async function getUserById(userId: number): Promise<User> {
+    return await fetchWrapper.get(`users/${userId}`)
+}
+export async function unbanUser(userId: number): Promise<any> {
+    return await fetchWrapper.patch(`users/${userId}`, {})
 }

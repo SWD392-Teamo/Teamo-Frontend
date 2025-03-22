@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useShallow } from "zustand/shallow";
 import GroupHeader from "./GroupHeader";
-import GroupCard from "./GroupCard";
+import GroupCard from "../../../../components/groups/GroupCard";
 import { useGroupStore } from "@/hooks/useGroupStore";
 import { group } from "console";
 

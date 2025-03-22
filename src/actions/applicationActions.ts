@@ -12,11 +12,7 @@ export async function getGroupApplications(groupId: number, query: string): Prom
     return await fetchWrapper.get(`groups/${groupId}/applications${query}`)
 }
 
-export async function getGroupApplicationById(groupId: number, appId: number): Promise<Application> {
-    return await fetchWrapper.get(`groups/${groupId}/applications/${appId}`)
-}
-
-export async function getUserApplicationById(appId: number): Promise<Application> {
+export async function getApplicationById(appId: number): Promise<Application> {
     return await fetchWrapper.get(`applications/${appId}`)
 }
 
