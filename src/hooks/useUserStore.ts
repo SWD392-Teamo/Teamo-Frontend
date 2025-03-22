@@ -15,7 +15,7 @@ type Actions = {
 
 const initialState: State = {
     users: [],
-    pageSize: 6,
+    pageSize: 3,
     totalCount: 0,
     selectedUser: 0,
 }
