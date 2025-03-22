@@ -23,21 +23,24 @@ export async function updateDescriptions( description: string): Promise<User>{
     return await fetchWrapper.patch(`profile/description`, {description})
 }
 
-export async function addSkill(addSkillProfile: addSkillProfile): Promise<User>{
+export async function addSkill(addSkillProfile: addSkillProfile[]): Promise<User>{
     return await fetchWrapper.post(`profile/skills`, addSkillProfile)
 }
 
-export async function updateSkill(userId:number, skillId: number, level:string): Promise<StudentSkill>{
+export async function updateSkill(skillId: number, level:string): Promise<StudentSkill>{
     return await fetchWrapper.patch(`profile/skills/${skillId}`, level)
-
 }
 
-export async function addLink(userId: number, addLinkProfile: addLinkProfile): Promise<Link>{
+export async function addLink(addLinkProfile: addLinkProfile[]): Promise<User>{
     return await fetchWrapper.post(`profile/links`, addLinkProfile)
 }
 
-export async function updateLink(userId: number, linkId: number, addLinkProfile: addLinkProfile): Promise<Link>{
+export async function updateLink(linkId: number, addLinkProfile: addLinkProfile): Promise<Link>{
     return await fetchWrapper.patch(`profile/links/${linkId}`, addLinkProfile)
+}
+
+export async function removeLink(linkId: number): Promise<Link>{
+    return await fetchWrapper.del(`profile/links/${linkId}`)
 }
 export async function getAllUsers(query: string): Promise<PagedResult<User>> {
     return await fetchWrapper.get(`users${query}`)

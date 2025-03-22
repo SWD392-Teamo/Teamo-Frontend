@@ -21,20 +21,25 @@ import { FaCamera, FaEdit, FaExternalLinkAlt, FaLink } from "react-icons/fa";
 import PopupModal from "@/components/PopupModal";
 import { AiOutlineEdit } from "react-icons/ai";
 import { updateProfile } from "firebase/auth";
+import { LinkManagementPopup } from "@/components/profile/LinkPopupModal";
 
 export default function Listing() {
   const [userId, setUserId] = useState<number | null>(null);
   const [profile, setProfile] = useState<User | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [file, setFile] = useState<File | null>(null);
+
+
   const [isImgPopupOpen, setIsImgPopupOpen] = useState(false);
   const [isDescPopupOpen, setIsDescPopupOpen] = useState(false);
+  const [isLinksPopupOpen, setIsLinksPopupOpen] = useState(false);
+
   const [newImageUrl, setNewImageUrl] = useState<string | null>(null);
-  const [file, setFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
   const [description, setDescription] = useState(profile?.description || "");
-  const [newLink, setNewLink] = useState<Link | null>(null);
   const [links, setLinks] = useState<Link[]>([]);
+
 
   useEffect(() => {
     getUserId().then((id) => {
@@ -115,6 +120,18 @@ export default function Listing() {
     }
   };
 
+
+  const handleLinksUpdated = (updatedLinks: Link[]) => {
+    setLinks(updatedLinks);
+    
+    if (profile) {
+      setProfile({
+        ...profile,
+        links: updatedLinks
+      });
+    }
+  };
+
   const handleDescriptionUpdate = async () => {
     setIsUpdating(true);
     try {
@@ -133,27 +150,6 @@ export default function Listing() {
     }
   };
 
-  const handleAddLink = () => {
-    if (newLink) {
-      addLink(userId!, newLink).then((newLinkAdded) => {
-        setLinks([...links, newLinkAdded]); // Add the new link to the list
-        setNewLink(null); // Clear the new link input
-      }).catch(error => {
-        console.error("Error adding new link:", error);
-      });
-    }
-  };
-
-  const handleEditLink = (linkId: number, updatedLink: { name: string, url: string }) => {
-    updateLink(userId!, linkId, updatedLink).then((updatedLinkData) => {
-      setLinks(links.map(link => link.id === linkId ? updatedLinkData : link));
-    }).catch(error => {
-      console.error("Error updating link:", error);
-    });
-  };
-
-
-  console.log("profile", profile);
   return (
     <div className="">
       <BackButton />
@@ -224,21 +220,33 @@ export default function Listing() {
           </div>
         </div>
 
-        <div className="mt-6 border-t pt-4 w-full">
-          <h3 className="text-lg font-semibold">Links</h3>
+         {/* Links Section */}
+         <div className="mt-6 border-t pt-4 w-full">
+         <div className="flex items-center gap-3 align-middle">
+            <h3 className="text-lg font-semibold">Links</h3>
+            <button onClick={() => setIsLinksPopupOpen(true)}>
+              <div className="inline-block bg-[#46afe9] rounded-full p-1 cursor-pointer hover:bg-[#41a4db]">
+                <AiOutlineEdit size={15} color="white" />
+              </div>
+            </button>
+          </div>
           <div className="flex flex-col gap-3 mt-2 w-2/3">
-            {profile?.links.map((link, index) => (
-              <a
-                key={index}
-                href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 text-[#46afe9] hover:underline"
-              >
-                <FaLink className="text-gray-500" />
-                {link.name || link.url}
-              </a>
-            ))}
+            {links.length > 0 ? (
+              links.map((link, index) => (
+                <a
+                  key={index}
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-[#131516] hover:underline"
+                >
+                  <FaLink className="text-gray-500" />
+                  {link.name || link.url}
+                </a>
+              ))
+            ) : (
+              <p className="text-gray-500 italic">No links added yet</p>
+            )}
           </div>
         </div>
 
@@ -292,6 +300,13 @@ export default function Listing() {
           placeholder="Enter your new description..."
         />
       </PopupModal>
+
+      <LinkManagementPopup
+        isOpen={isLinksPopupOpen}
+        onClose={() => setIsLinksPopupOpen(false)}
+        links={links}
+        onLinksUpdated={handleLinksUpdated}
+      />
     </div>
   );
 }
