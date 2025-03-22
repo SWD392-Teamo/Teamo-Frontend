@@ -1,5 +1,4 @@
 import SearchBar from '@/components/SearchBar';
-import { useParamsStore } from '@/hooks/useParamsStore';
 import { Button } from 'flowbite-react';
 
 interface MajorFilterProps {
@@ -9,7 +8,7 @@ interface MajorFilterProps {
   setPageIndex: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export default function MajorFilter({status, setSearch, setStatus, setPageIndex}: MajorFilterProps) {
+export default function SubjectFilter({status, setSearch, setStatus, setPageIndex}: MajorFilterProps) {
   return (
     <div className="flex flex-row justify-between items-center w-full mb-5">
       <div className="flex gap-5 mt-3">

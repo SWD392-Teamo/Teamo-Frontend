@@ -7,6 +7,10 @@ export async function getData(query: string): Promise<PagedResult<Subject>> {
     return await fetchWrapper.get(`subjects${query}`)
 }
 
+export async function getSubjectById(subjectId: number): Promise<Subject> {
+    return await fetchWrapper.get(`subjects/${subjectId}`)
+}
+
 export async function createSubject(formData: FormData): Promise<any> {
     return await fetchWrapper.post(`subjects`, formData)
 }

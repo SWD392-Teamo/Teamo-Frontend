@@ -1,14 +1,12 @@
 'use client'
 
-import { deleteMajor, getData, getMajorById } from '@/actions/majorActions';
 import AppModal from '@/components/AppModal';
 import AppPagination from '@/components/AppPagination';
 import EmptyFilter from '@/components/EmptyFilter';
 import GenericTable from '@/components/GenericTable';
-import { useMajorStore } from '@/hooks/useMajorStore';
-import { useParamsStore } from '@/hooks/useParamsStore';
+import { useSubjectStore } from '@/hooks/useSubjectStore';
 import { useLoading } from '@/providers/LoadingProvider';
-import { Major } from '@/types';
+import { Major, Subject } from '@/types';
 import { Button } from 'flowbite-react';
 import queryString from 'query-string';
 import { useEffect, useState } from 'react';
@@ -16,7 +14,8 @@ import toast from 'react-hot-toast';
 import { AiOutlineEdit } from 'react-icons/ai';
 import { useShallow } from 'zustand/shallow';
 import Filter from '../Filter';
-import MajorForm from './MajorForm';
+import SubjectForm from './SubjectForm';
+import { deleteSubject, getData, getSubjectById } from '@/actions/subjectAction';
 
 export default function MajorsListing() {
   //=====================================
@@ -25,7 +24,7 @@ export default function MajorsListing() {
 
   const [showModal, setShowModal] = useState(false);
   const { showLoading, hideLoading } = useLoading();
-  const [selectedMajor, setSelectedMajor] = useState<Major>();
+  const [selectedSubject, setSelectedSubject] = useState<Subject>();
   const [search, setSearch] = useState<string>("");
   const [pageIndex, setPageIndex] = useState<number>(1);
   const [status, setStatus] = useState<string>("");
@@ -34,16 +33,16 @@ export default function MajorsListing() {
   //      GLOBAL STATE MANAGEMENT
   //=====================================
 
-  // Use major store
-  const data = useMajorStore(
+  // Use subject store
+  const data = useSubjectStore(
     useShallow((state) => ({
-      majors: state.majors,
+      subjects: state.subjects,
       totalCount: state.totalCount,
       pageSize: state.pageSize,
     }))
   );
 
-  const setData = useMajorStore((state) => state.setData);
+  const setData = useSubjectStore((state) => state.setData);
 
   const url = queryString.stringifyUrl({
     url: "",
@@ -55,11 +54,11 @@ export default function MajorsListing() {
   });
 
   //=====================================
-  //      GET MAJORS LIST
+  //      GET SUBJECTS LIST
   //=====================================
 
   // Get majors
-  function getMajors() {
+  function getSubjects() {
     getData(url)
       .then((data) => {
         setData(data);
@@ -74,23 +73,23 @@ export default function MajorsListing() {
 
   // Get majors data
   useEffect(() => {
-    getMajors();
+    getSubjects();
   }, [url, setData, showLoading, hideLoading]);
 
   //=====================================
-  //      GET MAJOR BY ID
+  //      GET SUBJECT BY ID
   //=====================================
 
   function handleRowClick(id: number) {
     setShowModal(true);
     showLoading();
-    getMajor(id);
+    getSubject(id);
   }
 
-  async function getMajor(id: number) {
-    getMajorById(id)
+  async function getSubject(id: number) {
+    getSubjectById(id)
       .then((data) => {
-        setSelectedMajor(data);
+        setSelectedSubject(data);
       })
       .catch((error) => {
         toast.error(error.status + " " + error.message);
@@ -101,7 +100,7 @@ export default function MajorsListing() {
   }
 
   //==============================================
-  //      MAJOR TABLE CONFIGURATIONS
+  //      SUBJECT TABLE CONFIGURATIONS
   //==============================================
 
   // COLUMNS
@@ -120,9 +119,9 @@ export default function MajorsListing() {
   const handleDelete = async (id: number) => {
     try {
       showLoading();
-      // delete major
-      await deleteMajor(Number(id));
-      getMajors();
+      // Delete subject
+      await deleteSubject(Number(id));
+      getSubjects();
       toast.success("Major deleted successfully");
     } catch (error) {
       toast.error("Failed to delete major");
@@ -142,19 +141,19 @@ export default function MajorsListing() {
 
   return (
     <div className="mb-10 mt-5">
-      {/* Create Major Button */}
+      {/* Create Subject Button */}
       <Button 
           className='btn btn--secondary btn--icon'
           
           onClick={() => {
-            setSelectedMajor(undefined);
+            setSelectedSubject(undefined);
             setShowModal(true);
           }}
           type='button'>
-          <AiOutlineEdit size={20} className='me-2'/> Create Major
+          <AiOutlineEdit size={20} className='me-2'/> Create Subject
       </Button>
 
-      {/* Major Filters */}
+      {/* Subject Filters */}
       <Filter 
         status={status}
         setSearch={setSearch}
@@ -163,10 +162,10 @@ export default function MajorsListing() {
 
       {data.totalCount > 0 ? (
         <>
-          {/* Major Table */}
-          {data.majors && (
-            <GenericTable<Major>
-              data={data.majors}
+          {/* Subject Table */}
+          {data.subjects && (
+            <GenericTable<Subject>
+              data={data.subjects}
               columns={columns}
               actions={actions}
               onRowClick={handleRowClick}
@@ -187,20 +186,20 @@ export default function MajorsListing() {
           <AppModal
             show={showModal}
             onClose={() => setShowModal(false)}
-            title={selectedMajor == null ? "Create Major" : "Edit Major"}
+            title={selectedSubject == null ? "Create Subject" : "Edit Subject"}
             size="3xl"
           >
-            <MajorForm 
-              major={selectedMajor} 
+            <SubjectForm 
+              subject={selectedSubject} 
               onCancel={() => setShowModal(false)}
-              onSuccess={getMajors} />
+              onSuccess={getSubjects} />
           </AppModal>
         </>
       ) : (
         <>
           {/*Empty Filter */}
           <EmptyFilter
-            title="No major found"
+            title="No subject found"
             subtitle="Try changing the filters or reset it completely"
             showReset={true}
           />
