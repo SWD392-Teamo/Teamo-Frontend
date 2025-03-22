@@ -6,12 +6,14 @@ import defaultAvatar from "@/assets/defaultAvatar.jpg";
 import BackButton from "@/components/BackButton";
 import { useSession } from "next-auth/react";
 import {
+  addLink,
   getProfile,
   getUserId,
   updateDescriptions,
+  updateLink,
   uploadImage,
 } from "@/actions/userActions";
-import { User } from "@/types";
+import { Link, User } from "@/types";
 import MedGroupImage from "@/components/groups/MedGroupImage";
 import { getFirebaseImageUrl } from "@/lib/firebaseImage";
 import SkillBar from "@/components/SkillBar";
@@ -31,6 +33,8 @@ export default function Listing() {
   const [isUploading, setIsUploading] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
   const [description, setDescription] = useState(profile?.description || "");
+  const [newLink, setNewLink] = useState<Link | null>(null);
+  const [links, setLinks] = useState<Link[]>([]);
 
   useEffect(() => {
     getUserId().then((id) => {
@@ -44,6 +48,7 @@ export default function Listing() {
     if (userId) {
       getProfile(userId).then((data) => {
         setProfile(data);
+        setLinks(data.links);
       });
     }
   }, [userId]);
@@ -127,6 +132,26 @@ export default function Listing() {
       setIsUpdating(false);
     }
   };
+
+  const handleAddLink = () => {
+    if (newLink) {
+      addLink(userId!, newLink).then((newLinkAdded) => {
+        setLinks([...links, newLinkAdded]); // Add the new link to the list
+        setNewLink(null); // Clear the new link input
+      }).catch(error => {
+        console.error("Error adding new link:", error);
+      });
+    }
+  };
+
+  const handleEditLink = (linkId: number, updatedLink: { name: string, url: string }) => {
+    updateLink(userId!, linkId, updatedLink).then((updatedLinkData) => {
+      setLinks(links.map(link => link.id === linkId ? updatedLinkData : link));
+    }).catch(error => {
+      console.error("Error updating link:", error);
+    });
+  };
+
 
   console.log("profile", profile);
   return (
