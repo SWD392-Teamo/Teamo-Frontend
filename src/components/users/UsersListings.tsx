@@ -143,6 +143,7 @@ export default function UsersListings() {
       <div className="flex items-center space-x-3 py-4 px-2">
         <HiOutlineUserGroup className="w-7 h-7" />
         <h1 className="text-2xl font-extrabold">User Accounts List</h1>
+        <span className="text-gray-600">({data.totalCount} users)</span>
       </div>
       {/* Search & Filter */}
       <SearchBar className="mb-8" setSearch={setSearch} />
