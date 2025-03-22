@@ -35,28 +35,16 @@ export default function ApplicationsListing({ isForUser }: Props) {
   const [showModal, setShowModal] = useState(false);
   const { showLoading, hideLoading } = useLoading();
   const [selectedApplication, setSelectedApplication] = useState<Application>();
+  const [pageIndex, setPageIndex] = useState<number>(1);
+  const [status, setStatus] = useState<string>("");
+  const [sort, setSort] = useState<string>("");
 
   const params = useParams();
   const groupId = Number(params.groupId);
 
-  // Set page index
-  function setPageIndex(pageIndex: number) {
-    setParams({ pageIndex });
-  }
-
   //=====================================
   //      GLOBAL STATE MANAGEMENT
   //=====================================
-
-  // Rerender only on these params
-  const applicationParams = useParamsStore(
-    useShallow((state) => ({
-      pageIndex: state.pageIndex,
-      pageSize: state.pageSize,
-      status: state.status,
-      sort: state.sort,
-    }))
-  );
 
   // Use application store
   const data = useApplicationStore(
@@ -72,7 +60,11 @@ export default function ApplicationsListing({ isForUser }: Props) {
 
   const url = queryString.stringifyUrl({
     url: "",
-    query: applicationParams,
+    query: {
+      pageIndex,
+      status,
+      sort,
+    }
   });
 
   //=====================================
@@ -156,8 +148,8 @@ export default function ApplicationsListing({ isForUser }: Props) {
   if (
     !isForUser &&
     !(
-      applicationParams.status === "rejected" ||
-      applicationParams.status === "approved"
+      status === "rejected" ||
+      status === "approved"
     )
   ) {
     columns.push({ header: "Action", key: "id" });
@@ -208,9 +200,15 @@ export default function ApplicationsListing({ isForUser }: Props) {
   return (
     <div className=" mb-10">
       <BackButton url="/" />
-      <h1 className="page-title">Group Application</h1>
+      <h1 className="page-title mb-5">{isForUser ? 'My Applications' : 'Group Applications'}</h1>
       {/* Application Filters */}
-      <ApplicationFilter />
+      <ApplicationFilter 
+        status={status}
+        sort={sort}
+        setSort={setSort}
+        setStatus={setStatus}
+        setPageIndex={setPageIndex}
+      />
 
       {data.totalCount > 0 ? (
         <>
@@ -228,7 +226,7 @@ export default function ApplicationsListing({ isForUser }: Props) {
           <div className="flex justify-end mt-5">
             <AppPagination
               pageChanged={setPageIndex}
-              currentPage={applicationParams.pageIndex}
+              currentPage={pageIndex}
               pageSize={data.pageSize}
               totalCount={data.totalCount}
             />

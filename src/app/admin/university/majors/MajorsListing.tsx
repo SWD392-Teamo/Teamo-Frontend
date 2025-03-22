@@ -17,7 +17,7 @@ import { useShallow } from 'zustand/shallow';
 import MajorFilter from './MajorFilter';
 import MajorForm from './MajorForm';
 import { Button } from 'flowbite-react';
-import { AiFillEdit, AiOutlineEdit } from 'react-icons/ai';
+import { AiOutlineEdit } from 'react-icons/ai';
 
 export default function MajorsListing() {
   //=====================================
@@ -27,25 +27,13 @@ export default function MajorsListing() {
   const [showModal, setShowModal] = useState(false);
   const { showLoading, hideLoading } = useLoading();
   const [selectedMajor, setSelectedMajor] = useState<Major>();
-
-  // Set page index
-  function setPageIndex(pageIndex: number) {
-    setParams({ pageIndex });
-  }
+  const [search, setSearch] = useState<string>("");
+  const [pageIndex, setPageIndex] = useState<number>(1);
+  const [status, setStatus] = useState<string>("");
 
   //=====================================
   //      GLOBAL STATE MANAGEMENT
   //=====================================
-
-  // Rerender only on these params
-  const majorParams = useParamsStore(
-    useShallow((state) => ({
-      pageIndex: state.pageIndex,
-      pageSize: state.pageSize,
-      status: state.status,
-      sort: state.sort,
-    }))
-  );
 
   // Use application store
   const data = useMajorStore(
@@ -61,7 +49,11 @@ export default function MajorsListing() {
 
   const url = queryString.stringifyUrl({
     url: "",
-    query: majorParams,
+    query: {
+      pageIndex,
+      status,
+      ...(search.trim() ? { search } : {}),
+    }
   });
 
   //=====================================
@@ -122,7 +114,7 @@ export default function MajorsListing() {
     { header: "Status", key: "status" },
   ];
 
-  if (!(majorParams.status === "inactive")) {
+  if (!(status === "inactive")) {
     columns.push({ header: "Action", key: "id" });
   }
 
@@ -165,7 +157,11 @@ export default function MajorsListing() {
       </Button>
 
       {/* Major Filters */}
-      <MajorFilter />
+      <MajorFilter 
+        status={status}
+        setSearch={setSearch}
+        setStatus={setStatus}
+        setPageIndex={setPageIndex} />
 
       {data.totalCount > 0 ? (
         <>
@@ -183,7 +179,7 @@ export default function MajorsListing() {
           <div className="flex justify-end mt-5">
             <AppPagination
               pageChanged={setPageIndex}
-              currentPage={majorParams.pageIndex}
+              currentPage={pageIndex}
               pageSize={data.pageSize}
               totalCount={data.totalCount}
             />

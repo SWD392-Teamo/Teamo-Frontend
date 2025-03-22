@@ -2,7 +2,6 @@
 
 import React from 'react';
 import Link from 'next/link';
-import SearchBar from '@/components/SearchBar';
 
 type Tab = 'major' | 'subject' | 'field';
 
@@ -15,7 +14,6 @@ interface UniversityInfoHeaderProps {
 export default function UniversityInfoHeader({
   activeTab,
   setActiveTab,
-  setSearch,
 }: UniversityInfoHeaderProps) {
   const tabs: { id: Tab; name: string }[] = [
     { id: 'major', name: 'Majors' },
@@ -25,10 +23,8 @@ export default function UniversityInfoHeader({
 
   return (
     <div className="mb-10">
-      {/* search bar */}
-      <div className="my-10">
-        <SearchBar setSearch={setSearch} />
-      </div>
+      {/* Title */}
+      <h1 className="page-title mb-5">University Information</h1>
 
       {/* Navigation Bar */}
       <div className="w-full border-t border-b border-gray-200">
@@ -54,8 +50,6 @@ export default function UniversityInfoHeader({
           </nav>
         </div>
       </div>
-      {/* Title */}
-      <h1 className="page-title">University Information</h1>
     </div>
   );
 }
