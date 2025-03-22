@@ -5,19 +5,19 @@ type State = {
     users: User[]
     totalCount: number
     pageSize: number
-    selectedUser: User | null
+    selectedUser: number
 }
 
 type Actions = {
     setData: (data: PagedResult<User>) => void
-    setSelectedUser: (user: User) => void
+    setSelectedUser: (id: number) => void
 }
 
 const initialState: State = {
     users: [],
-    pageSize: 6,
+    pageSize: 3,
     totalCount: 0,
-    selectedUser: null,
+    selectedUser: 0,
 }
 
 export const useUserstore = create<State & Actions>((set) => ({
@@ -31,9 +31,9 @@ export const useUserstore = create<State & Actions>((set) => ({
         }))
     },
     
-    setSelectedUser(user) {
+    setSelectedUser(id) {
         set(() => ({
-            selectedUser: user
+            selectedUser: id
         }))
     },
 }))
