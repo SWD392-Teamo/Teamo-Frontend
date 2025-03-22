@@ -1,4 +1,4 @@
-import { banUser, getAllUsers } from "@/actions/userActions";
+import { banUser, getAllUsers, getProfile } from "@/actions/userActions";
 import { useUserstore } from "@/hooks/useUserStore";
 import { useLoading } from "@/providers/LoadingProvider";
 import queryString from "query-string";
@@ -15,6 +15,7 @@ import { useShallow } from "zustand/shallow";
 import BackButton from "../BackButton";
 import ConfirmationPopup from "./ConfirmationPopup";
 import UserFilter from "./UserFilter";
+import { useRouter } from "next/navigation";
 
 export default function UsersListings() {
   /**
@@ -25,6 +26,8 @@ export default function UsersListings() {
   const [search, setSearch] = useState<string>("");
   const [selectedUser, setSelectedUser] = useState<number>(0);
   const [pageIndex, setPageIndex] = useState(1);
+  const router = useRouter();
+
   /**
    * GLOBAL STATE MANAGEMENT
    */
@@ -55,9 +58,7 @@ export default function UsersListings() {
     },
   });
 
-  /**
-   * GET USERS LIST
-   */
+  /** GET USERS LIST */
 
   function getUsers() {
     console.log(url);
@@ -84,10 +85,7 @@ export default function UsersListings() {
     fullName: `${user.firstName} ${user.lastName}`,
   }));
 
-  /**
-   * GET USERS BY ID
-   */
-  function handleRowClick(id: number) {}
+  /** GET USERS BY ID*/
 
   /**
    * USER TABLE CONFIGURATIONS
@@ -111,6 +109,10 @@ export default function UsersListings() {
       .finally(() => {
         setShowModal(false);
       });
+  };
+
+  const handleRowClick = (id: number) => {
+    router.push(`users/details/${id}`);
   };
 
   // Columns
