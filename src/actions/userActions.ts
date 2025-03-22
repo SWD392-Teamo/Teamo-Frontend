@@ -11,33 +11,34 @@ export async function getUserId(): Promise<number | null> {
     return token?.user?.userId ?? null;
 }
 
-export async function uploadImage(userId: number, formData: FormData): Promise<any> {
-    return await fetchWrapper.post(`users/${userId}/profile/image`, formData)
+export async function uploadImage( formData: FormData): Promise<any> {
+    return await fetchWrapper.post(`profile/images`, formData)
 }
 
-export async function getProfile(userId: number): Promise<User> {
-    return await fetchWrapper.get(`users/${userId}/profile`)
+export async function getProfile(): Promise<User> {
+    return await fetchWrapper.get('profile');
 }
 
-export async function updateDescriptions(userId: number, description: string): Promise<User>{
-    return await fetchWrapper.patch(`users/${userId}/profile/descriptions`, {description})
+export async function updateDescriptions( description: string): Promise<User>{
+    return await fetchWrapper.patch(`profile/description`, {description})
 }
 
-export async function addSkill(userId: number, addSkillProfile: addSkillProfile): Promise<User>{
-    return await fetchWrapper.post(`users/${userId}/profile/skills`, addSkillProfile)
+export async function addSkill(addSkillProfile: addSkillProfile): Promise<User>{
+    return await fetchWrapper.post(`profile/skills`, addSkillProfile)
 }
 
 export async function updateSkill(userId:number, skillId: number, level:string): Promise<StudentSkill>{
-    return await fetchWrapper.patch(`users/${userId}/profile/skills/${skillId}`, level)
+    return await fetchWrapper.patch(`profile/skills/${skillId}`, level)
 
 }
 
 export async function addLink(userId: number, addLinkProfile: addLinkProfile): Promise<Link>{
-    return await fetchWrapper.post(`users/${userId}/profile/links`, addLinkProfile)
+    return await fetchWrapper.post(`profile/links`, addLinkProfile)
 }
 
 export async function updateLink(userId: number, linkId: number, addLinkProfile: addLinkProfile): Promise<Link>{
-    return await fetchWrapper.patch(`users/${userId}/profile/links/${linkId}`, addLinkProfile)
+    return await fetchWrapper.patch(`profile/links/${linkId}`, addLinkProfile)
+}
 export async function getAllUsers(query: string): Promise<PagedResult<User>> {
     return await fetchWrapper.get(`users${query}`)
 }

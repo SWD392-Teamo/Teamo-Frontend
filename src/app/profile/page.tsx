@@ -46,7 +46,7 @@ export default function Listing() {
 
   useEffect(() => {
     if (userId) {
-      getProfile(userId).then((data) => {
+      getProfile().then((data) => {
         setProfile(data);
         setLinks(data.links);
       });
@@ -102,7 +102,7 @@ export default function Listing() {
 
     try {
       if (userId) {
-        const response = await uploadImage(userId, formData);
+        const response = await uploadImage(formData);
         if (response && response.imageUrl) {
           setNewImageUrl(response.imageUrl);
         }
@@ -119,7 +119,7 @@ export default function Listing() {
     setIsUpdating(true);
     try {
       if (userId) {
-        const updatedProfile = await updateDescriptions(userId, description);
+        const updatedProfile = await updateDescriptions(description);
         // onUpdate(updatedProfile);
         if (updatedProfile) {
           setDescription(updatedProfile.description);
