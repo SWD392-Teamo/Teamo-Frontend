@@ -20,6 +20,7 @@ export type Major = {
     name: string;
     imgUrl: string;
     createdDate: Date;
+    status: string;
 }
 
 export type Skill = {
