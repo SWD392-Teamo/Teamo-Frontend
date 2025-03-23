@@ -5,6 +5,7 @@ import UniversityInfoHeader from './UniversityInfoHeader';
 import MajorsListing from './majors/MajorsListing';
 import SubjectsListing from './subjects/SubjectsListing';
 import FieldsListing from './fields/FieldsListing';
+import SemestersListing from './semesters/SemestersListing';
 
 export default function UniversityInformation() {
   const [activeTab, setActiveTab] = useState<'major' | 'subject' | 'field' | 'semester' | 'skill'>('major');
@@ -23,7 +24,7 @@ export default function UniversityInformation() {
         {activeTab === 'major' && <MajorsListing />}
         {activeTab === 'subject' && <SubjectsListing />}
         {activeTab === 'field' && <FieldsListing />}
-        {activeTab === 'semester' && <div>Semesters View</div>}
+        {activeTab === 'semester' && <SemestersListing />}
         {activeTab === 'skill' && <div>Skills View</div>}
       </div>
     </div>

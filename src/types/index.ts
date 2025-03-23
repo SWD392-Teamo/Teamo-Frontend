@@ -93,7 +93,9 @@ export type Semester = {
     id: number,
     name: string,
     code: string,
-    status: string
+    status: string,
+    startDate: Date,
+    endDate: Date,
 }
 
 export type User = {

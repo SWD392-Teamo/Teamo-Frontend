@@ -1,15 +1,14 @@
 'use client'
 
-import { createMajor, updateMajor } from '@/actions/majorActions';
 import { createSubject, updateSubject } from '@/actions/subjectAction';
 import FilePicker from '@/components/FilePicker';
 import Input from '@/components/Input';
 import InputArea from '@/components/InputArea';
 import { useLoading } from '@/providers/LoadingProvider';
-import { Major, Subject } from '@/types';
+import { Subject } from '@/types';
 import { Button } from 'flowbite-react';
 import Image from 'next/image';
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 

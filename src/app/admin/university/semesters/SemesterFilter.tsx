@@ -1,14 +1,14 @@
 import SearchBar from '@/components/SearchBar';
 import { Button } from 'flowbite-react';
 
-interface FilterProps {
+interface SemesterFilterProps {
   status?: string;
   setSearch: React.Dispatch<React.SetStateAction<string>>;
   setStatus?: React.Dispatch<React.SetStateAction<string>>;
   setPageIndex: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export default function Filter({status, setSearch, setStatus, setPageIndex}: FilterProps) {
+export default function SemesterFilter({status, setSearch, setStatus, setPageIndex}: SemesterFilterProps) {
   return (
     <div className="flex flex-row justify-between items-center w-full mb-5">
       {setStatus && 
@@ -25,32 +25,43 @@ export default function Filter({status, setSearch, setStatus, setPageIndex}: Fil
             All
           </Button>
           <Button
-            className={`btn ${status === 'active' ? 'btn--primary' : 'btn--primary--outline'}`}
+            className={`btn ${status === 'ongoing' ? 'btn--primary' : 'btn--primary--outline'}`}
             onClick={() => 
               {
-                setStatus('active');
+                setStatus('ongoing');
                 setPageIndex(1);
               }
             }
           >
-            Active
+            OnGoing
           </Button>
           <Button
-            className={`btn ${status === 'inactive' ? 'btn--primary' : 'btn--primary--outline'}`}
+            className={`btn ${status === 'past' ? 'btn--primary' : 'btn--primary--outline'}`}
             onClick={() => 
               {
-                setStatus('inactive');
+                setStatus('past');
                 setPageIndex(1);
               }
             }
           >
-            Inactive
+            Past
+          </Button>
+          <Button
+            className={`btn ${status === 'upcoming' ? 'btn--primary' : 'btn--primary--outline'}`}
+            onClick={() => 
+              {
+                setStatus('upcoming');
+                setPageIndex(1);
+              }
+            }
+          >
+            Upcoming
           </Button>
         </div>
       }
 
       {/* search bar */}
-      <div className={`flex ${setStatus != undefined ? 'justify-end' : 'justify-start'} min-w-[700px]`}>
+      <div className={`flex ${setStatus != undefined ? 'justify-end' : 'justify-start'} min-w-[600px]`}>
         <SearchBar setSearch={setSearch} />
       </div>
     </div>
