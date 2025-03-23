@@ -28,7 +28,11 @@ export async function addSkill(addSkillProfile: addSkillProfile[]): Promise<User
 }
 
 export async function updateSkill(skillId: number, level:string): Promise<StudentSkill>{
-    return await fetchWrapper.patch(`profile/skills/${skillId}`, level)
+    return await fetchWrapper.patch(`profile/skills/${skillId}`, {level})
+}
+
+export async function removeSkill(skillId: number): Promise<StudentSkill>{
+    return await fetchWrapper.del(`profile/skills/${skillId}`)
 }
 
 export async function addLink(addLinkProfile: addLinkProfile[]): Promise<User>{

@@ -429,7 +429,7 @@ export const LinkManagementPopup: React.FC<LinkManagementPopupProps> = ({
 
       <DeleteConfirmationPopup
         isOpen={deleteConfirmOpen}
-        linkName={linkToDelete?.name || ""}
+        name={linkToDelete?.name || ""}
         onClose={() => setDeleteConfirmOpen(false)}
         onConfirmDelete={handleDeleteLink}
         isDeleting={isSubmitting}

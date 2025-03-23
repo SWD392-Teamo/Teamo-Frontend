@@ -2,7 +2,7 @@ import { FaExclamationTriangle } from "react-icons/fa";
 
 interface DeleteConfirmationPopupProps {
    isOpen: boolean;
-   linkName: string;
+   name: string;
    onClose: () => void;
    onConfirmDelete: () => void;
    isDeleting: boolean;
@@ -10,7 +10,7 @@ interface DeleteConfirmationPopupProps {
  
  export const DeleteConfirmationPopup: React.FC<DeleteConfirmationPopupProps> = ({
    isOpen,
-   linkName,
+   name,
    onClose,
    onConfirmDelete,
    isDeleting,
@@ -31,7 +31,7 @@ interface DeleteConfirmationPopupProps {
          
          <div className="p-6">
            <p className="text-gray-700 mb-4">
-             Are you sure you want to delete <span className="font-semibold">{linkName || "this link"}</span>? 
+             Are you sure you want to delete <span className="font-semibold">{name || "this link"}</span>? 
              This action cannot be undone.
            </p>
            
@@ -57,7 +57,7 @@ interface DeleteConfirmationPopupProps {
                    Deleting...
                  </span>
                ) : (
-                 "Delete Link"
+                 "Delete"
                )}
              </button>
            </div>

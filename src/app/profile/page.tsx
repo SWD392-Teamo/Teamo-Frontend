@@ -13,7 +13,7 @@ import {
   updateLink,
   uploadImage,
 } from "@/actions/userActions";
-import { Link, User } from "@/types";
+import { Link, StudentSkill, User } from "@/types";
 import MedGroupImage from "@/components/groups/MedGroupImage";
 import { getFirebaseImageUrl } from "@/lib/firebaseImage";
 import SkillBar from "@/components/SkillBar";
@@ -22,6 +22,7 @@ import PopupModal from "@/components/PopupModal";
 import { AiOutlineEdit } from "react-icons/ai";
 import { updateProfile } from "firebase/auth";
 import { LinkManagementPopup } from "@/components/profile/LinkPopupModal";
+import { SkillManagementPopup } from "@/components/profile/SkillPopupModal";
 
 export default function Listing() {
   const [userId, setUserId] = useState<number | null>(null);
@@ -29,17 +30,16 @@ export default function Listing() {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
 
-
   const [isImgPopupOpen, setIsImgPopupOpen] = useState(false);
   const [isDescPopupOpen, setIsDescPopupOpen] = useState(false);
   const [isLinksPopupOpen, setIsLinksPopupOpen] = useState(false);
+  const [isSkillsPopupOpen, setIsSkillsPopupOpen] = useState(false);
 
   const [newImageUrl, setNewImageUrl] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
   const [description, setDescription] = useState(profile?.description || "");
   const [links, setLinks] = useState<Link[]>([]);
-
 
   useEffect(() => {
     getUserId().then((id) => {
@@ -120,16 +120,25 @@ export default function Listing() {
     }
   };
 
-
   const handleLinksUpdated = (updatedLinks: Link[]) => {
     setLinks(updatedLinks);
-    
+
     if (profile) {
       setProfile({
         ...profile,
-        links: updatedLinks
+        links: updatedLinks,
       });
     }
+  };
+
+  const handleSkillsUpdated = (updatedSkills: StudentSkill[]) => {
+    setProfile((prev) => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        studentSkills: updatedSkills,
+      };
+    });
   };
 
   const handleDescriptionUpdate = async () => {
@@ -220,9 +229,9 @@ export default function Listing() {
           </div>
         </div>
 
-         {/* Links Section */}
-         <div className="mt-6 border-t pt-4 w-full">
-         <div className="flex items-center gap-3 align-middle">
+        {/* Links Section */}
+        <div className="mt-6 border-t pt-4 w-full">
+          <div className="flex items-center gap-3 align-middle">
             <h3 className="text-lg font-semibold">Links</h3>
             <button onClick={() => setIsLinksPopupOpen(true)}>
               <div className="inline-block bg-[#46afe9] rounded-full p-1 cursor-pointer hover:bg-[#41a4db]">
@@ -251,8 +260,14 @@ export default function Listing() {
         </div>
 
         <div className="mt-6 border-t pt-4 w-full">
-          <h3 className="text-lg font-semibold">Skills</h3>
-          <div className="flex flex-col gap-3 mt-2 w-2/3">
+        <div className="flex items-center gap-3 align-middle">
+            <h3 className="text-lg font-semibold">Links</h3>
+            <button onClick={() => setIsSkillsPopupOpen(true)}>
+              <div className="inline-block bg-[#46afe9] rounded-full p-1 cursor-pointer hover:bg-[#41a4db]">
+                <AiOutlineEdit size={15} color="white" />
+              </div>
+            </button>
+          </div>          <div className="flex flex-col gap-3 mt-2 w-2/3">
             {profile?.studentSkills.map((skill, index) => (
               <SkillBar
                 key={index}
@@ -306,6 +321,12 @@ export default function Listing() {
         onClose={() => setIsLinksPopupOpen(false)}
         links={links}
         onLinksUpdated={handleLinksUpdated}
+      />
+      <SkillManagementPopup
+        isOpen={isSkillsPopupOpen}
+        onClose={() => setIsSkillsPopupOpen(false)}
+        skills={profile?.studentSkills || []}
+        onSkillsUpdated={handleSkillsUpdated}
       />
     </div>
   );
