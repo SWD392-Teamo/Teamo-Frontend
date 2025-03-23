@@ -17,7 +17,7 @@ type GenericTableProps<T> = {
   data: T[];
   columns: { header: string; key: keyof T | string }[];
   actions?: ActionButton[];
-  onRowClick?: (id: number) => void; // New prop for row click
+  onRowClick?: (id: number) => void;
 };
 
 export default function GenericTable<T>({
@@ -77,7 +77,7 @@ export default function GenericTable<T>({
                       height={50}
                       className="rounded-full object-cover border-2 border-gray-300 shadow-sm"
                     />
-                  ) : column.header === "Date" ? (
+                  ) : column.header.includes("Date") ? (
                     dateFormatter(String(item[column.key]))
                   ) : column.header === "Action" && actions ? (
                     <div className="flex flex-row align-middle justify-between gap-3">

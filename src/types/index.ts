@@ -12,6 +12,8 @@ export type Subject = {
     name: string
     description: string
     createdDate: string
+    imgUrl: string
+    status: string
 }
 
 export type Major = {
@@ -20,6 +22,7 @@ export type Major = {
     name: string;
     imgUrl: string;
     createdDate: Date;
+    status: string;
 }
 
 export type Skill = {
@@ -90,7 +93,9 @@ export type Semester = {
     id: number,
     name: string,
     code: string,
-    status: string
+    status: string,
+    startDate: Date,
+    endDate: Date,
 }
 
 export type User = {

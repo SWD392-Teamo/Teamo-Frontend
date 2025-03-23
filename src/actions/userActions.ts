@@ -10,7 +10,7 @@ export async function getUserId(): Promise<number | null> {
 }
 
 export async function uploadImage(userId: number, formData: FormData): Promise<any> {
-    return await fetchWrapper.post(`users/${userId}/profile/image`, formData)
+    return await fetchWrapper.post(`users/${userId}/profile/images`, formData)
 }
 
 export async function getProfile(userId: number): Promise<User> {

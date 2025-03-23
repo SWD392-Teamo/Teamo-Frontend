@@ -30,7 +30,7 @@ export default function Listings() {
     useShallow((state) => ({
       majors: state.majors,
       totalCount: state.totalCount,
-      pageCount: state.pageCount,
+      pageSize: state.pageSize,
     }))
   );
 

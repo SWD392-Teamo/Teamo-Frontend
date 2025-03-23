@@ -25,5 +25,5 @@ export async function sendApplication(groupId: number, data: FieldValues): Promi
 }
 
 export async function uploadApplicationDocument(formData: FormData): Promise<any> {
-    return await fetchWrapper.post(`applications/document`, formData)
+    return await fetchWrapper.post(`applications/documents`, formData)
 }
