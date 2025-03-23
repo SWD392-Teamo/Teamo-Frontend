@@ -17,7 +17,7 @@ type GenericTableProps<T> = {
   data: T[];
   columns: { header: string; key: keyof T | string }[];
   actions?: ActionButton[];
-  onRowClick?: (id: number) => void; // New prop for row click
+  onRowClick?: (id: number) => void;
 };
 
 export default function GenericTable<T>({

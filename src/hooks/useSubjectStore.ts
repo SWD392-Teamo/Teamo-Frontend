@@ -4,7 +4,7 @@ import { create } from "zustand"
 type State = {
     subjects: Subject[]
     totalCount: number
-    pageCount: number
+    pageSize: number
     selectedSubject: Subject | null
 }
 
@@ -15,7 +15,7 @@ type Actions = {
 
 const initialState: State = {
     subjects: [],
-    pageCount: 0,
+    pageSize: 0,
     totalCount: 0,
     selectedSubject: null,
 }
@@ -27,7 +27,7 @@ export const useSubjectStore = create<State & Actions>((set) => ({
         set(() => ({
             subjects: data.data,
             totalCount: data.count,
-            pageCount: data.pageSize
+            pageSize: data.pageSize
         }))
     },
     

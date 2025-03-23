@@ -4,7 +4,7 @@ import { create } from "zustand"
 type State = {
     majors: Major[]
     totalCount: number
-    pageCount: number
+    pageSize: number
     selectedMajor: Major | null
 }
 
@@ -15,7 +15,7 @@ type Actions = {
 
 const initialState: State = {
     majors: [],
-    pageCount: 0,
+    pageSize: 0,
     totalCount: 0,
     selectedMajor: null
 }
@@ -27,7 +27,7 @@ export const useMajorStore = create<State & Actions>((set) => ({
         set(() => ({
             majors: data.data,
             totalCount: data.count,
-            pageCount: data.pageSize
+            pageSize: data.pageSize
         }))
     },
 

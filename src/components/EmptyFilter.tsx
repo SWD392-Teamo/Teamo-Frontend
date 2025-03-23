@@ -23,7 +23,7 @@ export default function EmptyFilter({
 
   return (
     <div className="flex flex-col gap-2 justify-center items-center shadow-lg p-5 mt-5 bg-tertiary">
-      <h1 className="page-title">Group Application</h1>
+      <h1 className="page-title">Empty Result</h1>
       <div className="mt-4">
         {showReset && (
           <Button className="btn btn--primary--outline" onClick={reset}>

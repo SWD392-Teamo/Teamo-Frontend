@@ -29,7 +29,7 @@ export const useParamsStore = create<State & Actions>()((set) => ({
             if (newParams.pageIndex) {
                 return { ...state, pageIndex: newParams.pageIndex }
             } else {
-                return { ...state, ...newParams, pageNumber: 1 }
+                return { ...state, ...newParams, pageIndex: 1 }
             }
         })
     },
