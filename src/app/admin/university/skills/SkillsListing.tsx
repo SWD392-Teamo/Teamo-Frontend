@@ -1,13 +1,12 @@
 'use client'
 
-import { deleteField, getData, getFieldById } from '@/actions/fieldActions';
 import AppModal from '@/components/AppModal';
 import AppPagination from '@/components/AppPagination';
 import EmptyFilter from '@/components/EmptyFilter';
 import GenericTable from '@/components/GenericTable';
-import { useFieldStore } from '@/hooks/useFieldStore';
+import { useSkillStore } from '@/hooks/useSkillStore';
 import { useLoading } from '@/providers/LoadingProvider';
-import { Field } from '@/types';
+import { Skill } from '@/types';
 import { Button } from 'flowbite-react';
 import queryString from 'query-string';
 import { useEffect, useState } from 'react';
@@ -15,33 +14,34 @@ import toast from 'react-hot-toast';
 import { AiOutlineEdit } from 'react-icons/ai';
 import { useShallow } from 'zustand/shallow';
 import Filter from '../Filter';
-import FieldForm from './FieldForm';
+import { deleteSkill, getData, getSkillById } from '@/actions/skillActions';
+import SkillForm from './SkillForm';
 
-export default function FieldsListing() {
+export default function SkillsListing() {
   //=====================================
   //      LOCAL STATE MANAGEMENT
   //=====================================
 
   const [showModal, setShowModal] = useState(false);
   const { showLoading, hideLoading } = useLoading();
-  const [selectedField, setSelectedField] = useState<Field>();
+  const [selectedSkill, setSelectedSkill] = useState<Skill>();
   const [search, setSearch] = useState<string>("");
   const [pageIndex, setPageIndex] = useState<number>(1);
 
   //=====================================
-  //      GLOBAL FIELD MANAGEMENT
+  //      GLOBAL STATE MANAGEMENT
   //=====================================
 
-  // Use field store
-  const data = useFieldStore(
+  // Use skill store
+  const data = useSkillStore(
     useShallow((state) => ({
-      fields: state.fields,
+      skills: state.skills,
       totalCount: state.totalCount,
       pageSize: state.pageSize,
     }))
   );
 
-  const setData = useFieldStore((state) => state.setData);
+  const setData = useSkillStore((state) => state.setData);
 
   const url = queryString.stringifyUrl({
     url: "",
@@ -52,11 +52,11 @@ export default function FieldsListing() {
   });
 
   //=====================================
-  //      GET FIELDS LIST
+  //      GET SKILLS LIST
   //=====================================
 
-  // Get fields
-  function getFields() {
+  // Get skills
+  function getSkills() {
     getData(url)
       .then((data) => {
         setData(data);
@@ -69,25 +69,25 @@ export default function FieldsListing() {
       });
   }
 
-  // Get fields data
+  // Get skills data
   useEffect(() => {
-    getFields();
+    getSkills();
   }, [url, setData, showLoading, hideLoading]);
 
   //=====================================
-  //      GET FIELD BY ID
+  //      GET SKILL BY ID
   //=====================================
 
   function handleRowClick(id: number) {
     setShowModal(true);
     showLoading();
-    getField(id);
+    getSkill(id);
   }
 
-  async function getField(id: number) {
-    getFieldById(id)
+  async function getSkill(id: number) {
+    getSkillById(id)
       .then((data) => {
-        setSelectedField(data);
+        setSelectedSkill(data);
       })
       .catch((error) => {
         toast.error(error.status + " " + error.message);
@@ -98,13 +98,13 @@ export default function FieldsListing() {
   }
 
   //==============================================
-  //      FIELD TABLE CONFIGURATIONS
+  //      SKILL TABLE CONFIGURATIONS
   //==============================================
 
   // COLUMNS
-  const columns: { header: string; key: keyof Field }[] = [
+  const columns: { header: string; key: keyof Skill }[] = [
     { header: "Name", key: "name" },
-    { header: "Description", key: "description" },
+    { header: "Type", key: "type" },
     { header: "Action", key: "id" }
   ];
 
@@ -112,12 +112,12 @@ export default function FieldsListing() {
   const handleDelete = async (id: number) => {
     try {
       showLoading();
-      // Delete field
-      await deleteField(Number(id));
-      getFields();
-      toast.success("Field deleted successfully");
+      // Delete skill
+      await deleteSkill(Number(id));
+      getSkills();
+      toast.success("Skill deleted successfully");
     } catch (error) {
-      toast.error("Failed to delete field");
+      toast.error("Failed to delete skill");
     } finally {
       hideLoading();
     }
@@ -134,36 +134,36 @@ export default function FieldsListing() {
 
   return (
     <div className="mb-10 mt-5">
-      {/* Create Field Button */}
+      {/* Create skill Button */}
       <Button 
           className='btn btn--secondary btn--icon'
           
           onClick={() => {
-            setSelectedField(undefined);
+            setSelectedSkill(undefined);
             setShowModal(true);
           }}
           type='button'>
-          <AiOutlineEdit size={20} className='me-2'/> Create Field
+          <AiOutlineEdit size={20} className='me-2'/> Create skill
       </Button>
 
-      {/* Field Filters */}
+      {/* Skill Filters */}
       <Filter 
         setSearch={setSearch}
         setPageIndex={setPageIndex} />
 
       {data.totalCount > 0 ? (
         <>
-          {/* Field Table */}
-          {data.fields && (
-            <GenericTable<Field>
-              data={data.fields}
+          {/* Skill Table */}
+          {data.skills && (
+            <GenericTable<Skill>
+              data={data.skills}
               columns={columns}
               actions={actions}
               onRowClick={handleRowClick}
             />
           )}
 
-          {/* Field Pagination */}
+          {/* Skill Pagination */}
           <div className="flex justify-end mt-5">
             <AppPagination
               pageChanged={setPageIndex}
@@ -173,24 +173,24 @@ export default function FieldsListing() {
             />
           </div>
 
-          {/* Field Form Modal */}
+          {/* Skill Form Modal */}
           <AppModal
             show={showModal}
             onClose={() => setShowModal(false)}
-            title={selectedField == null ? "Create Field" : "Edit Field"}
+            title={selectedSkill == null ? "Create Skill" : "Edit Skill"}
             size="3xl"
           >
-            <FieldForm 
-              field={selectedField} 
+            <SkillForm 
+              skill={selectedSkill} 
               onCancel={() => setShowModal(false)}
-              onSuccess={getFields} />
+              onSuccess={getSkills} />
           </AppModal>
         </>
       ) : (
         <>
           {/*Empty Filter */}
           <EmptyFilter
-            title="No field found"
+            title="No skill found"
             subtitle="Try changing the filters or reset it completely"
             showReset={true}
           />
