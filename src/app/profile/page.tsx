@@ -5,22 +5,41 @@ import React, { useEffect, useState } from "react";
 import defaultAvatar from "@/assets/defaultAvatar.jpg";
 import BackButton from "@/components/BackButton";
 import { useSession } from "next-auth/react";
-import { getProfile, getUserId, uploadImage } from "@/actions/userActions";
-import { User } from "@/types";
+import {
+  addLink,
+  getProfile,
+  getUserId,
+  updateDescriptions,
+  updateLink,
+  uploadImage,
+} from "@/actions/userActions";
+import { Link, StudentSkill, User } from "@/types";
 import MedGroupImage from "@/components/groups/MedGroupImage";
 import { getFirebaseImageUrl } from "@/lib/firebaseImage";
 import SkillBar from "@/components/SkillBar";
-import { FaCamera, FaExternalLinkAlt, FaLink } from "react-icons/fa";
+import { FaCamera, FaEdit, FaExternalLinkAlt, FaLink } from "react-icons/fa";
+import PopupModal from "@/components/PopupModal";
+import { AiOutlineEdit } from "react-icons/ai";
+import { updateProfile } from "firebase/auth";
+import { LinkManagementPopup } from "@/components/profile/LinkPopupModal";
+import { SkillManagementPopup } from "@/components/profile/SkillPopupModal";
 
 export default function Listing() {
   const [userId, setUserId] = useState<number | null>(null);
   const [profile, setProfile] = useState<User | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [newImageUrl, setNewImageUrl] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
-    const [isUploading, setIsUploading] = useState(false);
-  
+
+  const [isImgPopupOpen, setIsImgPopupOpen] = useState(false);
+  const [isDescPopupOpen, setIsDescPopupOpen] = useState(false);
+  const [isLinksPopupOpen, setIsLinksPopupOpen] = useState(false);
+  const [isSkillsPopupOpen, setIsSkillsPopupOpen] = useState(false);
+
+  const [newImageUrl, setNewImageUrl] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [description, setDescription] = useState(profile?.description || "");
+  const [links, setLinks] = useState<Link[]>([]);
 
   useEffect(() => {
     getUserId().then((id) => {
@@ -32,8 +51,9 @@ export default function Listing() {
 
   useEffect(() => {
     if (userId) {
-      getProfile(userId).then((data) => {
+      getProfile().then((data) => {
         setProfile(data);
+        setLinks(data.links);
       });
     }
   }, [userId]);
@@ -58,20 +78,25 @@ export default function Listing() {
     fetchUserId();
   }, []);
 
+  useEffect(() => {
+    if (profile?.description !== undefined) {
+      setDescription(profile.description);
+    }
+  }, [profile?.description]);
+
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0];
     if (selectedFile) {
-      setFile(selectedFile); 
+      setFile(selectedFile);
       const reader = new FileReader();
-      
+
       reader.onloadend = () => {
-        setNewImageUrl(reader.result as string); 
+        setNewImageUrl(reader.result as string);
       };
-      
+
       reader.readAsDataURL(selectedFile);
     }
   };
-
 
   const handleSaveImage = async () => {
     if (!file) return;
@@ -81,23 +106,59 @@ export default function Listing() {
     formData.append("image", file);
 
     try {
-      if(userId){
-        const response = await uploadImage(userId, formData);
+      if (userId) {
+        const response = await uploadImage(formData);
         if (response && response.imageUrl) {
           setNewImageUrl(response.imageUrl);
         }
-        setIsPopupOpen(false);
+        setIsImgPopupOpen(false);
       }
-      
     } catch (error) {
       console.error("Error uploading image:", error);
     } finally {
       setIsUploading(false);
     }
   };
-  
 
-  console.log("profile", profile);
+  const handleLinksUpdated = (updatedLinks: Link[]) => {
+    setLinks(updatedLinks);
+
+    if (profile) {
+      setProfile({
+        ...profile,
+        links: updatedLinks,
+      });
+    }
+  };
+
+  const handleSkillsUpdated = (updatedSkills: StudentSkill[]) => {
+    setProfile((prev) => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        studentSkills: updatedSkills,
+      };
+    });
+  };
+
+  const handleDescriptionUpdate = async () => {
+    setIsUpdating(true);
+    try {
+      if (userId) {
+        const updatedProfile = await updateDescriptions(description);
+        // onUpdate(updatedProfile);
+        if (updatedProfile) {
+          setDescription(updatedProfile.description);
+        }
+        setIsDescPopupOpen(false);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
   return (
     <div className="">
       <BackButton />
@@ -119,7 +180,7 @@ export default function Listing() {
               )}
               <button
                 className="absolute bottom-2 right-2 p-2 bg-white rounded-full shadow-md hover:bg-gray-200"
-                onClick={() => setIsPopupOpen(true)}
+                onClick={() => setIsImgPopupOpen(true)}
               >
                 <FaCamera className="text-gray-600" size={15} />
               </button>
@@ -145,7 +206,15 @@ export default function Listing() {
         </div>
 
         <div className="mt-6 border-t pt-4 w-full">
-          <h3 className="text-lg font-semibold">About</h3>
+          <div className="flex items-center gap-3 align-middle">
+            <h3 className="text-lg font-semibold">About</h3>
+            <button onClick={() => setIsDescPopupOpen(true)}>
+              <div className="inline-block bg-[#46afe9] rounded-full p-1 cursor-pointer hover:bg-[#41a4db]">
+                <AiOutlineEdit size={15} color="white" />
+              </div>
+            </button>
+          </div>
+
           <p className="text-gray-600 text-base">{profile?.description}</p>
         </div>
 
@@ -160,27 +229,45 @@ export default function Listing() {
           </div>
         </div>
 
+        {/* Links Section */}
         <div className="mt-6 border-t pt-4 w-full">
-          <h3 className="text-lg font-semibold">Links</h3>
+          <div className="flex items-center gap-3 align-middle">
+            <h3 className="text-lg font-semibold">Links</h3>
+            <button onClick={() => setIsLinksPopupOpen(true)}>
+              <div className="inline-block bg-[#46afe9] rounded-full p-1 cursor-pointer hover:bg-[#41a4db]">
+                <AiOutlineEdit size={15} color="white" />
+              </div>
+            </button>
+          </div>
           <div className="flex flex-col gap-3 mt-2 w-2/3">
-            {profile?.links.map((link, index) => (
-              <a
-                key={index}
-                href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 text-[#46afe9] hover:underline"
-              >
-                <FaLink className="text-gray-500" />
-                {link.name || link.url}
-              </a>
-            ))}
+            {links.length > 0 ? (
+              links.map((link, index) => (
+                <a
+                  key={index}
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-[#131516] hover:underline"
+                >
+                  <FaLink className="text-gray-500" />
+                  {link.name || link.url}
+                </a>
+              ))
+            ) : (
+              <p className="text-gray-500 italic">No links added yet</p>
+            )}
           </div>
         </div>
 
         <div className="mt-6 border-t pt-4 w-full">
-          <h3 className="text-lg font-semibold">Skills</h3>
-          <div className="flex flex-col gap-3 mt-2 w-2/3">
+        <div className="flex items-center gap-3 align-middle">
+            <h3 className="text-lg font-semibold">Links</h3>
+            <button onClick={() => setIsSkillsPopupOpen(true)}>
+              <div className="inline-block bg-[#46afe9] rounded-full p-1 cursor-pointer hover:bg-[#41a4db]">
+                <AiOutlineEdit size={15} color="white" />
+              </div>
+            </button>
+          </div>          <div className="flex flex-col gap-3 mt-2 w-2/3">
             {profile?.studentSkills.map((skill, index) => (
               <SkillBar
                 key={index}
@@ -193,43 +280,54 @@ export default function Listing() {
           </div>
         </div>
       </div>
-      {isPopupOpen && (
-        <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg">
-            <h3 className="text-xl font-semibold mb-4">Change Profile Image</h3>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleImageUpload}
-              className="mb-4"
-            />
-            {newImageUrl && (
-              <Image
-                src={newImageUrl}
-                alt="New Profile Image"
-                width={120}
-                height={120}
-                className="rounded-full object-cover"
-              />
-            )}
-            <div className="flex justify-end gap-3 mt-4">
-              <button
-                onClick={() => setIsPopupOpen(false)}
-                className="px-4 py-2 bg-gray-300 rounded-md hover:bg-gray-400"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleSaveImage}
-                disabled={isUploading}
-                className="px-4 py-2 bg-[#46afe9] text-white rounded-md hover:bg-[#d3eef9] hover:text-black"
-              >
-                {isUploading ? "Uploading..." : "Save"}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <PopupModal
+        isOpen={isImgPopupOpen}
+        title="Change Profile Image"
+        onClose={() => setIsImgPopupOpen(false)}
+        onSave={handleSaveImage}
+        isSaving={isUploading}
+        disableSave={!newImageUrl}
+        saveLabel="Upload"
+      >
+        <input type="file" accept="image/*" onChange={handleImageUpload} />
+        {newImageUrl && (
+          <img
+            src={newImageUrl}
+            alt="Preview"
+            className="rounded-full w-28 h-28 object-cover mt-4"
+          />
+        )}
+      </PopupModal>
+
+      <PopupModal
+        isOpen={isDescPopupOpen}
+        title="Update Description"
+        onClose={() => setIsDescPopupOpen(false)}
+        onSave={handleDescriptionUpdate}
+        isSaving={isUpdating}
+        disableSave={!description}
+      >
+        <textarea
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          className="w-full border rounded-md p-2"
+          rows={4}
+          placeholder="Enter your new description..."
+        />
+      </PopupModal>
+
+      <LinkManagementPopup
+        isOpen={isLinksPopupOpen}
+        onClose={() => setIsLinksPopupOpen(false)}
+        links={links}
+        onLinksUpdated={handleLinksUpdated}
+      />
+      <SkillManagementPopup
+        isOpen={isSkillsPopupOpen}
+        onClose={() => setIsSkillsPopupOpen(false)}
+        skills={profile?.studentSkills || []}
+        onSkillsUpdated={handleSkillsUpdated}
+      />
     </div>
   );
 }

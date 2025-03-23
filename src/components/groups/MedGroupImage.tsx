@@ -23,7 +23,7 @@ const MedGroupImage: React.FC<imgProps> = ({ imgUrl }) => {
             alt="Medium Group Image"
             width={1200}
             height={1200}
-            className="w-full h-full rounded-full object-cover border-2 border-gray-300 shadow-sm"
+            className="rounded-full object-cover border-2 border-gray-300 shadow-sm  aspect-square"
           />
        ) : (
          <p>Loading image...</p>

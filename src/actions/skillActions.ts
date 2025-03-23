@@ -8,6 +8,10 @@ export async function getData(query: string): Promise<PagedResult<Skill>> {
     return await fetchWrapper.get(`skills${query}`)
 }
 
+export async function getAllSkills(): Promise<Skill[]> {
+    return await fetchWrapper.get(`skills?isPaginated=false`)
+}
+
 export async function getSkillById(skillId: number): Promise<Skill> {
     return await fetchWrapper.get(`skills/${skillId}`)
 }

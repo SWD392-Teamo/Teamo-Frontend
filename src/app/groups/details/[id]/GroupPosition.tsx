@@ -64,7 +64,7 @@ const GroupPositionCard: React.FC<{
                         <Image
                           src={defaultAvatar}
                           alt={member?.studentName || "none"}
-                          className="w-10 h-10 rounded-full object-cover border-2 border-gray-300 shadow-sm"
+                          className="w-10 h-10 rounded-full object-cover border-2 border-gray-300 shadow-sm aspect-square"
                         />
                       )}
                     </div>
@@ -92,7 +92,7 @@ const GroupPositionCard: React.FC<{
                     <Image
                       src={defaultAvatar}
                       alt="none"
-                      className="w-10 h-10 rounded-full object-cover border-2 border-gray-300 shadow-sm"
+                      className="w-10 h-10 rounded-full object-cover border-2 border-gray-300 shadow-sm aspect-square"
                     />
                   </div>
                   <div className="flex items-center gap-2">

@@ -1,12 +1,12 @@
 import { dateFormatter } from "@/utils/dateFormatter";
 import { Button } from "flowbite-react";
 import React from "react";
-import MemberAvatar from "./groups/MemberAvatar";
+import MemberAvatar from "../groups/MemberAvatar";
 import Image from "next/image";
 
 // Define a type for action buttons
 type ActionButton = {
-  label: React.ReactNode;
+  label: string;
   onClick: (id: number) => void;
   className?: string;
 };
@@ -15,16 +15,16 @@ type ActionButton = {
 // Add onRowClick to props
 type GenericTableProps<T> = {
   data: T[];
-  columns: { header: string; key: keyof T | string }[];
+  columns: { header: string; key: keyof T }[];
   actions?: ActionButton[];
-  onRowClick?: (id: number) => void;
+  onRowClick?: (id: number) => void;  // New prop for row click
 };
 
-export default function GenericTable<T>({
-  data,
+export default function GenericTable<T>({ 
+  data, 
   columns,
   actions,
-  onRowClick,
+  onRowClick 
 }: GenericTableProps<T>) {
   return (
     <div className="overflow-x-auto">
@@ -43,24 +43,18 @@ export default function GenericTable<T>({
         </thead>
         <tbody>
           {data.map((item: any, rowIndex) => (
-            <tr
+            <tr 
               key={rowIndex}
               onClick={() => onRowClick && onRowClick(Number(item.id))}
-              className={`${
-                onRowClick ? "cursor-pointer hover:bg-gray-100" : ""
-              }`}
+              className={`${onRowClick ? 'cursor-pointer hover:bg-gray-100' : ''}`}
             >
               {columns.map((column, colIndex) => (
-                <td
+                  <td
                   key={String(column.key)}
                   className={`px-4 py-2 border border-gray-300 bg-gray-50 ${
                     colIndex === 0 ? "border-l" : "border-l-0"
-                  } ${
-                    colIndex === columns.length - 1 ? "border-r" : "border-r-0"
-                  } ${
-                    column.header === ""
-                      ? "flex justify-center items-center"
-                      : ""
+                  } ${colIndex === columns.length - 1 ? "border-r" : "border-r-0"} ${
+                    column.header === "" ? "flex justify-center items-center" : ""
                   }`}
                   onClick={(e) => {
                     // Prevent row click when clicking action buttons
@@ -83,10 +77,8 @@ export default function GenericTable<T>({
                       {actions.map((action, index) => (
                         <Button
                           key={index}
-                          className={
-                            action.className || "btn btn--primary--outline"
-                          }
-                          onClick={() => action.onClick(Number(item.id))}
+                          className={action.className || "btn btn--primary--outline"}
+                          onClick={() => action.onClick(Number(String(item[column.key])))}
                         >
                           {action.label}
                         </Button>
