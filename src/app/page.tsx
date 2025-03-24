@@ -3,6 +3,7 @@
 import Feature from "@/components/Home/Feature";
 import Title from "../components/Home/Title";
 import MajorCarousel from "@/components/Home/MajorCarousel";
+import PostCarousel from "@/components/Home/PostCarousel";
 
 export default function Home() {
   return (
@@ -13,6 +14,7 @@ export default function Home() {
       />
       <Feature />
       <MajorCarousel />
+      <PostCarousel/>
     </div>
   );
 }
