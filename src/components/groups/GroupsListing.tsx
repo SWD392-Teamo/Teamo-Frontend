@@ -143,10 +143,12 @@ export default function GroupsListing({ isForUser, viewMode }: Props) {
 
   return (
     <div className=" mb-10">
-      <BackButton url="/" />
       <div className="mb-10">
         {/* Title */}
-        <h1 className="page-title">{isForUser ? "My Groups" : "Groups"}</h1>
+        <div className="flex items-center space-x-3 py-4 px-2">
+          <h1 className="page-title">{isForUser ? "My Groups" : "Groups"}</h1>
+          <span className="text-gray-600 mt-4">({data.totalCount} groups)</span>
+        </div>
         {/* search bar */}
         <div className="flex items-center justify-between pr-10">
           <SearchBar setSearch={setSearch} />
