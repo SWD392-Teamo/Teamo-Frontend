@@ -261,7 +261,7 @@ export default function Listing() {
 
         <div className="mt-6 border-t pt-4 w-full">
         <div className="flex items-center gap-3 align-middle">
-            <h3 className="text-lg font-semibold">Links</h3>
+            <h3 className="text-lg font-semibold">Skills</h3>
             <button onClick={() => setIsSkillsPopupOpen(true)}>
               <div className="inline-block bg-[#46afe9] rounded-full p-1 cursor-pointer hover:bg-[#41a4db]">
                 <AiOutlineEdit size={15} color="white" />
