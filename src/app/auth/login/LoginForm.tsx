@@ -38,14 +38,14 @@ export default function LoginForm() {
       const res = await signIn("google", {
         idToken,
         redirect: true,
-        callbackUrl: "/",
+        callbackUrl: "/posts",
       });
 
       if (res?.error) {
         throw res.error;
       }
 
-      router.push("/");
+      router.push(`/`);
     } catch (error: any) {
       toast.error(error.status + " " + error.message);
     }
@@ -57,7 +57,7 @@ export default function LoginForm() {
       const res = await signIn("dotnet-identity", {
         ...data,
         redirect: true,
-        callbackUrl: "/",
+        callbackUrl: "/posts",
       });
 
       if (res?.error) {
