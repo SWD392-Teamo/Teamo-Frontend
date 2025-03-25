@@ -19,6 +19,7 @@ import SemesterNavbar from "./SemesterNavbar";
 import SearchBar from "../SearchBar";
 import BackButton from "../BackButton";
 import { Button } from "flowbite-react";
+import { useRouter } from "next/navigation";
 
 interface Props {
   isForUser?: boolean;
@@ -39,6 +40,8 @@ export default function GroupsListing({ isForUser, viewMode }: Props) {
   const [pageIndex, setPageIndex] = useState(1);
   const [pageSize, setPageSize] = useState(6);
   const incrementSize = 2;
+
+  const router = useRouter();
 
   /** GLOBAL STATE MANAGEMENT */
 
@@ -115,7 +118,7 @@ export default function GroupsListing({ isForUser, viewMode }: Props) {
 
   /** HANDLE ACTIONS */
   const handleRowClick = (id: number) => {
-    //router.push(`users/details/${id}`);
+    router.push(`groups/details/${id}`);
   };
 
   const handleSeeMore = () => {
