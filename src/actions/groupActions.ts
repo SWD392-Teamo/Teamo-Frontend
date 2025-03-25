@@ -2,6 +2,8 @@
 
 import { fetchWrapper } from "@/lib/fetchWrapper"
 import { Group, PagedResult } from "@/types"
+import { addGroup } from './../types/interface';
+
 
 export async function getData(query: string): Promise<PagedResult<Group>> {
     return await fetchWrapper.get(`groups${query}`)
@@ -19,4 +21,8 @@ export async function banGroup(groupId: number): Promise<any> {
 }
 export async function unBanGroup(groupId: number): Promise<any> {
     return await fetchWrapper.patch(`groups/${groupId}/unban`,{})
+}
+
+export async function createGroup(addGroup: addGroup): Promise<Group> {
+    return await fetchWrapper.post('groups', addGroup);
 }

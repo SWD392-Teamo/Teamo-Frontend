@@ -13,3 +13,11 @@ export async function getPostByGroup(groupId: number, query: string): Promise<Pa
 export async function createPost(groupId: number, formData: FormData): Promise<Post> {
    return await fetchWrapper.post(`groups/${groupId}/posts`, formData)
 }
+
+export async function updatePost(groupId: number, postId: number, formData: FormData): Promise<Post> {
+   return await fetchWrapper.patch(`groups/${groupId}/posts/${postId}`, formData)
+}
+
+export async function deletePost(groupId: number, postId: number): Promise<Post> {
+   return await fetchWrapper.del(`groups/${groupId}/posts/${postId}`)
+}
