@@ -5,6 +5,7 @@ import React, { useEffect } from "react";
 import toast from "react-hot-toast";
 import DropdownSelect, { DropdownOption } from "../DropdownSelect";
 import { useSubjectStore } from "@/hooks/useSubjectStore";
+import { Button } from "flowbite-react";
 
 interface GroupFilterProps {
   semesterId: string;
@@ -15,6 +16,7 @@ interface GroupFilterProps {
   setSemesterId: React.Dispatch<React.SetStateAction<string>>;
   setSubjectId: React.Dispatch<React.SetStateAction<string>>;
   setSort: React.Dispatch<React.SetStateAction<string>>;
+  setSearch: React.Dispatch<React.SetStateAction<string>>;
 }
 export default function GroupFilter({
   semesterId,
@@ -25,6 +27,7 @@ export default function GroupFilter({
   setSubjectId,
   setStatus,
   setSort,
+  setSearch,
 }: GroupFilterProps) {
   /** GLOBAL STATE MANAGEMENT */
   const semesters = useSemesterStore((state) => state.semesters);
@@ -75,44 +78,65 @@ export default function GroupFilter({
     { value: "Full", label: "Full" },
     { value: "Archived", label: "Archived" },
     { value: "Deleted", label: "Deleted" },
+    { value: "Banned", label: "Banned" },
   ];
   const sortOptions: DropdownOption[] = [
     { value: "DateDesc", label: "Latest" },
     { value: "DateAsc", label: "Oldest" },
   ];
 
+  /** HANDLE ACTIONS */
+  const handleResetFilter = () => {
+    setSemesterId("");
+    setSubjectId("");
+    setSearch("");
+    setStatus("");
+    setSort("");
+    setSearch("");
+  };
+
   return (
     <div>
       {/* Filter buttons */}
-      <div className="flex gap-4">
-        {/* Filter semester */}
-        <DropdownSelect
-          value={semesterId || ""}
-          onChange={(value) => setSemesterId(value)}
-          options={semesterOptions}
-          placeholder="All Semesters"
-        />
-        {/* Filter subject */}
-        <DropdownSelect
-          value={subjectId || ""}
-          onChange={(value) => setSubjectId(value)}
-          options={subjectOptions}
-          placeholder="All Subjects"
-        />
-        {/* Filter status */}
-        <DropdownSelect
-          value={status || ""}
-          onChange={(value) => setStatus(value)}
-          options={statusOptions}
-          placeholder="All Status"
-        />
-        {/* Sort */}
-        <DropdownSelect
-          value={sort || "DateDesc"}
-          onChange={(value) => setSort(value)}
-          options={sortOptions}
-          placeholder="Sort"
-        />
+      <div className="flex gap-4 items-center justify-between">
+        <div className="flex gap-4">
+          {/* Filter semester */}
+          <DropdownSelect
+            value={semesterId || ""}
+            onChange={(value) => setSemesterId(value)}
+            options={semesterOptions}
+            placeholder="All Semesters"
+          />
+          {/* Filter subject */}
+          <DropdownSelect
+            value={subjectId || ""}
+            onChange={(value) => setSubjectId(value)}
+            options={subjectOptions}
+            placeholder="All Subjects"
+          />
+          {/* Filter status */}
+          <DropdownSelect
+            value={status || ""}
+            onChange={(value) => setStatus(value)}
+            options={statusOptions}
+            placeholder="All Status"
+          />
+          {/* Sort */}
+          <DropdownSelect
+            value={sort || "DateDesc"}
+            onChange={(value) => setSort(value)}
+            options={sortOptions}
+            placeholder="Sort"
+          />
+        </div>
+
+        {/* Reset Filter */}
+        <Button
+          onClick={handleResetFilter}
+          className="btn btn--primary--outline"
+        >
+          Reset
+        </Button>
       </div>
     </div>
   );

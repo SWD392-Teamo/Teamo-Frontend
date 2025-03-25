@@ -12,13 +12,18 @@ import { IoIosStar } from "react-icons/io";
 import { useShallow } from "zustand/shallow";
 import { getUserId } from "@/actions/userActions";
 import Link from "next/link";
-import { getGroupById } from "@/actions/groupActions";
+import { banGroup, getGroupById, unBanGroup } from "@/actions/groupActions";
 import { useParams } from "next/navigation";
 import GroupPositionCard from "@/app/groups/details/[id]/GroupPosition";
+import { Button } from "flowbite-react";
+import AppModal from "../AppModal";
+import ConfirmationPopup from "../users/ConfirmationPopup";
+import toast from "react-hot-toast";
 
 export default function GroupDetail() {
   const [userId, setUserId] = useState<number | null>(null);
   const param = useParams();
+  const [showModel, setShowModal] = useState(false);
 
   const { id } = param;
 
@@ -39,13 +44,11 @@ export default function GroupDetail() {
     const fetchGroup = async (id: number) => {
       const group = await getGroupById(id);
       setSelectedGroup(group);
+      console.log(selectedgroup);
     };
 
     fetchUserId();
-
-    if (selectedgroup == null) {
-      fetchGroup(Number(id));
-    }
+    fetchGroup(Number(id));
   }, []);
 
   const groupMembers = selectedgroup?.groupMembers;
@@ -53,6 +56,25 @@ export default function GroupDetail() {
   const isLeader = groupMembers?.some(
     (member) => member.studentId === userId && member.role === "Leader"
   );
+
+  // handle ban group
+  const handleBanGroup = async (id: number) => {
+    try {
+      let updatedGroup;
+      if (selectedgroup?.status === "Banned") {
+        updatedGroup = await unBanGroup(id);
+        toast.success("Successfully unban this group.");
+      } else {
+        updatedGroup = await banGroup(id);
+        toast.success("Successfully ban this group.");
+      }
+      setSelectedGroup(updatedGroup);
+    } catch (error) {
+      toast.error("Fail to ban this user!");
+    } finally {
+      setShowModal(false);
+    }
+  };
 
   return (
     <div className="border border-gray-200 rounded-lg shadow-sm p-12 flex flex-col items-start hover:shadow-lg transition flex-1 mb-16">
@@ -74,6 +96,16 @@ export default function GroupDetail() {
           <div className="text-left w-full font-bold text-[#54B8F0] text-2xl my-2">
             {selectedgroup?.name}
           </div>
+          <Button
+            onClick={() => setShowModal(true)}
+            className={`btn ${
+              selectedgroup?.status === "Banned"
+                ? "btn--primary"
+                : "btn--danger--outline"
+            }`}
+          >
+            {selectedgroup?.status === "Banned" ? "Unban" : "Ban"}
+          </Button>
         </div>
       </div>
       <div className="w-full flex justify-between items-center">
@@ -192,6 +224,21 @@ export default function GroupDetail() {
           )}
         </div>
       </div>
+      {/* Popup Modal */}
+      <AppModal
+        show={showModel}
+        onClose={() => setShowModal(false)}
+        title="Confirmation"
+      >
+        <ConfirmationPopup
+          message={
+            selectedgroup?.status === "Banned"
+              ? "Are you sure to unban this group?"
+              : "Are you sure to ban this group?"
+          }
+          onConfirm={() => handleBanGroup(selectedgroup?.id as number)}
+        />
+      </AppModal>
     </div>
   );
 }

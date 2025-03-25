@@ -67,6 +67,7 @@ export default function GroupsListing({ isForUser, viewMode }: Props) {
       ...(search.trim() ? { search } : {}),
     },
   });
+  console.log(url);
   /** FETCH DATA */
 
   //FETCH GROUP
@@ -74,7 +75,6 @@ export default function GroupsListing({ isForUser, viewMode }: Props) {
     const fetchGroups = async () => {
       showLoading();
       try {
-        console.log(isForUser);
         const groups = isForUser
           ? await getUserGroups(url)
           : await getGroupData(url);
@@ -92,7 +92,6 @@ export default function GroupsListing({ isForUser, viewMode }: Props) {
           })),
         };
 
-        console.log(formattedGroups.data);
         setData(formattedGroups);
       } catch (error) {
         toast.error("Failed to load groups");
@@ -152,16 +151,6 @@ export default function GroupsListing({ isForUser, viewMode }: Props) {
         {/* search bar */}
         <div className="flex items-center justify-between pr-10">
           <SearchBar setSearch={setSearch} />
-
-          {/* Reset Filter */}
-          <div className="pt-3 pd-0">
-            <Button
-              onClick={handleResetFilter}
-              className="btn btn--primary--outline"
-            >
-              Reset
-            </Button>
-          </div>
         </div>
       </div>
 
@@ -202,6 +191,7 @@ export default function GroupsListing({ isForUser, viewMode }: Props) {
                 setSubjectId={setSubjectId}
                 setStatus={setStatus}
                 setSort={setSort}
+                setSearch={setSearch}
               />
             </div>
             {/* Table */}

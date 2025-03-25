@@ -22,10 +22,17 @@ export default function SemesterNavbar({ semesterId, setSemesterId }: Props) {
         toast.error(error.status + " " + error.message);
       });
   }, []);
+  // SET DEFAULT SEMESTER ID
+  useEffect(() => {
+    if (semesters.length > 0 && !semesterId) {
+      setSemesterId(semesters[0].id.toString());
+    }
+  }, [semesters]);
+
   return (
     <div>
       {/* Navigation Bar */}
-      <div className="w-full border-t border-b border-gray-200">
+      <div className="w-full border-t border-b border-gray-200 mb-5">
         <div className="overflow-x-auto">
           <nav className="flex justify-start content-around gap-10 px-4">
             {semesters.map((semester, index) => {
@@ -34,7 +41,7 @@ export default function SemesterNavbar({ semesterId, setSemesterId }: Props) {
                 <React.Fragment key={semester.name}>
                   <Link
                     href="#"
-                    onClick={() => setSemesterId(semesterId)}
+                    onClick={() => setSemesterId(semester.id.toString())}
                     className={`link ${isActive ? "active" : ""} p-5`}
                   >
                     {semester.name}
