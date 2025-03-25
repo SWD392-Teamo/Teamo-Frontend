@@ -14,14 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { createPost } from "@/actions/postAction";
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../ui/form";
-import { Controller, Form, useForm } from "react-hook-form";
+
 
 interface CreatePostPopupProps {
    groupId: number;
@@ -120,7 +113,7 @@ interface CreatePostPopupProps {
            <DialogHeader>
              <DialogTitle>Create New Post</DialogTitle>
              <DialogDescription>
-               Share your thoughts with the {groupName} group
+               Announce something to other member in {groupName} group?
              </DialogDescription>
            </DialogHeader>
            <form onSubmit={onSubmit} className="space-y-4">
@@ -158,7 +151,7 @@ interface CreatePostPopupProps {
                    {!selectedFile ? (
                      <div>
                        <p className="text-gray-600">
-                         Drag and drop a file here or{' '}
+                         Drag and drop a file or an image here or{' '}
                          <button 
                            type="button"
                            onClick={onButtonClick}
@@ -168,7 +161,7 @@ interface CreatePostPopupProps {
                          </button>
                        </p>
                        <p className="text-xs text-gray-500 mt-1">
-                         PDF, DOC, DOCX, TXT (max 5MB)
+                         PDF, DOC, DOCX, TXT, PNG, JPG,... (max 5MB)
                        </p>
                      </div>
                    ) : (

@@ -27,13 +27,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           password: credentials.password
         })
 
-        if (response) {
-          // Any object returned will be saved in `user` property of the JWT
-          return response
-        } else {
-          // If you return null then an error will be displayed advising the user to check their details.
-          return null
-        }
+        // If you return null then an error will be displayed advising the user to check their details.
+        if (response.error) return null
+
+        // Any object returned will be saved in `user` property of the JWT
+        return response
       }
     }),
     CredentialsProvider({
@@ -51,11 +49,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             idToken: credentials.idToken
           });
 
-          if (response) {
-            return response;
-          }
+        if (response.error && response.error.status == 401) return null
 
-          return null;
+        // Any object returned will be saved in `user` property of the JWT
+        return response
           
         } catch (error) {
           console.error('Google sign-in error:', error);
@@ -94,7 +91,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   pages: {
     // Specify the next app login page
-    signIn: '/auth/login',  
+    signIn: '/auth/login',
+    error: '/auth/login'
   },
   secret: process.env.NEXTAUTH_SECRET
 })

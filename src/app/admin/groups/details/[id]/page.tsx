@@ -1,7 +1,11 @@
-import React from 'react'
+"use client";
+import GroupDetail from "@/components/groups/GroupDetail";
+import React from "react";
 
 export default function Details() {
   return (
-    <div>Group detail here</div>
-  )
+    <div>
+      <GroupDetail />
+    </div>
+  );
 }

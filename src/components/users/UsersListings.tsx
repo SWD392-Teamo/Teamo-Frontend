@@ -129,7 +129,7 @@ export default function UsersListings() {
   // Buttons
   const actions = [
     {
-      label: <HiBan />,
+      label: "BAN",
       onClick: handlePopup,
       className: "btn btn--danger--outline",
     },
@@ -138,11 +138,10 @@ export default function UsersListings() {
   return (
     <div className="w-full">
       {/* Header */}
-      <BackButton url="/" />
       <div className="flex items-center space-x-3 py-4 px-2">
-        <HiOutlineUserGroup className="w-7 h-7" />
-        <h1 className="text-2xl font-extrabold">User Accounts List</h1>
-        <span className="text-gray-600">({data.totalCount} users)</span>
+        {/* <HiOutlineUserGroup className="w-7 h-7" /> */}
+        <h1 className="page-title">User Accounts List</h1>
+        <span className="text-gray-600 mt-4">({data.totalCount} users)</span>
       </div>
       {/* Search & Filter */}
       <SearchBar className="mb-8" setSearch={setSearch} />

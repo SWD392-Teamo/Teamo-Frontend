@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import AppModal from '@/components/AppModal';
 import AppPagination from '@/components/AppPagination';
@@ -15,7 +15,12 @@ import { AiOutlineEdit } from 'react-icons/ai';
 import { useShallow } from 'zustand/shallow';
 import Filter from '../Filter';
 import SubjectForm from './SubjectForm';
-import { deleteSubject, getData, getSubjectById } from '@/actions/subjectAction';
+import {
+  deleteSubject,
+  getData,
+  getSubjectById,
+} from '@/actions/subjectAction';
+import ConfirmationPopup from '@/components/users/ConfirmationPopup';
 
 export default function MajorsListing() {
   //=====================================
@@ -23,11 +28,13 @@ export default function MajorsListing() {
   //=====================================
 
   const [showModal, setShowModal] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
   const { showLoading, hideLoading } = useLoading();
+  const [selectedSubjectId, setSelectedSubjectId] = useState<number>(0);
   const [selectedSubject, setSelectedSubject] = useState<Subject>();
-  const [search, setSearch] = useState<string>("");
+  const [search, setSearch] = useState<string>('');
   const [pageIndex, setPageIndex] = useState<number>(1);
-  const [status, setStatus] = useState<string>("");
+  const [status, setStatus] = useState<string>('');
 
   //=====================================
   //      GLOBAL STATE MANAGEMENT
@@ -45,12 +52,12 @@ export default function MajorsListing() {
   const setData = useSubjectStore((state) => state.setData);
 
   const url = queryString.stringifyUrl({
-    url: "",
+    url: '',
     query: {
       pageIndex,
       status,
       ...(search.trim() ? { search } : {}),
-    }
+    },
   });
 
   //=====================================
@@ -64,7 +71,7 @@ export default function MajorsListing() {
         setData(data);
       })
       .catch((error) => {
-        toast.error(error.status + " " + error.message);
+        toast.error(error.status + ' ' + error.message);
       })
       .finally(() => {
         hideLoading();
@@ -92,7 +99,7 @@ export default function MajorsListing() {
         setSelectedSubject(data);
       })
       .catch((error) => {
-        toast.error(error.status + " " + error.message);
+        toast.error(error.status + ' ' + error.message);
       })
       .finally(() => {
         hideLoading();
@@ -105,60 +112,64 @@ export default function MajorsListing() {
 
   // COLUMNS
   const columns: { header: string; key: keyof Subject }[] = [
-    { header: "Code", key: "code" },
-    { header: "Name", key: "name" },
-    { header: "Date", key: "createdDate" },
-    { header: "Status", key: "status" },
+    { header: 'Code', key: 'code' },
+    { header: 'Name', key: 'name' },
+    { header: 'Date', key: 'createdDate' },
+    { header: 'Status', key: 'status' },
   ];
 
-  if (!(status === "inactive")) {
-    columns.push({ header: "Action", key: "id" });
+  if (!(status === 'inactive')) {
+    columns.push({ header: 'Action', key: 'id' });
   }
 
   // DELETE ACTION
   const handleDelete = async (id: number) => {
     try {
-      showLoading();
       // Delete subject
       await deleteSubject(Number(id));
       getSubjects();
-      toast.success("Subject deleted successfully");
+      toast.success('Subject deleted successfully');
     } catch (error) {
-      toast.error("Failed to delete subject");
+      toast.error('Failed to delete subject');
     } finally {
-      hideLoading();
+      setShowConfirmModal(false);
     }
   };
-
+  // Handle popup
+  const handlePopup = (id: number) => {
+    setSelectedSubjectId(id);
+    setShowConfirmModal(true);
+  };
   // ACTION BUTTONS
   const actions = [
     {
-      label: "Delete",
-      onClick: handleDelete,
-      className: "btn btn--primary--outline",
+      label: 'Delete',
+      onClick: handlePopup,
+      className: 'btn btn--primary--outline',
     },
   ];
 
   return (
-    <div className="mb-10 mt-5">
+    <div className='mb-10 mt-5'>
       {/* Create Subject Button */}
-      <Button 
-          className='btn btn--secondary btn--icon'
-          
-          onClick={() => {
-            setSelectedSubject(undefined);
-            setShowModal(true);
-          }}
-          type='button'>
-          <AiOutlineEdit size={20} className='me-2'/> Create Subject
+      <Button
+        className='btn btn--secondary btn--icon'
+        onClick={() => {
+          setSelectedSubject(undefined);
+          setShowModal(true);
+        }}
+        type='button'
+      >
+        <AiOutlineEdit size={20} className='me-2' /> Create Subject
       </Button>
 
       {/* Subject Filters */}
-      <Filter 
+      <Filter
         status={status}
         setSearch={setSearch}
         setStatus={setStatus}
-        setPageIndex={setPageIndex} />
+        setPageIndex={setPageIndex}
+      />
 
       {data.totalCount > 0 ? (
         <>
@@ -173,7 +184,7 @@ export default function MajorsListing() {
           )}
 
           {/* Subject Pagination */}
-          <div className="flex justify-end mt-5">
+          <div className='flex justify-end mt-5'>
             <AppPagination
               pageChanged={setPageIndex}
               currentPage={pageIndex}
@@ -186,25 +197,37 @@ export default function MajorsListing() {
           <AppModal
             show={showModal}
             onClose={() => setShowModal(false)}
-            title={selectedSubject == null ? "Create Subject" : "Edit Subject"}
-            size="3xl"
+            title={selectedSubject == null ? 'Create Subject' : 'Edit Subject'}
+            size='3xl'
           >
-            <SubjectForm 
-              subject={selectedSubject} 
+            <SubjectForm
+              subject={selectedSubject}
               onCancel={() => setShowModal(false)}
-              onSuccess={getSubjects} />
+              onSuccess={getSubjects}
+            />
           </AppModal>
         </>
       ) : (
         <>
           {/*Empty Filter */}
           <EmptyFilter
-            title="No subject found"
-            subtitle="Try changing the filters or reset it completely"
+            title='No subject found'
+            subtitle='Try changing the filters or reset it completely'
             showReset={true}
           />
         </>
       )}
+      {/* Popup Modal */}
+      <AppModal
+        show={showConfirmModal}
+        onClose={() => setShowConfirmModal(false)}
+        title='Confirmation'
+      >
+        <ConfirmationPopup
+          message='Are you sure you want to delete this subject?'
+          onConfirm={() => handleDelete(selectedSubjectId)}
+        />
+      </AppModal>
     </div>
   );
 }

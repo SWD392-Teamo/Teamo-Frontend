@@ -1,5 +1,5 @@
 "use client";
-import { getData } from "@/actions/groupActions";
+import { getData, getUserGroups } from "@/actions/groupActions";
 import {  getPostByGroup, getPostData } from "@/actions/postAction";
 import { CreatePostPopup } from "@/components/posts/CreatePostPopup";
 import PostCard from "@/components/posts/PostCard";
@@ -79,7 +79,7 @@ export default function Listings() {
           },
         });
         
-        const groupsResponse = await getData(groupQuery, true);
+        const groupsResponse = await getUserGroups(groupQuery);
         setGroups([
           { 
             id: 0, 

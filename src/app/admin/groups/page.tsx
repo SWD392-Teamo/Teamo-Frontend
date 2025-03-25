@@ -1,7 +1,7 @@
-import React from 'react'
+"use client";
+import GroupsListing from "@/components/groups/GroupsListing";
+import React from "react";
 
 export default function Listings() {
-  return (
-    <div>Group list here</div>
-  )
+  return <GroupsListing viewMode="Table" />;
 }

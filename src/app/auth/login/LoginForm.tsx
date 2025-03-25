@@ -1,20 +1,21 @@
 "use client";
 
-import React from "react";
-import { FieldValues, useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
 import Input from "@/components/Input";
+import { useLoading } from "@/providers/LoadingProvider";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { Button } from "flowbite-react";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { FieldValues, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { AiFillGoogleCircle } from "react-icons/ai";
-import { signIn } from "next-auth/react";
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { firebaseAuth } from "../../../../firebase";
-import { useLoading } from "@/providers/LoadingProvider";
-import { Button } from "flowbite-react";
 
 export default function LoginForm() {
   // Next navigation
   const router = useRouter();
+
+  const {showLoading, hideLoading} = useLoading();
 
   // Set up form state
   const {
@@ -35,38 +36,50 @@ export default function LoginForm() {
       // Get ID token
       const idToken = await result.user.getIdToken();
 
+      showLoading();
       const res = await signIn("google", {
         idToken,
-        redirect: true,
-        callbackUrl: "/posts",
+        redirect: false,
       });
+      hideLoading();
 
-      if (res?.error) {
-        throw res.error;
+      if (res?.code == 'credentials') {
+        toast.error("Please use the provided email from FPT education");
+        return;
       }
-
-      router.push(`/`);
+      else if (res?.code == null){
+        window.location.href = '/posts';
+      }
+      else {
+        throw res?.code;
+      }
     } catch (error: any) {
-      toast.error(error.status + " " + error.message);
+      toast.error("Unexpected error while logging in: " + error);
     }
   }
 
   // On submit login logic
   async function onSubmit(data: FieldValues) {
     try {
+      showLoading();
       const res = await signIn("dotnet-identity", {
         ...data,
-        redirect: true,
-        callbackUrl: "/posts",
+        redirect: false
       });
+      hideLoading();
 
-      if (res?.error) {
-        throw res.error;
+      if (res?.code == 'credentials') {
+        toast.error("Incorrect email or password");
+        return;
       }
-
-      router.push(`/`);
+      else if (res?.code == null){
+        window.location.href = '/posts';
+      }
+      else {
+        throw res?.code;
+      }
     } catch (error: any) {
-      toast.error(error.status + " " + error.message);
+      toast.error("Unexpected error while logging in: " + error);
     }
   }
 
