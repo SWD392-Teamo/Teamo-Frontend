@@ -1,22 +1,22 @@
-"use client";
+'use client';
 
-import { deleteField, getData, getFieldById } from "@/actions/fieldActions";
-import AppModal from "@/components/AppModal";
-import AppPagination from "@/components/AppPagination";
-import EmptyFilter from "@/components/EmptyFilter";
-import GenericTable from "@/components/GenericTable";
-import { useFieldStore } from "@/hooks/useFieldStore";
-import { useLoading } from "@/providers/LoadingProvider";
-import { Field } from "@/types";
-import { Button } from "flowbite-react";
-import queryString from "query-string";
-import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
-import { AiOutlineEdit } from "react-icons/ai";
-import { useShallow } from "zustand/shallow";
-import Filter from "../Filter";
-import FieldForm from "./FieldForm";
-import ConfirmationPopup from "@/components/users/ConfirmationPopup";
+import { deleteField, getData, getFieldById } from '@/actions/fieldActions';
+import AppModal from '@/components/AppModal';
+import AppPagination from '@/components/AppPagination';
+import EmptyFilter from '@/components/EmptyFilter';
+import GenericTable from '@/components/GenericTable';
+import { useFieldStore } from '@/hooks/useFieldStore';
+import { useLoading } from '@/providers/LoadingProvider';
+import { Field } from '@/types';
+import { Button } from 'flowbite-react';
+import queryString from 'query-string';
+import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+import { AiOutlineEdit } from 'react-icons/ai';
+import { useShallow } from 'zustand/shallow';
+import Filter from '../Filter';
+import FieldForm from './FieldForm';
+import ConfirmationPopup from '@/components/users/ConfirmationPopup';
 
 export default function FieldsListing() {
   //=====================================
@@ -28,7 +28,7 @@ export default function FieldsListing() {
   const { showLoading, hideLoading } = useLoading();
   const [selectedField, setSelectedField] = useState<Field>();
   const [selectedFieldId, setSelectedFieldId] = useState<number>(0);
-  const [search, setSearch] = useState<string>("");
+  const [search, setSearch] = useState<string>('');
   const [pageIndex, setPageIndex] = useState<number>(1);
 
   //=====================================
@@ -47,7 +47,7 @@ export default function FieldsListing() {
   const setData = useFieldStore((state) => state.setData);
 
   const url = queryString.stringifyUrl({
-    url: "",
+    url: '',
     query: {
       pageIndex,
       ...(search.trim() ? { search } : {}),
@@ -65,7 +65,7 @@ export default function FieldsListing() {
         setData(data);
       })
       .catch((error) => {
-        toast.error(error.status + " " + error.message);
+        toast.error(error.status + ' ' + error.message);
       })
       .finally(() => {
         hideLoading();
@@ -93,7 +93,7 @@ export default function FieldsListing() {
         setSelectedField(data);
       })
       .catch((error) => {
-        toast.error(error.status + " " + error.message);
+        toast.error(error.status + ' ' + error.message);
       })
       .finally(() => {
         hideLoading();
@@ -106,9 +106,9 @@ export default function FieldsListing() {
 
   // COLUMNS
   const columns: { header: string; key: keyof Field }[] = [
-    { header: "Name", key: "name" },
-    { header: "Description", key: "description" },
-    { header: "Action", key: "id" },
+    { header: 'Name', key: 'name' },
+    { header: 'Description', key: 'description' },
+    { header: 'Action', key: 'id' },
   ];
 
   // DELETE ACTION
@@ -117,9 +117,9 @@ export default function FieldsListing() {
       // Delete field
       await deleteField(Number(id));
       getFields();
-      toast.success("Field deleted successfully");
+      toast.success('Field deleted successfully');
     } catch (error) {
-      toast.error("Failed to delete field");
+      toast.error('Failed to delete field');
     } finally {
       setShowConfirmModal(false);
     }
@@ -132,24 +132,24 @@ export default function FieldsListing() {
   // ACTION BUTTONS
   const actions = [
     {
-      label: "Delete",
+      label: 'Delete',
       onClick: handlePopup,
-      className: "btn btn--primary--outline",
+      className: 'btn btn--primary--outline',
     },
   ];
 
   return (
-    <div className="mb-10 mt-5">
+    <div className='mb-10 mt-5'>
       {/* Create Field Button */}
       <Button
-        className="btn btn--secondary btn--icon"
+        className='btn btn--secondary btn--icon'
         onClick={() => {
           setSelectedField(undefined);
           setShowModal(true);
         }}
-        type="button"
+        type='button'
       >
-        <AiOutlineEdit size={20} className="me-2" /> Create Field
+        <AiOutlineEdit size={20} className='me-2' /> Create Field
       </Button>
 
       {/* Field Filters */}
@@ -168,7 +168,7 @@ export default function FieldsListing() {
           )}
 
           {/* Field Pagination */}
-          <div className="flex justify-end mt-5">
+          <div className='flex justify-end mt-5'>
             <AppPagination
               pageChanged={setPageIndex}
               currentPage={pageIndex}
@@ -181,8 +181,8 @@ export default function FieldsListing() {
           <AppModal
             show={showModal}
             onClose={() => setShowModal(false)}
-            title={selectedField == null ? "Create Field" : "Edit Field"}
-            size="3xl"
+            title={selectedField == null ? 'Create Field' : 'Edit Field'}
+            size='3xl'
           >
             <FieldForm
               field={selectedField}
@@ -195,8 +195,8 @@ export default function FieldsListing() {
         <>
           {/*Empty Filter */}
           <EmptyFilter
-            title="No field found"
-            subtitle="Try changing the filters or reset it completely"
+            title='No field found'
+            subtitle='Try changing the filters or reset it completely'
             showReset={true}
           />
         </>
@@ -205,10 +205,10 @@ export default function FieldsListing() {
       <AppModal
         show={showConfirmModal}
         onClose={() => setShowConfirmModal(false)}
-        title="Confirmation"
+        title='Confirmation'
       >
         <ConfirmationPopup
-          message="Are you sure you want to delete this field?"
+          message='Are you sure you want to delete this field?'
           onConfirm={() => handleDelete(selectedFieldId)}
         />
       </AppModal>

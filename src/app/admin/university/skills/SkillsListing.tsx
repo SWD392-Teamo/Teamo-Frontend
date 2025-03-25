@@ -1,22 +1,22 @@
-"use client";
+'use client';
 
-import AppModal from "@/components/AppModal";
-import AppPagination from "@/components/AppPagination";
-import EmptyFilter from "@/components/EmptyFilter";
-import GenericTable from "@/components/GenericTable";
-import { useSkillStore } from "@/hooks/useSkillStore";
-import { useLoading } from "@/providers/LoadingProvider";
-import { Skill } from "@/types";
-import { Button } from "flowbite-react";
-import queryString from "query-string";
-import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
-import { AiOutlineEdit } from "react-icons/ai";
-import { useShallow } from "zustand/shallow";
-import Filter from "../Filter";
-import { deleteSkill, getData, getSkillById } from "@/actions/skillActions";
-import SkillForm from "./SkillForm";
-import ConfirmationPopup from "@/components/users/ConfirmationPopup";
+import AppModal from '@/components/AppModal';
+import AppPagination from '@/components/AppPagination';
+import EmptyFilter from '@/components/EmptyFilter';
+import GenericTable from '@/components/GenericTable';
+import { useSkillStore } from '@/hooks/useSkillStore';
+import { useLoading } from '@/providers/LoadingProvider';
+import { Skill } from '@/types';
+import { Button } from 'flowbite-react';
+import queryString from 'query-string';
+import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+import { AiOutlineEdit } from 'react-icons/ai';
+import { useShallow } from 'zustand/shallow';
+import Filter from '../Filter';
+import { deleteSkill, getData, getSkillById } from '@/actions/skillActions';
+import SkillForm from './SkillForm';
+import ConfirmationPopup from '@/components/users/ConfirmationPopup';
 
 export default function SkillsListing() {
   //=====================================
@@ -28,7 +28,7 @@ export default function SkillsListing() {
   const { showLoading, hideLoading } = useLoading();
   const [selectedSkillId, setSelectedSkillId] = useState<number>(0);
   const [selectedSkill, setSelectedSkill] = useState<Skill>();
-  const [search, setSearch] = useState<string>("");
+  const [search, setSearch] = useState<string>('');
   const [pageIndex, setPageIndex] = useState<number>(1);
 
   //=====================================
@@ -47,7 +47,7 @@ export default function SkillsListing() {
   const setData = useSkillStore((state) => state.setData);
 
   const url = queryString.stringifyUrl({
-    url: "",
+    url: '',
     query: {
       pageIndex,
       ...(search.trim() ? { search } : {}),
@@ -65,7 +65,7 @@ export default function SkillsListing() {
         setData(data);
       })
       .catch((error) => {
-        toast.error(error.status + " " + error.message);
+        toast.error(error.status + ' ' + error.message);
       })
       .finally(() => {
         hideLoading();
@@ -93,7 +93,7 @@ export default function SkillsListing() {
         setSelectedSkill(data);
       })
       .catch((error) => {
-        toast.error(error.status + " " + error.message);
+        toast.error(error.status + ' ' + error.message);
       })
       .finally(() => {
         hideLoading();
@@ -106,9 +106,9 @@ export default function SkillsListing() {
 
   // COLUMNS
   const columns: { header: string; key: keyof Skill }[] = [
-    { header: "Name", key: "name" },
-    { header: "Type", key: "type" },
-    { header: "Action", key: "id" },
+    { header: 'Name', key: 'name' },
+    { header: 'Type', key: 'type' },
+    { header: 'Action', key: 'id' },
   ];
 
   // DELETE ACTION
@@ -117,9 +117,9 @@ export default function SkillsListing() {
       // Delete skill
       await deleteSkill(Number(id));
       getSkills();
-      toast.success("Skill deleted successfully");
+      toast.success('Skill deleted successfully');
     } catch (error) {
-      toast.error("Failed to delete skill");
+      toast.error('Failed to delete skill');
     } finally {
       setShowConfirmModal(false);
     }
@@ -132,24 +132,24 @@ export default function SkillsListing() {
   // ACTION BUTTONS
   const actions = [
     {
-      label: "Delete",
+      label: 'Delete',
       onClick: handlePopup,
-      className: "btn btn--primary--outline",
+      className: 'btn btn--primary--outline',
     },
   ];
 
   return (
-    <div className="mb-10 mt-5">
+    <div className='mb-10 mt-5'>
       {/* Create skill Button */}
       <Button
-        className="btn btn--secondary btn--icon"
+        className='btn btn--secondary btn--icon'
         onClick={() => {
           setSelectedSkill(undefined);
           setShowModal(true);
         }}
-        type="button"
+        type='button'
       >
-        <AiOutlineEdit size={20} className="me-2" /> Create skill
+        <AiOutlineEdit size={20} className='me-2' /> Create skill
       </Button>
 
       {/* Skill Filters */}
@@ -168,7 +168,7 @@ export default function SkillsListing() {
           )}
 
           {/* Skill Pagination */}
-          <div className="flex justify-end mt-5">
+          <div className='flex justify-end mt-5'>
             <AppPagination
               pageChanged={setPageIndex}
               currentPage={pageIndex}
@@ -181,8 +181,8 @@ export default function SkillsListing() {
           <AppModal
             show={showModal}
             onClose={() => setShowModal(false)}
-            title={selectedSkill == null ? "Create Skill" : "Edit Skill"}
-            size="3xl"
+            title={selectedSkill == null ? 'Create Skill' : 'Edit Skill'}
+            size='3xl'
           >
             <SkillForm
               skill={selectedSkill}
@@ -195,8 +195,8 @@ export default function SkillsListing() {
         <>
           {/*Empty Filter */}
           <EmptyFilter
-            title="No skill found"
-            subtitle="Try changing the filters or reset it completely"
+            title='No skill found'
+            subtitle='Try changing the filters or reset it completely'
             showReset={true}
           />
         </>
@@ -205,10 +205,10 @@ export default function SkillsListing() {
       <AppModal
         show={showConfirmModal}
         onClose={() => setShowConfirmModal(false)}
-        title="Confirmation"
+        title='Confirmation'
       >
         <ConfirmationPopup
-          message="Are you sure you want to delete this skill?"
+          message='Are you sure you want to delete this skill?'
           onConfirm={() => handleDelete(selectedSkillId)}
         />
       </AppModal>
