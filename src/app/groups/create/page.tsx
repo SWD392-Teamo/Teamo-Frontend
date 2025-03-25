@@ -24,7 +24,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm, useFieldArray, Field } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 
@@ -55,6 +55,7 @@ import {
  import { Check, ChevronsUpDown } from "lucide-react"
  import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
+import { getAllFields } from "@/actions/fieldActions";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -82,6 +83,7 @@ const CreateGroupPage = () => {
   const [skills, setSkills] = useState<Skill[]>([]);
   const [semesters, setSemesters] = useState<Semester[]>([]);
   const [subjects, setSubjects] = useState<Subject[]>([]);
+  const [fieldss, setFieldss] = useState<Field[]>([]);
 
   // Initialize form with react-hook-form and zod
   const form = useForm({
@@ -114,15 +116,17 @@ const CreateGroupPage = () => {
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
-        const [skillsData, semestersData, subjectsData] = await Promise.all([
+        const [skillsData, semestersData, subjectsData, fieldssData] = await Promise.all([
           getAllSkills(),
           getAllSemesters("?status=ongoing"),
           getAllSubjects("?status=Active"),
+          getAllFields(),
         ]);
 
         setSkills(skillsData);
         setSemesters(semestersData.data);
         setSubjects(subjectsData.data);
+        setFieldss(fieldssData.data);
       } catch (error) {
         toast.error("Error fetching data!");
       }
@@ -133,15 +137,22 @@ const CreateGroupPage = () => {
 
   // Submit handler
   const onSubmit = async (data: addGroup) => {
-    try {
-      await createGroup(data);
-      toast.success("Group created successfully!");
+   try {
+     const createdGroup = await createGroup(data);
+     toast.success("Group created successfully!");
+     router.push("/groups");
 
-      router.push("/groups");
-    } catch (error) {
-      toast.error("Post created error!");
-    }
-  };
+     return createdGroup;
+   } catch (error) {
+     const errorMessage = error instanceof Error 
+       ? error.message 
+       : "Failed to create group";
+     
+     toast.error(errorMessage);
+     
+     throw error;
+   }
+ };
   const getSkillNames = (skillIds: number[]) => {
     return skillIds
       .map((id) => skills.find((skill) => skill.id === id)?.name)
@@ -247,6 +258,36 @@ const CreateGroupPage = () => {
                               value={subject.id.toString()}
                             >
                               {subject.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="fieldId"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Field</FormLabel>
+                      <Select
+                        onValueChange={(value) => field.onChange(Number(value))}
+                        value={field.value?.toString()}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select Field" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {fieldss.map((f) => (
+                            <SelectItem
+                              key={f.id}
+                              value={f.id.toString()}
+                            >
+                              {f.name}
                             </SelectItem>
                           ))}
                         </SelectContent>
