@@ -3,27 +3,28 @@ import { getData as getSubjectsData } from "@/actions/subjectAction";
 import { useSemesterStore } from "@/hooks/useSemesterStore";
 import React, { useEffect } from "react";
 import toast from "react-hot-toast";
-import { useShallow } from "zustand/shallow";
 import DropdownSelect, { DropdownOption } from "../DropdownSelect";
-import Link from "next/link";
 import { useSubjectStore } from "@/hooks/useSubjectStore";
-import { Button } from "flowbite-react";
 
 interface GroupFilterProps {
   semesterId: string;
   subjectId: string;
   status: string;
+  sort: string;
   setStatus: React.Dispatch<React.SetStateAction<string>>;
   setSemesterId: React.Dispatch<React.SetStateAction<string>>;
   setSubjectId: React.Dispatch<React.SetStateAction<string>>;
+  setSort: React.Dispatch<React.SetStateAction<string>>;
 }
 export default function GroupFilter({
   semesterId,
   subjectId,
   status,
+  sort,
   setSemesterId,
   setSubjectId,
   setStatus,
+  setSort,
 }: GroupFilterProps) {
   /** GLOBAL STATE MANAGEMENT */
   const semesters = useSemesterStore((state) => state.semesters);
@@ -75,6 +76,10 @@ export default function GroupFilter({
     { value: "Archived", label: "Archived" },
     { value: "Deleted", label: "Deleted" },
   ];
+  const sortOptions: DropdownOption[] = [
+    { value: "DateDesc", label: "Latest" },
+    { value: "DateAsc", label: "Oldest" },
+  ];
 
   return (
     <div>
@@ -100,6 +105,13 @@ export default function GroupFilter({
           onChange={(value) => setStatus(value)}
           options={statusOptions}
           placeholder="All Status"
+        />
+        {/* Sort */}
+        <DropdownSelect
+          value={sort || "DateDesc"}
+          onChange={(value) => setSort(value)}
+          options={sortOptions}
+          placeholder="Sort"
         />
       </div>
     </div>

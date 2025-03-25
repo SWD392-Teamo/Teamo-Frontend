@@ -31,6 +31,7 @@ export default function GroupsListing({ isForUser, viewMode }: Props) {
   const [semesterId, setSemesterId] = useState<string>("");
   const [subjectId, setSubjectId] = useState<string>("");
   const [status, setStatus] = useState<string>("");
+  const [sort, setSort] = useState<string>("");
 
   const { showLoading, hideLoading } = useLoading();
 
@@ -59,6 +60,7 @@ export default function GroupsListing({ isForUser, viewMode }: Props) {
       semesterId,
       subjectId,
       status,
+      sort,
       ...(search.trim() ? { search } : {}),
     },
   });
@@ -73,8 +75,22 @@ export default function GroupsListing({ isForUser, viewMode }: Props) {
         const groups = isForUser
           ? await getUserGroups(url)
           : await getGroupData(url);
-        console.log(groups.data);
-        setData(groups);
+
+        // Format Created Date
+        const formattedGroups = {
+          ...groups,
+          data: groups.data.map((group) => ({
+            ...group,
+            createdAt: new Date(group.createdAt).toLocaleDateString("vi-VN", {
+              day: "2-digit",
+              month: "2-digit",
+              year: "numeric",
+            }),
+          })),
+        };
+
+        console.log(formattedGroups.data);
+        setData(formattedGroups);
       } catch (error) {
         toast.error("Failed to load groups");
       } finally {
@@ -90,15 +106,11 @@ export default function GroupsListing({ isForUser, viewMode }: Props) {
   const columns = [
     { header: "ID", key: "id" },
     { header: "Name", key: "name" },
+    { header: "Created By", key: "createdByUserName" },
     { header: "Created At", key: "createdAt" },
     { header: "Subject Code", key: "subjectCode" },
     { header: "Semester Name", key: "semesterName" },
     { header: "Status", key: "status" },
-  ];
-
-  const options = [
-    { value: "SP25", label: "Spring2025" },
-    { value: "SP24", label: "Spring2024" },
   ];
 
   /** HANDLE ACTIONS */
@@ -123,6 +135,7 @@ export default function GroupsListing({ isForUser, viewMode }: Props) {
     setSubjectId("");
     setSearch("");
     setStatus("");
+    setSort("");
   };
 
   return (
@@ -179,9 +192,11 @@ export default function GroupsListing({ isForUser, viewMode }: Props) {
                 semesterId={semesterId}
                 subjectId={subjectId}
                 status={status}
+                sort={sort}
                 setSemesterId={setSemesterId}
                 setSubjectId={setSubjectId}
                 setStatus={setStatus}
+                setSort={setSort}
               />
             </div>
             {/* Table */}
