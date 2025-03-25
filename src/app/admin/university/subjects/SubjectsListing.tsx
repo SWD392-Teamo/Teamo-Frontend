@@ -1,21 +1,26 @@
-'use client'
+"use client";
 
-import AppModal from '@/components/AppModal';
-import AppPagination from '@/components/AppPagination';
-import EmptyFilter from '@/components/EmptyFilter';
-import GenericTable from '@/components/GenericTable';
-import { useSubjectStore } from '@/hooks/useSubjectStore';
-import { useLoading } from '@/providers/LoadingProvider';
-import { Major, Subject } from '@/types';
-import { Button } from 'flowbite-react';
-import queryString from 'query-string';
-import { useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
-import { AiOutlineEdit } from 'react-icons/ai';
-import { useShallow } from 'zustand/shallow';
-import Filter from '../Filter';
-import SubjectForm from './SubjectForm';
-import { deleteSubject, getData, getSubjectById } from '@/actions/subjectAction';
+import AppModal from "@/components/AppModal";
+import AppPagination from "@/components/AppPagination";
+import EmptyFilter from "@/components/EmptyFilter";
+import GenericTable from "@/components/GenericTable";
+import { useSubjectStore } from "@/hooks/useSubjectStore";
+import { useLoading } from "@/providers/LoadingProvider";
+import { Major, Subject } from "@/types";
+import { Button } from "flowbite-react";
+import queryString from "query-string";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { AiOutlineEdit } from "react-icons/ai";
+import { useShallow } from "zustand/shallow";
+import Filter from "../Filter";
+import SubjectForm from "./SubjectForm";
+import {
+  deleteSubject,
+  getData,
+  getSubjectById,
+} from "@/actions/subjectAction";
+import ConfirmationPopup from "@/components/users/ConfirmationPopup";
 
 export default function MajorsListing() {
   //=====================================
@@ -23,7 +28,9 @@ export default function MajorsListing() {
   //=====================================
 
   const [showModal, setShowModal] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
   const { showLoading, hideLoading } = useLoading();
+  const [selectedSubjectId, setSelectedSubjectId] = useState<number>(0);
   const [selectedSubject, setSelectedSubject] = useState<Subject>();
   const [search, setSearch] = useState<string>("");
   const [pageIndex, setPageIndex] = useState<number>(1);
@@ -50,7 +57,7 @@ export default function MajorsListing() {
       pageIndex,
       status,
       ...(search.trim() ? { search } : {}),
-    }
+    },
   });
 
   //=====================================
@@ -118,7 +125,6 @@ export default function MajorsListing() {
   // DELETE ACTION
   const handleDelete = async (id: number) => {
     try {
-      showLoading();
       // Delete subject
       await deleteSubject(Number(id));
       getSubjects();
@@ -126,15 +132,19 @@ export default function MajorsListing() {
     } catch (error) {
       toast.error("Failed to delete subject");
     } finally {
-      hideLoading();
+      setShowConfirmModal(false);
     }
   };
-
+  // Handle popup
+  const handlePopup = (id: number) => {
+    setSelectedSubjectId(id);
+    setShowConfirmModal(true);
+  };
   // ACTION BUTTONS
   const actions = [
     {
       label: "Delete",
-      onClick: handleDelete,
+      onClick: handlePopup,
       className: "btn btn--primary--outline",
     },
   ];
@@ -142,23 +152,24 @@ export default function MajorsListing() {
   return (
     <div className="mb-10 mt-5">
       {/* Create Subject Button */}
-      <Button 
-          className='btn btn--secondary btn--icon'
-          
-          onClick={() => {
-            setSelectedSubject(undefined);
-            setShowModal(true);
-          }}
-          type='button'>
-          <AiOutlineEdit size={20} className='me-2'/> Create Subject
+      <Button
+        className="btn btn--secondary btn--icon"
+        onClick={() => {
+          setSelectedSubject(undefined);
+          setShowModal(true);
+        }}
+        type="button"
+      >
+        <AiOutlineEdit size={20} className="me-2" /> Create Subject
       </Button>
 
       {/* Subject Filters */}
-      <Filter 
+      <Filter
         status={status}
         setSearch={setSearch}
         setStatus={setStatus}
-        setPageIndex={setPageIndex} />
+        setPageIndex={setPageIndex}
+      />
 
       {data.totalCount > 0 ? (
         <>
@@ -189,10 +200,11 @@ export default function MajorsListing() {
             title={selectedSubject == null ? "Create Subject" : "Edit Subject"}
             size="3xl"
           >
-            <SubjectForm 
-              subject={selectedSubject} 
+            <SubjectForm
+              subject={selectedSubject}
               onCancel={() => setShowModal(false)}
-              onSuccess={getSubjects} />
+              onSuccess={getSubjects}
+            />
           </AppModal>
         </>
       ) : (
@@ -205,6 +217,17 @@ export default function MajorsListing() {
           />
         </>
       )}
+      {/* Popup Modal */}
+      <AppModal
+        show={showConfirmModal}
+        onClose={() => setShowConfirmModal(false)}
+        title="Confirmation"
+      >
+        <ConfirmationPopup
+          message="Are you sure you want to delete this subject?"
+          onConfirm={() => handleDelete(selectedSubjectId)}
+        />
+      </AppModal>
     </div>
   );
 }

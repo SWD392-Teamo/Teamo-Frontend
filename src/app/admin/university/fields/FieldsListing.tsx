@@ -1,21 +1,22 @@
-'use client'
+"use client";
 
-import { deleteField, getData, getFieldById } from '@/actions/fieldActions';
-import AppModal from '@/components/AppModal';
-import AppPagination from '@/components/AppPagination';
-import EmptyFilter from '@/components/EmptyFilter';
-import GenericTable from '@/components/GenericTable';
-import { useFieldStore } from '@/hooks/useFieldStore';
-import { useLoading } from '@/providers/LoadingProvider';
-import { Field } from '@/types';
-import { Button } from 'flowbite-react';
-import queryString from 'query-string';
-import { useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
-import { AiOutlineEdit } from 'react-icons/ai';
-import { useShallow } from 'zustand/shallow';
-import Filter from '../Filter';
-import FieldForm from './FieldForm';
+import { deleteField, getData, getFieldById } from "@/actions/fieldActions";
+import AppModal from "@/components/AppModal";
+import AppPagination from "@/components/AppPagination";
+import EmptyFilter from "@/components/EmptyFilter";
+import GenericTable from "@/components/GenericTable";
+import { useFieldStore } from "@/hooks/useFieldStore";
+import { useLoading } from "@/providers/LoadingProvider";
+import { Field } from "@/types";
+import { Button } from "flowbite-react";
+import queryString from "query-string";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { AiOutlineEdit } from "react-icons/ai";
+import { useShallow } from "zustand/shallow";
+import Filter from "../Filter";
+import FieldForm from "./FieldForm";
+import ConfirmationPopup from "@/components/users/ConfirmationPopup";
 
 export default function FieldsListing() {
   //=====================================
@@ -23,8 +24,10 @@ export default function FieldsListing() {
   //=====================================
 
   const [showModal, setShowModal] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
   const { showLoading, hideLoading } = useLoading();
   const [selectedField, setSelectedField] = useState<Field>();
+  const [selectedFieldId, setSelectedFieldId] = useState<number>(0);
   const [search, setSearch] = useState<string>("");
   const [pageIndex, setPageIndex] = useState<number>(1);
 
@@ -48,7 +51,7 @@ export default function FieldsListing() {
     query: {
       pageIndex,
       ...(search.trim() ? { search } : {}),
-    }
+    },
   });
 
   //=====================================
@@ -105,13 +108,12 @@ export default function FieldsListing() {
   const columns: { header: string; key: keyof Field }[] = [
     { header: "Name", key: "name" },
     { header: "Description", key: "description" },
-    { header: "Action", key: "id" }
+    { header: "Action", key: "id" },
   ];
 
   // DELETE ACTION
   const handleDelete = async (id: number) => {
     try {
-      showLoading();
       // Delete field
       await deleteField(Number(id));
       getFields();
@@ -119,15 +121,19 @@ export default function FieldsListing() {
     } catch (error) {
       toast.error("Failed to delete field");
     } finally {
-      hideLoading();
+      setShowConfirmModal(false);
     }
   };
-
+  // Handle popup
+  const handlePopup = (id: number) => {
+    setSelectedFieldId(id);
+    setShowConfirmModal(true);
+  };
   // ACTION BUTTONS
   const actions = [
     {
       label: "Delete",
-      onClick: handleDelete,
+      onClick: handlePopup,
       className: "btn btn--primary--outline",
     },
   ];
@@ -135,21 +141,19 @@ export default function FieldsListing() {
   return (
     <div className="mb-10 mt-5">
       {/* Create Field Button */}
-      <Button 
-          className='btn btn--secondary btn--icon'
-          
-          onClick={() => {
-            setSelectedField(undefined);
-            setShowModal(true);
-          }}
-          type='button'>
-          <AiOutlineEdit size={20} className='me-2'/> Create Field
+      <Button
+        className="btn btn--secondary btn--icon"
+        onClick={() => {
+          setSelectedField(undefined);
+          setShowModal(true);
+        }}
+        type="button"
+      >
+        <AiOutlineEdit size={20} className="me-2" /> Create Field
       </Button>
 
       {/* Field Filters */}
-      <Filter 
-        setSearch={setSearch}
-        setPageIndex={setPageIndex} />
+      <Filter setSearch={setSearch} setPageIndex={setPageIndex} />
 
       {data.totalCount > 0 ? (
         <>
@@ -180,10 +184,11 @@ export default function FieldsListing() {
             title={selectedField == null ? "Create Field" : "Edit Field"}
             size="3xl"
           >
-            <FieldForm 
-              field={selectedField} 
+            <FieldForm
+              field={selectedField}
               onCancel={() => setShowModal(false)}
-              onSuccess={getFields} />
+              onSuccess={getFields}
+            />
           </AppModal>
         </>
       ) : (
@@ -196,6 +201,17 @@ export default function FieldsListing() {
           />
         </>
       )}
+      {/* Popup Modal */}
+      <AppModal
+        show={showConfirmModal}
+        onClose={() => setShowConfirmModal(false)}
+        title="Confirmation"
+      >
+        <ConfirmationPopup
+          message="Are you sure you want to delete this field?"
+          onConfirm={() => handleDelete(selectedFieldId)}
+        />
+      </AppModal>
     </div>
   );
 }

@@ -129,7 +129,7 @@ export default function UsersListings() {
   // Buttons
   const actions = [
     {
-      label: <HiBan />,
+      label: "BAN",
       onClick: handlePopup,
       className: "btn btn--danger--outline",
     },

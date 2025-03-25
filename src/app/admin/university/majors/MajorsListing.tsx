@@ -1,22 +1,23 @@
-'use client'
+"use client";
 
-import { deleteMajor, getData, getMajorById } from '@/actions/majorActions';
-import AppModal from '@/components/AppModal';
-import AppPagination from '@/components/AppPagination';
-import EmptyFilter from '@/components/EmptyFilter';
-import GenericTable from '@/components/GenericTable';
-import { useMajorStore } from '@/hooks/useMajorStore';
-import { useParamsStore } from '@/hooks/useParamsStore';
-import { useLoading } from '@/providers/LoadingProvider';
-import { Major } from '@/types';
-import { Button } from 'flowbite-react';
-import queryString from 'query-string';
-import { useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
-import { AiOutlineEdit } from 'react-icons/ai';
-import { useShallow } from 'zustand/shallow';
-import Filter from '../Filter';
-import MajorForm from './MajorForm';
+import { deleteMajor, getData, getMajorById } from "@/actions/majorActions";
+import AppModal from "@/components/AppModal";
+import AppPagination from "@/components/AppPagination";
+import EmptyFilter from "@/components/EmptyFilter";
+import GenericTable from "@/components/GenericTable";
+import { useMajorStore } from "@/hooks/useMajorStore";
+import { useParamsStore } from "@/hooks/useParamsStore";
+import { useLoading } from "@/providers/LoadingProvider";
+import { Major } from "@/types";
+import { Button } from "flowbite-react";
+import queryString from "query-string";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { AiOutlineEdit } from "react-icons/ai";
+import { useShallow } from "zustand/shallow";
+import Filter from "../Filter";
+import MajorForm from "./MajorForm";
+import ConfirmationPopup from "@/components/users/ConfirmationPopup";
 
 export default function MajorsListing() {
   //=====================================
@@ -24,8 +25,10 @@ export default function MajorsListing() {
   //=====================================
 
   const [showModal, setShowModal] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
   const { showLoading, hideLoading } = useLoading();
   const [selectedMajor, setSelectedMajor] = useState<Major>();
+  const [selectedMajorId, setSelectedMajorId] = useState<number>(0);
   const [search, setSearch] = useState<string>("");
   const [pageIndex, setPageIndex] = useState<number>(1);
   const [status, setStatus] = useState<string>("");
@@ -51,7 +54,7 @@ export default function MajorsListing() {
       pageIndex,
       status,
       ...(search.trim() ? { search } : {}),
-    }
+    },
   });
 
   //=====================================
@@ -119,7 +122,6 @@ export default function MajorsListing() {
   // DELETE ACTION
   const handleDelete = async (id: number) => {
     try {
-      showLoading();
       // delete major
       await deleteMajor(Number(id));
       getMajors();
@@ -127,15 +129,19 @@ export default function MajorsListing() {
     } catch (error) {
       toast.error("Failed to delete major");
     } finally {
-      hideLoading();
+      setShowConfirmModal(false);
     }
   };
-
+  // Handle popup
+  const handlePopup = (id: number) => {
+    setSelectedMajorId(id);
+    setShowConfirmModal(true);
+  };
   // ACTION BUTTONS
   const actions = [
     {
       label: "Delete",
-      onClick: handleDelete,
+      onClick: handlePopup,
       className: "btn btn--primary--outline",
     },
   ];
@@ -143,23 +149,24 @@ export default function MajorsListing() {
   return (
     <div className="mb-10 mt-5">
       {/* Create Major Button */}
-      <Button 
-          className='btn btn--secondary btn--icon'
-          
-          onClick={() => {
-            setSelectedMajor(undefined);
-            setShowModal(true);
-          }}
-          type='button'>
-          <AiOutlineEdit size={20} className='me-2'/> Create Major
+      <Button
+        className="btn btn--secondary btn--icon"
+        onClick={() => {
+          setSelectedMajor(undefined);
+          setShowModal(true);
+        }}
+        type="button"
+      >
+        <AiOutlineEdit size={20} className="me-2" /> Create Major
       </Button>
 
       {/* Major Filters */}
-      <Filter 
+      <Filter
         status={status}
         setSearch={setSearch}
         setStatus={setStatus}
-        setPageIndex={setPageIndex} />
+        setPageIndex={setPageIndex}
+      />
 
       {data.totalCount > 0 ? (
         <>
@@ -190,10 +197,11 @@ export default function MajorsListing() {
             title={selectedMajor == null ? "Create Major" : "Edit Major"}
             size="3xl"
           >
-            <MajorForm 
-              major={selectedMajor} 
+            <MajorForm
+              major={selectedMajor}
               onCancel={() => setShowModal(false)}
-              onSuccess={getMajors} />
+              onSuccess={getMajors}
+            />
           </AppModal>
         </>
       ) : (
@@ -206,6 +214,18 @@ export default function MajorsListing() {
           />
         </>
       )}
+
+      {/* Popup Modal */}
+      <AppModal
+        show={showConfirmModal}
+        onClose={() => setShowConfirmModal(false)}
+        title="Confirmation"
+      >
+        <ConfirmationPopup
+          message="Are you sure you want to delete this major?"
+          onConfirm={() => handleDelete(selectedMajorId)}
+        />
+      </AppModal>
     </div>
   );
 }
