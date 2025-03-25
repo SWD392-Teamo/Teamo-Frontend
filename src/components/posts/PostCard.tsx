@@ -67,7 +67,6 @@ const PostCard: React.FC<Post> = ({
   documentUrl,
   status,
 }) => {
-  // Extract initials for avatar fallback
   const getInitials = (name: string) => {
     return name
       .split(" ")

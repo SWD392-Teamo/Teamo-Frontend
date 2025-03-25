@@ -10,3 +10,6 @@ export async function getPostByGroup(groupId: number, query: string): Promise<Pa
    return await fetchWrapper.get(`groups/${groupId}/posts${query}`);
 }
 
+export async function createPost(groupId: number, formData: FormData): Promise<Post> {
+   return await fetchWrapper.post(`groups/${groupId}/posts`, formData)
+}

@@ -43,6 +43,7 @@
     "react-pdf": "^9.2.1",
     "recharts": "^2.15.1",
     "sass": "^1.83.4",
+    "shadcn": "^2.4.0-canary.17",
     "tailwind-merge": "^3.0.2",
     "tailwindcss-animate": "^1.0.7",
     "teamo-frontend": "file:",
