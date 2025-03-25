@@ -139,5 +139,4 @@ export type Post = {
     documentUrl: string,
     createdAt: string,
     updatedAt: string,
-    totalLike: number,
 }
