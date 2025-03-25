@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { deleteMajor, getData, getMajorById } from '@/actions/majorActions';
 import AppModal from '@/components/AppModal';
@@ -17,6 +17,7 @@ import { AiOutlineEdit } from 'react-icons/ai';
 import { useShallow } from 'zustand/shallow';
 import Filter from '../Filter';
 import MajorForm from './MajorForm';
+import ConfirmationPopup from '@/components/users/ConfirmationPopup';
 
 export default function MajorsListing() {
   //=====================================
@@ -24,11 +25,13 @@ export default function MajorsListing() {
   //=====================================
 
   const [showModal, setShowModal] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
   const { showLoading, hideLoading } = useLoading();
   const [selectedMajor, setSelectedMajor] = useState<Major>();
-  const [search, setSearch] = useState<string>("");
+  const [selectedMajorId, setSelectedMajorId] = useState<number>(0);
+  const [search, setSearch] = useState<string>('');
   const [pageIndex, setPageIndex] = useState<number>(1);
-  const [status, setStatus] = useState<string>("");
+  const [status, setStatus] = useState<string>('');
 
   //=====================================
   //      GLOBAL STATE MANAGEMENT
@@ -46,12 +49,12 @@ export default function MajorsListing() {
   const setData = useMajorStore((state) => state.setData);
 
   const url = queryString.stringifyUrl({
-    url: "",
+    url: '',
     query: {
       pageIndex,
       status,
       ...(search.trim() ? { search } : {}),
-    }
+    },
   });
 
   //=====================================
@@ -65,7 +68,7 @@ export default function MajorsListing() {
         setData(data);
       })
       .catch((error) => {
-        toast.error(error.status + " " + error.message);
+        toast.error(error.status + ' ' + error.message);
       })
       .finally(() => {
         hideLoading();
@@ -93,7 +96,7 @@ export default function MajorsListing() {
         setSelectedMajor(data);
       })
       .catch((error) => {
-        toast.error(error.status + " " + error.message);
+        toast.error(error.status + ' ' + error.message);
       })
       .finally(() => {
         hideLoading();
@@ -106,60 +109,64 @@ export default function MajorsListing() {
 
   // COLUMNS
   const columns: { header: string; key: keyof Major }[] = [
-    { header: "Code", key: "code" },
-    { header: "Name", key: "name" },
-    { header: "Date", key: "createdDate" },
-    { header: "Status", key: "status" },
+    { header: 'Code', key: 'code' },
+    { header: 'Name', key: 'name' },
+    { header: 'Date', key: 'createdDate' },
+    { header: 'Status', key: 'status' },
   ];
 
-  if (!(status === "inactive")) {
-    columns.push({ header: "Action", key: "id" });
+  if (!(status === 'inactive')) {
+    columns.push({ header: 'Action', key: 'id' });
   }
 
   // DELETE ACTION
   const handleDelete = async (id: number) => {
     try {
-      showLoading();
       // delete major
       await deleteMajor(Number(id));
       getMajors();
-      toast.success("Major deleted successfully");
+      toast.success('Major deleted successfully');
     } catch (error) {
-      toast.error("Failed to delete major");
+      toast.error('Failed to delete major');
     } finally {
-      hideLoading();
+      setShowConfirmModal(false);
     }
   };
-
+  // Handle popup
+  const handlePopup = (id: number) => {
+    setSelectedMajorId(id);
+    setShowConfirmModal(true);
+  };
   // ACTION BUTTONS
   const actions = [
     {
-      label: "Delete",
-      onClick: handleDelete,
-      className: "btn btn--primary--outline",
+      label: 'Delete',
+      onClick: handlePopup,
+      className: 'btn btn--primary--outline',
     },
   ];
 
   return (
-    <div className="mb-10 mt-5">
+    <div className='mb-10 mt-5'>
       {/* Create Major Button */}
-      <Button 
-          className='btn btn--secondary btn--icon'
-          
-          onClick={() => {
-            setSelectedMajor(undefined);
-            setShowModal(true);
-          }}
-          type='button'>
-          <AiOutlineEdit size={20} className='me-2'/> Create Major
+      <Button
+        className='btn btn--secondary btn--icon'
+        onClick={() => {
+          setSelectedMajor(undefined);
+          setShowModal(true);
+        }}
+        type='button'
+      >
+        <AiOutlineEdit size={20} className='me-2' /> Create Major
       </Button>
 
       {/* Major Filters */}
-      <Filter 
+      <Filter
         status={status}
         setSearch={setSearch}
         setStatus={setStatus}
-        setPageIndex={setPageIndex} />
+        setPageIndex={setPageIndex}
+      />
 
       {data.totalCount > 0 ? (
         <>
@@ -174,7 +181,7 @@ export default function MajorsListing() {
           )}
 
           {/* Major Pagination */}
-          <div className="flex justify-end mt-5">
+          <div className='flex justify-end mt-5'>
             <AppPagination
               pageChanged={setPageIndex}
               currentPage={pageIndex}
@@ -187,25 +194,38 @@ export default function MajorsListing() {
           <AppModal
             show={showModal}
             onClose={() => setShowModal(false)}
-            title={selectedMajor == null ? "Create Major" : "Edit Major"}
-            size="3xl"
+            title={selectedMajor == null ? 'Create Major' : 'Edit Major'}
+            size='3xl'
           >
-            <MajorForm 
-              major={selectedMajor} 
+            <MajorForm
+              major={selectedMajor}
               onCancel={() => setShowModal(false)}
-              onSuccess={getMajors} />
+              onSuccess={getMajors}
+            />
           </AppModal>
         </>
       ) : (
         <>
           {/*Empty Filter */}
           <EmptyFilter
-            title="No major found"
-            subtitle="Try changing the filters or reset it completely"
+            title='No major found'
+            subtitle='Try changing the filters or reset it completely'
             showReset={true}
           />
         </>
       )}
+
+      {/* Popup Modal */}
+      <AppModal
+        show={showConfirmModal}
+        onClose={() => setShowConfirmModal(false)}
+        title='Confirmation'
+      >
+        <ConfirmationPopup
+          message='Are you sure you want to delete this major?'
+          onConfirm={() => handleDelete(selectedMajorId)}
+        />
+      </AppModal>
     </div>
   );
 }
