@@ -12,6 +12,7 @@ import defaultAvatar from "@/assets/defaultAvatar.jpg";
 import SkillBar from "../SkillBar";
 import AppModal from "../AppModal";
 import ConfirmationPopup from "./ConfirmationPopup";
+import { Button } from "flowbite-react";
 
 export default function UserDetails() {
   /** LOCAL STATE MANAGEMENT */
@@ -125,7 +126,7 @@ export default function UserDetails() {
               </p>
 
               {/* Button */}
-              <button
+              <Button
                 onClick={() => setShowModal(true)}
                 className={`btn ${
                   selectedUser.status === "Banned"
@@ -134,7 +135,7 @@ export default function UserDetails() {
                 }`}
               >
                 {selectedUser.status === "Banned" ? "Unban User" : "Ban User"}
-              </button>
+              </Button>
             </div>
           )}
         </div>

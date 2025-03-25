@@ -1,4 +1,5 @@
 import { banUser } from "@/actions/userActions";
+import { Button } from "flowbite-react";
 import React from "react";
 import toast from "react-hot-toast";
 
@@ -14,9 +15,9 @@ export default function ConfirmationPopup({ message, onConfirm }: Props) {
         {message}
       </span>
       <div className="flex justify-end space-x-3 w-full pt-2">
-        <button onClick={onConfirm} className="btn btn--danger">
+        <Button onClick={onConfirm} className="btn btn--danger">
           OK
-        </button>
+        </Button>
       </div>
     </div>
   );
