@@ -67,6 +67,7 @@ export default function GroupsListing({ isForUser, viewMode }: Props) {
       ...(search.trim() ? { search } : {}),
     },
   });
+  console.log(url);
   /** FETCH DATA */
 
   //FETCH GROUP
@@ -74,7 +75,6 @@ export default function GroupsListing({ isForUser, viewMode }: Props) {
     const fetchGroups = async () => {
       showLoading();
       try {
-        console.log(isForUser);
         const groups = isForUser
           ? await getUserGroups(url)
           : await getGroupData(url);
@@ -92,7 +92,6 @@ export default function GroupsListing({ isForUser, viewMode }: Props) {
           })),
         };
 
-        console.log(formattedGroups.data);
         setData(formattedGroups);
       } catch (error) {
         toast.error("Failed to load groups");
