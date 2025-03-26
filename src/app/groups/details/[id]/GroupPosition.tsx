@@ -23,7 +23,8 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 const GroupPositionCard: React.FC<{
   positions: GroupPosition[];
   members: GroupMember[];
-}> = ({ positions, members }) => {
+  isMemberOrLeader: boolean;
+}> = ({ positions, members, isMemberOrLeader }) => {
   const [showModal, setShowModal] = useState(false);
   const [selectedPositionId, setSelectedPositionId] = useState(0);
   
@@ -97,6 +98,8 @@ const GroupPositionCard: React.FC<{
                   ))}
                 </div>
                 
+                {!isMemberOrLeader &&           
+
                 <Button 
                   variant="default"
                   className="bg-gradient-to-r from-[#46afe9] to-blue-400 hover:from-blue-400 hover:to-sky-400"
@@ -108,6 +111,8 @@ const GroupPositionCard: React.FC<{
                   <HiOutlineLightningBolt className="h-4 w-4 mr-2" />
                   <span className="font-semibold">Easy Apply</span>
                 </Button>
+            }
+
               </div>
             </CardContent>
           </Card>

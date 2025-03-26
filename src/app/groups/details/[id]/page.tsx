@@ -16,7 +16,7 @@ import GroupPositionCard from "./GroupPosition";
 import { getUserId } from "@/actions/userActions";
 import Link from "next/link";
 import { getGroupById } from "@/actions/groupActions";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -32,8 +32,9 @@ import { Separator } from "@/components/ui/separator";
 
 const GroupDetail: React.FC = () => {
   const [userId, setUserId] = useState<number | null>(null);
-  const params = useParams();
-  const { id } = params;
+  const param = useParams();
+  const router = useRouter();
+  const {id} = param;
 
   const { selectedgroup } = useGroupStore(
     useShallow((state) => ({
@@ -65,7 +66,11 @@ const GroupDetail: React.FC = () => {
   const groupPositions = selectedgroup?.groupPositions;
   const isLeader = groupMembers?.some(
     (member) => member.studentId === userId && member.role === "Leader"
-  );
+  ) ?? false;
+
+  const isMember = groupMembers?.some(
+    (member) => member.studentId === userId && member.role === "Member"
+  ) ?? false;
 
   return (
     <Card className="shadow-sm hover:shadow-md transition-all duration-300 mb-8">
@@ -137,18 +142,22 @@ const GroupDetail: React.FC = () => {
 
         <Separator />
 
-        <div>
-          <h3 className="text-lg font-medium text-muted-foreground mb-4">
-            Positions
-          </h3>
-          {groupPositions && groupMembers && (
-            <GroupPositionCard
-              positions={groupPositions}
-              members={groupMembers}
-            />
-          )}
+      {/*position */}
+      <div className="container">
+        <div className="text-left w-full font-semibold text-xl text-[#8C8F8E] my-5">
+          Position
         </div>
-        <Separator />
+        {groupPositions && groupMembers && (
+          <GroupPositionCard
+            positions={groupPositions}
+            members={groupMembers}
+            isMemberOrLeader={isLeader || isMember}
+
+          />
+        )}
+      </div>
+
+      <Separator />
 
         <div>
           <h3 className="text-lg font-medium text-muted-foreground mb-4">
@@ -156,10 +165,12 @@ const GroupDetail: React.FC = () => {
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {selectedgroup?.groupMembers.map((member, index) => (
+              
               <Card key={index} className="bg-gray-50">
                 <CardContent className="p-4">
                   <div className="flex items-center gap-4">
-                    <Avatar>
+
+                    <Avatar onClick={() => router.push(`/profile/details/${member.studentId}`)}>
                       <AvatarImage
                         src={member?.imgUrl}
                         alt={member?.studentName || "User"}
@@ -193,7 +204,7 @@ const GroupDetail: React.FC = () => {
       <CardFooter className="pt-2 pb-6">
         {isLeader && (
           <Link
-            to={`/groups/${selectedgroup?.id}/applications`}
+            href={`/groups/${selectedgroup?.id}/applications`}
             className="w-full"
           >
             <Button
