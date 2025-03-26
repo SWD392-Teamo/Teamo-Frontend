@@ -58,6 +58,6 @@ export async function removeGroupPosition(groupId: number, positionId: number): 
     return await fetchWrapper.del(`groups/${groupId}/positions/${positionId}`)
 }
 
-export async function updateMember(groupId: number, userId: number, updateMember: editMember): Promise<any> {
-    return await fetchWrapper.patch(`groups/${groupId}/members/${userId}`, updateMember)
+export async function updateMember(groupId: number, studentId: number, updateMember: editMember): Promise<any> {
+    return await fetchWrapper.patch(`groups/${groupId}/members/${studentId}`, updateMember)
 }

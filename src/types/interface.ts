@@ -44,5 +44,5 @@ export interface editGroupPositions {
 
 export interface editMember {
    role: string, //Leader, Member
-   skillIds: number[],
+   groupPositionIds: number[],
 }
