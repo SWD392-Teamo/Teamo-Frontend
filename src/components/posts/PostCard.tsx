@@ -15,6 +15,7 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 import { VisuallyHidden } from "radix-ui";
+import { useRouter } from "next/navigation";
 
 // Helper function to determine file type
 const getFileTypeFromFirebaseUrl = (
@@ -61,12 +62,15 @@ const getFileTypeFromFirebaseUrl = (
 const PostCard: React.FC<Post> = ({
   groupMemberName,
   groupMemberImgUrl,
+  studentId,
   createdAt,
   groupName,
   content,
   documentUrl,
   status,
 }) => {
+  const router = useRouter();
+
   const getInitials = (name: string) => {
     return name
       .split(" ")
@@ -96,7 +100,9 @@ const PostCard: React.FC<Post> = ({
   return (
     <div>
       <Card className="w-full mx-16 my-8">
-        <CardHeader className="flex flex-row items-center space-x-4 border-b">
+        <CardHeader 
+          className="flex flex-row items-center space-x-4 border-b cursor-pointer"
+          onClick={() => router.push(`/profile/details/${studentId}`)}>
           <Avatar>
             <AvatarImage src={groupMemberImgUrl} alt={groupMemberName} />
             <AvatarFallback>{getInitials(groupMemberName)}</AvatarFallback>

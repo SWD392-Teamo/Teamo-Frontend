@@ -43,6 +43,7 @@ export type Application = {
     groupName: string
     studentName: string
     studentEmail: string
+    studentId: number
     imgUrl: string
     requestTime: string
     requestContent: string

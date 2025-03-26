@@ -13,7 +13,7 @@ import { useShallow } from "zustand/shallow";
 import { getUserId } from "@/actions/userActions";
 import Link from "next/link";
 import { banGroup, getGroupById, unBanGroup } from "@/actions/groupActions";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import GroupPositionCard from "@/app/groups/details/[id]/GroupPosition";
 import { Button } from "flowbite-react";
 import AppModal from "../AppModal";
@@ -24,6 +24,7 @@ export default function GroupDetail() {
   const [userId, setUserId] = useState<number | null>(null);
   const param = useParams();
   const [showModel, setShowModal] = useState(false);
+  const router = useRouter();
 
   const { id } = param;
 
@@ -55,7 +56,11 @@ export default function GroupDetail() {
   const groupPositions = selectedgroup?.groupPositions;
   const isLeader = groupMembers?.some(
     (member) => member.studentId === userId && member.role === "Leader"
-  );
+  ) ?? false;
+
+  const isMember = groupMembers?.some(
+    (member) => member.studentId === userId && member.role === "Member"
+  ) ?? false;
 
   // handle ban group
   const handleBanGroup = async (id: number) => {
@@ -169,6 +174,7 @@ export default function GroupDetail() {
           <GroupPositionCard
             positions={groupPositions}
             members={groupMembers}
+            isMemberOrLeader={isLeader || isMember}
           />
         )}
       </div>
@@ -182,7 +188,8 @@ export default function GroupDetail() {
         <div className="text-left w-full font-normal text-lg">
           <div className="grid grid-cols-2 gap-4 mt-4">
             {selectedgroup?.groupMembers.map((member, index) => (
-              <div key={index} className="bg-gray-100 p-4 rounded-lg shadow-md">
+              <div key={index} className="bg-gray-100 p-4 rounded-lg shadow-md cursor-pointer"
+                   onClick={() => router.push(`/profile/details/${member.studentId}`)}>
                 <div className="flex items-center gap-4">
                   <div key={member.studentId}>
                     {member?.imgUrl ? (

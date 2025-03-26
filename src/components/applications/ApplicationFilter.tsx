@@ -29,7 +29,7 @@ export default function ApplicationFilter({status, sort, setSort, setStatus, set
             }
           }
         >
-          All
+          Requested
         </Button>
         <Button
           className={`btn ${status === 'approved' ? 'btn--primary' : 'btn--primary--outline'}`}
