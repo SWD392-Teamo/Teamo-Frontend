@@ -140,9 +140,10 @@ export default function MajorsListing() {
   // ACTION BUTTONS
   const actions = [
     {
-      label: 'Delete',
+      label: 'Disable',
       onClick: handlePopup,
       className: 'btn btn--primary--outline',
+      constraintStatus: 'Inactive'
     },
   ];
 

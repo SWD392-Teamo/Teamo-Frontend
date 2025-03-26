@@ -22,6 +22,7 @@ export type Major = {
     name: string;
     imgUrl: string;
     createdDate: Date;
+    subjects: Subject[];
     status: string;
 }
 
