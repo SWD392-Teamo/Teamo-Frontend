@@ -119,7 +119,7 @@ async function handleResponse(response: Response) {
             // If there is an error text then display it
             message: typeof(data === 'string') ? data : response.statusText
         }
-        return {error}
+         throw {error}
     }
 }
 
