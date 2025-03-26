@@ -11,111 +11,109 @@ import { useGroupStore } from "@/hooks/useGroupStore";
 import { useShallow } from "zustand/shallow";
 import { HiOutlineLightningBolt } from "react-icons/hi";
 import { useState } from "react";
-import { Button } from "flowbite-react";
 import AppModal from "@/components/AppModal";
 import ApplicationForm from "@/components/applications/ApplicationForm";
+
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+
 
 const GroupPositionCard: React.FC<{
   positions: GroupPosition[];
   members: GroupMember[];
 }> = ({ positions, members }) => {
   const [showModal, setShowModal] = useState(false);
-  const [selectedPositionId, setSelectedPositionId] = useState<number>(0);
+  const [selectedPositionId, setSelectedPositionId] = useState(0);
+  
   const { selectedgroup } = useGroupStore(
     useShallow((state) => ({
       selectedgroup: state.selectedGroup,
     }))
   );
 
-  console.log("selectedgroup", selectedgroup);
-  console.log("positions", positions);
-
   return (
-    <div className="grid grid-cols-2 gap-6 ">
-      {positions?.map((position) => (
-        <div
-          key={position.id}
-          className="p-5 rounded-lg shadow-md border w-full bg-[linear-gradient(to_right,#F2F9FD_10%,#FFFFFF_90%)]"
-        >
-          <div className="flex flex-col gap-3">
-            <h3 className="text-base font-semibold">
-              {position.name}
-              <i className="font-normal"> ({position.count})</i>
-            </h3>
-            {/* position status */}
-            {position && (
-              <div>
-                <PositionStatusBadge status={position?.status} />
-              </div>
-            )}
-          </div>
-
-          <div className="flex justify-between items-center mt-4">
-            <div className="flex flex-row items-center gap-5">
-              {members
-                .filter((member) => member.positions.includes(position.name))
-                .map((member, index) => (
-                  <div key={index} className="flex flex-col items-center gap-5">
-                    {/* Member Avatar */}
-                    <div key={member.studentId} className="">
-                      {member?.imgUrl ? (
-                        <MemberAvatar imgUrl={member?.imgUrl} />
-                      ) : (
-                        <Image
-                          src={defaultAvatar}
-                          alt={member?.studentName || "none"}
-                          className="w-10 h-10 rounded-full object-cover border-2 border-gray-300 shadow-sm aspect-square"
-                        />
-                      )}
-                    </div>
-
-                    <div className="flex items-center gap-1">
-                      <h4 className="font-semibold">{member.studentName}</h4>
-                      {member?.role === "Leader" && (
-                        <IoIosStar className="text-yellow-500" />
-                      )}
-                    </div>
-                  </div>
-                ))}
-              {Array.from({
-                length:
-                  position.count -
-                  members.filter((member) =>
-                    member.positions.includes(position.name)
-                  ).length,
-              }).map((_, index) => (
-                <div
-                  key={`default-${index}`}
-                  className="flex flex-col items-center gap-5"
-                >
-                  <div>
-                    <Image
-                      src={defaultAvatar}
-                      alt="none"
-                      className="w-10 h-10 rounded-full object-cover border-2 border-gray-300 shadow-sm aspect-square"
-                    />
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <h4 className="font-semibold">Teamo</h4>
-                  </div>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {positions?.map((position) => {
+        const positionMembers = members.filter((member) => 
+          member.positions.includes(position.name)
+        );
+        
+        const emptySlots = position.count - positionMembers.length;
+        
+        return (
+          <Card 
+            key={position.id} 
+            className="overflow-hidden bg-gradient-to-r from-blue-50 to-white border border-gray-200"
+          >
+            <CardHeader className="pb-2">
+              <div className="flex justify-between items-start">
+                <div className="space-y-1">
+                  <h3 className="text-base font-semibold">
+                    {position.name}
+                    <span className="font-normal text-gray-500 ml-1">({position.count})</span>
+                  </h3>
+                  {position && <PositionStatusBadge status={position?.status} />}
                 </div>
-              ))}
-            </div>
-            <Button className="btn btn--primary justify-self-end" onClick={() => 
-              {
-                setShowModal(true)
-                setSelectedPositionId(position.id);
-              }}>
-              <div className="btn--icon">
-                <HiOutlineLightningBolt size={20} />
-                <div className="font-bold">Easy Apply</div>
               </div>
-            </Button>
-          </div>
-        </div>
-      ))}
+            </CardHeader>
+            
+            <CardContent>
+              <div className="flex justify-between items-center">
+                <div className="flex flex-wrap gap-4">
+                  {/* Filled positions */}
+                  {positionMembers.map((member, index) => (
+                    <div key={index} className="flex flex-col items-center gap-2">
+                      <Avatar className="h-10 w-10 border-2 border-gray-200">
+                        <AvatarImage src={member?.imgUrl} alt={member?.studentName || "Member"} />
+                        <AvatarFallback className="bg-blue-100 text-blue-600">
+                          {member?.studentName?.substring(0, 2) || "M"}
+                        </AvatarFallback>
+                      </Avatar>
+                      
+                      <div className="flex items-center gap-1">
+                        <span className="text-sm font-medium">{member.studentName}</span>
+                        {member?.role === "Leader" && (
+                          <IoIosStar className="text-yellow-500" />
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                  
+                  {/* Empty slots */}
+                  {Array.from({ length: emptySlots }).map((_, index) => (
+                    <div key={`empty-${index}`} className="flex flex-col items-center gap-2">
+                      <Avatar className="h-10 w-10 border-2 border-gray-200">
+                        <AvatarFallback className="bg-gray-100 text-gray-400">
+                          ?
+                        </AvatarFallback>
+                      </Avatar>
+                      
+                      <div className="flex items-center gap-1">
+                        <span className="text-sm font-medium text-gray-500">Available</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                
+                <Button 
+                  variant="default"
+                  className="bg-gradient-to-r from-[#46afe9] to-blue-400 hover:from-blue-400 hover:to-sky-400"
+                  onClick={() => {
+                    setShowModal(true);
+                    setSelectedPositionId(position.id);
+                  }}
+                >
+                  <HiOutlineLightningBolt className="h-4 w-4 mr-2" />
+                  <span className="font-semibold">Easy Apply</span>
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        );
+      })}
 
-      {/* Application Form Modal */}
       <AppModal
         show={showModal}
         onClose={() => setShowModal(false)}
@@ -124,7 +122,7 @@ const GroupPositionCard: React.FC<{
       >
         <ApplicationForm 
           groupPositionId={selectedPositionId}
-          groupId={selectedgroup?.id != undefined ? selectedgroup?.id : 0}
+          groupId={selectedgroup?.id !== undefined ? selectedgroup?.id : 0}
           onCancel={() => setShowModal(false)}
         />
       </AppModal>
