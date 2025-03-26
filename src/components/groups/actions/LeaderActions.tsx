@@ -48,8 +48,8 @@ interface LeaderActionsProps {
          <DropdownMenuLabel>Position Management</DropdownMenuLabel>
          
          {/* Position Actions */}
-         <UpdatePositionsDialog group={group} />
          <AddPositionDialog groupId={group.id} />
+         <UpdatePositionsDialog group={group} />
          <DeletePositionDialog groupId={group.id} positions={group.groupPositions} />
          
          <DropdownMenuSeparator />

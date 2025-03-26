@@ -12,7 +12,7 @@ export const DeletePositionDialog: React.FC<{ groupId: number; positions: GroupP
    return (
      <Dialog>
        <DialogTrigger asChild>
-         <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+         <DropdownMenuItem onSelect={(e) => e.preventDefault()} className="text-red-600">
            <Trash className="mr-2 h-4 w-4" /> Delete Position
          </DropdownMenuItem>
        </DialogTrigger>

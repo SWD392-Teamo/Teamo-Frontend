@@ -1,27 +1,27 @@
-"use client";
+'use client';
 
 import {
   getApplicationById,
   getGroupApplications,
   getUserApplications,
   reviewApplication,
-} from "@/actions/applicationActions";
-import ApplicationFilter from "@/components/applications/ApplicationFilter";
-import AppPagination from "@/components/AppPagination";
-import BackButton from "@/components/BackButton";
-import GenericTable from "@/components/GenericTable";
-import { useApplicationStore } from "@/hooks/useApplicationStore";
-import { useParamsStore } from "@/hooks/useParamsStore";
-import { useLoading } from "@/providers/LoadingProvider";
-import { Application } from "@/types";
-import { useParams } from "next/navigation";
-import queryString from "query-string";
-import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
-import { useShallow } from "zustand/shallow";
-import AppModal from "../AppModal";
-import ApplicationDetails from "./ApplicationDetails";
-import EmptyFilter from "../EmptyFilter";
+} from '@/actions/applicationActions';
+import ApplicationFilter from '@/components/applications/ApplicationFilter';
+import AppPagination from '@/components/AppPagination';
+import BackButton from '@/components/BackButton';
+import GenericTable from '@/components/GenericTable';
+import { useApplicationStore } from '@/hooks/useApplicationStore';
+import { useParamsStore } from '@/hooks/useParamsStore';
+import { useLoading } from '@/providers/LoadingProvider';
+import { Application } from '@/types';
+import { useParams } from 'next/navigation';
+import queryString from 'query-string';
+import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+import { useShallow } from 'zustand/shallow';
+import AppModal from '../AppModal';
+import ApplicationDetails from './ApplicationDetails';
+import EmptyFilter from '../EmptyFilter';
 
 interface Props {
   isForUser: boolean;
@@ -36,8 +36,8 @@ export default function ApplicationsListing({ isForUser }: Props) {
   const { showLoading, hideLoading } = useLoading();
   const [selectedApplication, setSelectedApplication] = useState<Application>();
   const [pageIndex, setPageIndex] = useState<number>(1);
-  const [status, setStatus] = useState<string>("");
-  const [sort, setSort] = useState<string>("");
+  const [status, setStatus] = useState<string>('');
+  const [sort, setSort] = useState<string>('');
 
   const params = useParams();
   const groupId = Number(params.groupId);
@@ -59,12 +59,12 @@ export default function ApplicationsListing({ isForUser }: Props) {
   const setParams = useParamsStore((state) => state.setParams);
 
   const url = queryString.stringifyUrl({
-    url: "",
+    url: '',
     query: {
       pageIndex,
       status,
       sort,
-    }
+    },
   });
 
   //=====================================
@@ -78,7 +78,7 @@ export default function ApplicationsListing({ isForUser }: Props) {
         setData(data);
       })
       .catch((error) => {
-        toast.error(error.status + " " + error.message);
+        toast.error(error.status + ' ' + error.message);
       })
       .finally(() => {
         hideLoading();
@@ -92,7 +92,7 @@ export default function ApplicationsListing({ isForUser }: Props) {
         setData(data);
       })
       .catch((error) => {
-        toast.error(error.status + " " + error.message);
+        toast.error(error.status + ' ' + error.message);
       })
       .finally(() => {
         hideLoading();
@@ -125,7 +125,7 @@ export default function ApplicationsListing({ isForUser }: Props) {
         setSelectedApplication(data);
       })
       .catch((error) => {
-        toast.error(error.status + " " + error.message);
+        toast.error(error.status + ' ' + error.message);
       })
       .finally(() => {
         hideLoading();
@@ -138,21 +138,15 @@ export default function ApplicationsListing({ isForUser }: Props) {
 
   // COLUMNS
   const columns: { header: string; key: keyof Application }[] = [
-    { header: "", key: "imgUrl" },
-    { header: "Applicant", key: "studentName" },
-    { header: "Position", key: "groupPositionName" },
-    { header: "Date", key: "requestTime" },
-    { header: "Status", key: "status" },
+    { header: '', key: 'imgUrl' },
+    { header: 'Applicant', key: 'studentName' },
+    { header: 'Position', key: 'groupPositionName' },
+    { header: 'Date', key: 'requestTime' },
+    { header: 'Status', key: 'status' },
   ];
 
-  if (
-    !isForUser &&
-    !(
-      status === "rejected" ||
-      status === "approved"
-    )
-  ) {
-    columns.push({ header: "Action", key: "id" });
+  if (!isForUser && !(status === 'rejected' || status === 'approved')) {
+    columns.push({ header: 'Action', key: 'id' });
   }
 
   // APPROVE ACTION
@@ -160,10 +154,10 @@ export default function ApplicationsListing({ isForUser }: Props) {
     try {
       showLoading();
       // Approve application
-      await reviewApplication(groupId, Number(id), { status: "Approved" });
-      toast.success("Application approved successfully");
+      await reviewApplication(groupId, Number(id), { status: 'Approved' });
+      toast.success('Application approved successfully');
     } catch (error) {
-      toast.error("Failed to approve application");
+      toast.error('Failed to approve application');
     } finally {
       hideLoading();
     }
@@ -174,10 +168,10 @@ export default function ApplicationsListing({ isForUser }: Props) {
     try {
       showLoading();
       // Reject application
-      await reviewApplication(groupId, Number(id), { status: "Rejected" });
-      toast.success("Application rejected successfully");
+      await reviewApplication(groupId, Number(id), { status: 'Rejected' });
+      toast.success('Application rejected successfully');
     } catch (error) {
-      toast.error("Failed to reject application");
+      toast.error('Failed to reject application');
     } finally {
       hideLoading();
     }
@@ -186,23 +180,25 @@ export default function ApplicationsListing({ isForUser }: Props) {
   // ACTION BUTTONS
   const actions = [
     {
-      label: "Approve",
+      label: 'Approve',
       onClick: handleApprove,
-      className: "btn btn--primary--outline",
+      className: 'btn btn--primary--outline',
     },
     {
-      label: "Decline",
+      label: 'Decline',
       onClick: handleDecline,
-      className: "btn btn--danger--outline",
+      className: 'btn btn--danger--outline',
     },
   ];
 
   return (
-    <div className=" mb-10">
-      <BackButton url="/" />
-      <h1 className="page-title mb-5">{isForUser ? 'My Applications' : 'Group Applications'}</h1>
+    <div className=' mb-10'>
+      <BackButton />
+      <h1 className='page-title mb-5'>
+        {isForUser ? 'My Applications' : 'Group Applications'}
+      </h1>
       {/* Application Filters */}
-      <ApplicationFilter 
+      <ApplicationFilter
         status={status}
         sort={sort}
         setSort={setSort}
@@ -223,7 +219,7 @@ export default function ApplicationsListing({ isForUser }: Props) {
           )}
 
           {/* Application Pagination */}
-          <div className="flex justify-end mt-5">
+          <div className='flex justify-end mt-5'>
             <AppPagination
               pageChanged={setPageIndex}
               currentPage={pageIndex}
@@ -236,8 +232,8 @@ export default function ApplicationsListing({ isForUser }: Props) {
           <AppModal
             show={showModal}
             onClose={() => setShowModal(false)}
-            title="Application Details"
-            size="3xl"
+            title='Application Details'
+            size='3xl'
           >
             <ApplicationDetails application={selectedApplication!} />
           </AppModal>
@@ -246,8 +242,8 @@ export default function ApplicationsListing({ isForUser }: Props) {
         <>
           {/*Empty Filter */}
           <EmptyFilter
-            title="No applications found"
-            subtitle="Try changing the filters or reset it completely"
+            title='No applications found'
+            subtitle='Try changing the filters or reset it completely'
             showReset={true}
           />
         </>

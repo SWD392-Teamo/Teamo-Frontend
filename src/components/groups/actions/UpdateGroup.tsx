@@ -91,6 +91,9 @@ const UpdateGroupDialog: React.FC<UpdateGroupDialogProps> = ({
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isFormValid, setIsFormValid] = useState<boolean>(false);
 
+  const [searchSubject, setSearchSubject] = useState<string>("");
+  const [searchField, setSearchField] = useState<string>("");
+
   const form = useForm<UpdateGroupFormValues>({
     resolver: zodResolver(updateGroupSchema),
     defaultValues: {
@@ -355,7 +358,6 @@ const UpdateGroupDialog: React.FC<UpdateGroupDialogProps> = ({
                       onValueChange={(value) => {
                         const id = Number(value);
                         field.onChange(id);
-                        // Update display value when selection changes
                         const semester = semesters.find((s) => s.id === id);
                         if (semester) {
                           setSelectedValues((prev) => ({
@@ -373,7 +375,6 @@ const UpdateGroupDialog: React.FC<UpdateGroupDialogProps> = ({
                               !isDataLoaded ? "Loading..." : "Select Semester"
                             }
                           >
-                            {/* This shows the name, but we track the ID in the form */}
                             {selectedValues.semester.name}
                           </SelectValue>
                         </SelectTrigger>
@@ -421,20 +422,32 @@ const UpdateGroupDialog: React.FC<UpdateGroupDialogProps> = ({
                               !isDataLoaded ? "Loading..." : "Select Subject"
                             }
                           >
-                            {/* This shows the code, but we track the ID in the form */}
                             {selectedValues.subject.code}
                           </SelectValue>
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent className="bg-white">
-                        {subjects.map((subject) => (
-                          <SelectItem
-                            key={subject.id}
-                            value={subject.id.toString()}
-                          >
-                            {subject.name} ({subject.code})
-                          </SelectItem>
-                        ))}
+                      <SelectContent className="text-xl bg-white">
+                        <div className="p-2">
+                          <Input
+                            placeholder="Search subject..."
+                            className="w-full border rounded-md p-2"
+                            onChange={(e) => setSearchSubject(e.target.value)}
+                          />
+                        </div>
+                        {subjects
+                          .filter((subject) =>
+                            subject.code
+                              .toLowerCase()
+                              .includes(searchSubject.toLowerCase())
+                          )
+                          .map((subject) => (
+                            <SelectItem
+                              key={subject.id}
+                              value={subject.id.toString()}
+                            >
+                              {subject.code}
+                            </SelectItem>
+                          ))}
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -469,17 +482,27 @@ const UpdateGroupDialog: React.FC<UpdateGroupDialogProps> = ({
                               !isDataLoaded ? "Loading..." : "Select Field"
                             }
                           >
-                            {/* This shows the name, but we track the ID in the form */}
                             {selectedValues.field.name}
                           </SelectValue>
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent className="bg-white">
-                        {fields.map((f) => (
-                          <SelectItem key={f.id} value={f.id.toString()}>
-                            {f.name}
-                          </SelectItem>
-                        ))}
+                      <SelectContent className="text-xl bg-white">
+                        <Input
+                          placeholder="Search field..."
+                          className="w-full border rounded-md p-2"
+                          onChange={(e) => setSearchField(e.target.value)}
+                        />
+                        {fields
+                          .filter((field) =>
+                            field.name
+                              .toLowerCase()
+                              .includes(searchField.toLowerCase())
+                          )
+                          .map((f) => (
+                            <SelectItem key={f.id} value={f.id.toString()}>
+                              {f.name}
+                            </SelectItem>
+                          ))}
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -505,13 +528,8 @@ const UpdateGroupDialog: React.FC<UpdateGroupDialogProps> = ({
                   </FormItem>
                 )}
               />
-              
             </div>
-            <ImageUpload
-                groupId={group.id}
-                onSuccess={() => console.log("Upload successful!")}
-                onCancel={() => console.log("Upload cancelled")}
-              />
+            
 
             <DialogFooter>
               <Button
