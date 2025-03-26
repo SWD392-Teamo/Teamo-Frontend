@@ -56,7 +56,6 @@ export const AddPositionDialog: React.FC<{ groupId: number }> = ({ groupId }) =>
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Initialize form
   const form = useForm<z.infer<typeof positionFormSchema>>({
     resolver: zodResolver(positionFormSchema),
     defaultValues: {
@@ -66,7 +65,6 @@ export const AddPositionDialog: React.FC<{ groupId: number }> = ({ groupId }) =>
     },
   });
 
-  // Fetch skills
   useEffect(() => {
     const fetchSkills = async () => {
       try {
@@ -81,7 +79,6 @@ export const AddPositionDialog: React.FC<{ groupId: number }> = ({ groupId }) =>
     fetchSkills();
   }, []);
 
-  // Get skill names from IDs for display
   const getSkillNames = (skillIds: number[]) => {
     return skillIds.map(id => {
       const skill = skills.find(s => s.id === id);
@@ -89,7 +86,6 @@ export const AddPositionDialog: React.FC<{ groupId: number }> = ({ groupId }) =>
     });
   };
 
-  // Form submission handler
   const onSubmit = async (data: z.infer<typeof positionFormSchema>) => {
     setIsLoading(true);
     try {

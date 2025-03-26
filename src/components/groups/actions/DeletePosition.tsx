@@ -47,12 +47,10 @@ export const DeletePositionDialog: React.FC<{ groupId: number; positions: GroupP
     }
   };
 
-  // Get position details by ID
   const getPositionById = (id: number) => {
     return positions.find(position => position.id === id);
   };
 
-  // Handle position deletion
   const handleDelete = async () => {
     if (!selectedPositionId) {
       toast.error("Please select a position to delete.");

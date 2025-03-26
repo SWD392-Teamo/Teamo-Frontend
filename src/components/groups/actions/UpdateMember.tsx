@@ -39,7 +39,6 @@ export const UpdateMemberDialog: React.FC<UpdateMemberDialogProps> = ({
   const [selectedPositions, setSelectedPositions] = useState<number[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Reset state when dialog opens
   useEffect(() => {
     if (isOpen) {
       setSelectedMember(null);
@@ -48,12 +47,10 @@ export const UpdateMemberDialog: React.FC<UpdateMemberDialogProps> = ({
     }
   }, [isOpen]);
 
-  // Update form when member is selected
   useEffect(() => {
     if (selectedMember) {
       setSelectedRole(selectedMember.role);
       
-      // Convert position names to IDs by matching with available positions
       if (selectedMember.positions && Array.isArray(selectedMember.positions)) {
         const positionIds = selectedMember.positions.map(posName => {
           const foundPosition = group.groupPositions.find(pos => pos.name === posName);
@@ -62,19 +59,16 @@ export const UpdateMemberDialog: React.FC<UpdateMemberDialogProps> = ({
         
         setSelectedPositions(positionIds);
       } else {
-        // If positions is undefined or not an array, set empty array
         setSelectedPositions([]);
       }
     }
   }, [selectedMember, group.groupPositions]);
 
-  // Handle member selection
   const handleMemberSelect = (memberId: number) => {
     const member = group.groupMembers.find(m => m.studentId === memberId);
     setSelectedMember(member || null);
   };
 
-  // Handle position selection
   const handlePositionSelect = (positionId: number) => {
     setSelectedPositions(prev => 
       prev.includes(positionId)
@@ -83,7 +77,6 @@ export const UpdateMemberDialog: React.FC<UpdateMemberDialogProps> = ({
     );
   };
 
-  // Handle form submission
   const handleSubmit = async () => {
     if (!selectedMember) {
       toast.error("Please select a member to update.");

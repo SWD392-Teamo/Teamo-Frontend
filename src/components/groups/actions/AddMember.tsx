@@ -29,7 +29,6 @@ export const AddMemberDialog: React.FC<{ group: Group }> = ({ group }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
-  // Reset state when dialog opens
   useEffect(() => {
     if (isOpen) {
       setSearchQuery('');
@@ -40,7 +39,6 @@ export const AddMemberDialog: React.FC<{ group: Group }> = ({ group }) => {
     }
   }, [isOpen]);
 
-  // Check if user is already a member of the group
   const isUserAlreadyMember = (userId: number) => {
     return group.groupMembers.some(member => member.studentId === userId);
   };
