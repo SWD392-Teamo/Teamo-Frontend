@@ -15,8 +15,6 @@ export default function Home() {
       />
       <Feature />
       <MajorCarousel />
-      <PostCarousel/>
-      <CustomComponents/>
     </div>
   );
 }
