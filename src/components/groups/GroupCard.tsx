@@ -8,97 +8,145 @@ import { useGroupStore } from "@/hooks/useGroupStore";
 import { Group } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
-import PositionCard from "./PositionCard";
+import { 
+  Card, 
+  CardContent, 
+  CardFooter, 
+  CardHeader 
+} from '@/components/ui/card';
+import { 
+  Avatar, 
+  AvatarFallback, 
+  AvatarImage 
+} from '@/components/ui/avatar';
+import { PositionBadge } from "./PositionCard";
+import { AvatarGroup } from "../ui/avatar-group";
+import { useEffect, useState } from "react";
+import { getUserId } from "@/actions/userActions";
+import LeaderActions from "./actions/LeaderActions";
 
 const GroupCard: React.FC<{ group: Group }> = ({ group }) => {
-  const link = `/groups/details/${group.id}`
+  const link = `/groups/details/${group.id}`;
 
   const { setSelectedGroup } = useGroupStore();
+  const [currentUserId, setCurrentUserId] = useState<number | null>(null);
+  const [isLeader, setIsLeader] = useState<boolean>(false);
+  
 
   const handleDetailsClick = () => {
     setSelectedGroup(group);
   };
 
   const leader = group.groupMembers.find((member) => member.role === "Leader");
-  const groupMember = group.groupMembers.filter(
+  const members = group.groupMembers.filter(
     (member) => member.role === "Member"
   );
-  const groupPosition = group.groupPositions;
+
+  const getInitials = (name: string) => {
+    return (
+      name
+        ?.split(" ")
+        .map((n) => n[0])
+        .join("")
+        .toUpperCase() || "?"
+    );
+  };
+
+  useEffect(() => {
+    const fetchUserId = async (): Promise<void> => {
+      const userId = await getUserId();
+      setCurrentUserId(userId);
+      
+      const isUserLeader = group.groupMembers.some(
+        member => member.studentId === userId && member.role === "Leader"
+      );
+      setIsLeader(isUserLeader);
+    };
+    
+    fetchUserId();
+  }, [group.groupMembers]);
 
   return (
-    <div className="border border-gray-200 rounded-lg shadow-sm p-10 flex flex-col items-start hover:shadow-lg transition flex-1">
-      <div className="flex flex-row items-center w-15 h-15 gap-4 mb-3">
-        {group?.imgUrl ? (
-          <SmallGroupImage imgUrl={group?.imgUrl} />
-        ) : (
-          <div className="w-1/6">
-            <Image
-              src={defaultGroup}
-              alt={group?.name || "none"}
-              width={400}
-              height={400}
-              className=" object-cover rounded-full border-2 border-gray-300 shadow-sm aspect-square"
-            />
+    <Card className="overflow-hidden hover:shadow-lg transition h-full flex flex-col">
+      <CardHeader className="pb-2">
+        <div className="flex items-center gap-4">
+          <Avatar className="h-16 w-16 border-2 border-gray-200">
+            <AvatarImage src={group?.imgUrl || undefined} alt={group?.name} />
+            <AvatarFallback className="bg-blue-100 text-blue-700">
+              {getInitials(group?.name)}
+            </AvatarFallback>
+          </Avatar>
+          
+          <div className="flex-1">
+            <div className="flex justify-between items-start">
+              <h3 className="text-xl font-bold text-blue-500 truncate">{group?.name}</h3>
+              
+              {isLeader && (
+                <LeaderActions group={group} />
+              )}
+            </div>
+            <div className="flex flex-wrap items-center mt-1">
+              <h2 className="font-semibold text-lg text-gray-900">{group?.title}</h2>
+              {group?.status && <GroupStatusBadge status={group?.status} />}
+            </div>
           </div>
-        )}
-        <div className="text-left w-full font-bold text-[#54B8F0] text-xl my-2">
-          {group?.name}
         </div>
-      </div>
-      <div className="flex flex-row gap-4 items-center">
-        <h2 className="text-xl font-bold text-black">{group?.title}</h2>
-        {group?.status && <GroupStatusBadge status={group?.status} />}
-      </div>
-      <div className="flex items-center space-x-2">
-        <i className="font-thin text-base text-gray-500">Leader:</i>
-        <div className="text-lg font-semibold text-black font-beVietnam">
-          {leader?.studentName}
-        </div>
-      </div>
-
-      <div className="flex items-center space-x-2 mt-2">
-        {leader?.imgUrl ? (
-          <LeaderAvatar imgUrl={leader?.imgUrl} />
-        ) : (
-          <Image
-            src={defaultAvatar}
-            alt={leader?.studentName || "none"}
-            className="w-12 h-12 rounded-full object-cover border-2 border-gray-300 shadow-sm  aspect-square"
-          />
-        )}
-
-        {groupMember.map((member) => (
-          <div key={member.studentId}>
-            {member?.imgUrl ? (
-              <MemberAvatar imgUrl={member?.imgUrl} />
-            ) : (
-              <Image
-                src={defaultAvatar}
-                alt={member?.studentName || "none"}
-                width={50}
-                height={50}
-                className=" rounded-full object-cover border-2 border-gray-300 shadow-sm  aspect-square"
-              />
-            )}
+      </CardHeader>
+      
+      <CardContent className="pt-0 pb-2 flex-grow">
+        <div className="space-y-4">
+          <div className="flex items-center mt-2">
+            <span className="text-sm text-gray-500 mr-2">Leader:</span>
+            <div className="flex items-center">
+              <span className="font-medium">{leader?.studentName}</span>
+            </div>
           </div>
-        ))}
-      </div>
-
-      <Link href={link}>
-        <button
-          className="mt-4 px-6 py-2 text-base text-logo border border-logo rounded-full hover:bg-blue-100 font-semibold"
-          onClick={handleDetailsClick}
-        >
-          Details
-        </button>
-      </Link>
-
-      <div className="flex flex-wrap gap-2 mt-4">
-        {groupPosition.map((position) => (
-          <PositionCard key={position.id} position={position} />
-        ))}
-      </div>
-    </div>
+          
+          {group.groupMembers.length > 0 && (
+            <div className="flex items-center mt-3">
+              <AvatarGroup limit={3} showCount={members.length > 3}>
+                {/* Leader avatar first (larger) */}
+                <Avatar className="h-12 w-12 border-2 border-white ring-2 ring-blue-100">
+                  <AvatarImage src={leader?.imgUrl || undefined} alt={leader?.studentName} />
+                  <AvatarFallback className="bg-blue-100 text-blue-700">
+                    {getInitials(leader?.studentName || '')}
+                  </AvatarFallback>
+                </Avatar>
+                
+                {/* Member avatars */}
+                {members.map((member) => (
+                  <Avatar key={member.studentId} className="h-10 w-10 border-2 border-white">
+                    <AvatarImage src={member?.imgUrl || undefined} alt={member?.studentName} />
+                    <AvatarFallback className="bg-gray-100 text-gray-700 text-xs">
+                      {getInitials(member?.studentName || '')}
+                    </AvatarFallback>
+                  </Avatar>
+                ))}
+              </AvatarGroup>
+            </div>
+          )}
+          
+          {group.groupPositions.length > 0 && (
+            <div className="flex flex-wrap gap-2 mt-3">
+              {group.groupPositions.map((position) => (
+                <PositionBadge key={position.id} position={position} />
+              ))}
+            </div>
+          )}
+        </div>
+      </CardContent>
+      
+      <CardFooter className="pt-2">
+        <Link href={link} className="w-full">
+          <button
+            className="w-full px-6 py-2 text-base text-logo border border-logo rounded-full hover:bg-blue-100 font-semibold transition"
+            onClick={handleDetailsClick}
+          >
+            Details
+          </button>
+        </Link>
+      </CardFooter>
+    </Card>
   );
 };
 

@@ -17,6 +17,18 @@ import { getUserId } from "@/actions/userActions";
 import Link from "next/link";
 import { getGroupById } from "@/actions/groupActions";
 import { useParams, useRouter } from "next/navigation";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardFooter,
+} from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 
 const GroupDetail: React.FC = () => {
   const [userId, setUserId] = useState<number | null>(null);
@@ -30,7 +42,7 @@ const GroupDetail: React.FC = () => {
     }))
   );
 
-  const setSelectedGroup = useGroupStore(state => state.setSelectedGroup);
+  const setSelectedGroup = useGroupStore((state) => state.setSelectedGroup);
 
   useEffect(() => {
     const fetchUserId = async () => {
@@ -40,15 +52,14 @@ const GroupDetail: React.FC = () => {
 
     const fetchGroup = async (id: number) => {
       const group = await getGroupById(id);
-      setSelectedGroup(group)
-    }
+      setSelectedGroup(group);
+    };
 
     fetchUserId();
 
     if (selectedgroup == null) {
-      fetchGroup(Number(id))
+      fetchGroup(Number(id));
     }
-
   }, []);
 
   const groupMembers = selectedgroup?.groupMembers;
@@ -62,78 +73,74 @@ const GroupDetail: React.FC = () => {
   ) ?? false;
 
   return (
-    <div className="border border-gray-200 rounded-lg shadow-sm p-12 flex flex-col items-start hover:shadow-lg transition flex-1 mb-16">
-      <div className="flex flex-col">
-        <BackButton />
+    <Card className="shadow-sm hover:shadow-md transition-all duration-300 mb-8">
+      <CardHeader className="pb-2">
+        <div className="flex items-start justify-between">
+          <BackButton />
+        </div>
 
-        <div className="flex flex-row items-center mt-2 w-15 h-15 gap-4 my-3">
-          {selectedgroup?.imgUrl ? (
-            <MedGroupImage imgUrl={selectedgroup?.imgUrl} />
-          ) : (
-            <div className="w-1/12">
-              <Image
-                src={defaultGroup}
-                alt={selectedgroup?.name || "none"}
-                className="w-full h-full rounded-full object-cover border-2 border-gray-300 shadow-sm"
-              />
+        <div className="flex items-center gap-4 mt-4">
+          <Avatar className="h-16 w-16 border-2 border-gray-200">
+            <AvatarImage
+              src={selectedgroup?.imgUrl}
+              alt={selectedgroup?.name || "Group"}
+            />
+            <AvatarFallback className="bg-blue-100 text-blue-600">
+              {selectedgroup?.name?.substring(0, 2) || "GP"}
+            </AvatarFallback>
+          </Avatar>
+
+          <div>
+            <CardTitle className="text-2xl text-blue-500">
+              {selectedgroup?.name}
+            </CardTitle>
+            <div className="flex items-center gap-2 mt-1">
+              <h2 className="text-xl font-semibold">{selectedgroup?.title}</h2>
+              {selectedgroup?.status && (
+                <GroupStatusBadge status={selectedgroup?.status} />
+              )}
             </div>
-          )}
-          <div className="text-left w-full font-bold text-[#54B8F0] text-2xl my-2">
-            {selectedgroup?.name}
+            <CardDescription className="mt-1">
+              {selectedgroup?.semesterName}
+            </CardDescription>
           </div>
         </div>
-      </div>
-      <div className="w-full flex justify-between items-center">
-        <div className="flex flex-row gap-4 items-center">
-          <h2 className="text-xl font-bold text-black">
-            {selectedgroup?.title}
-          </h2>
-          {selectedgroup?.status && (
-            <GroupStatusBadge status={selectedgroup?.status} />
-          )}
-        </div>
 
-        <div className="font-semibold text-base text-[#8C8F8E] ">
+        <div className="text-sm text-muted-foreground mt-2">
           {selectedgroup?.createdAt && (
             <DateConverter isoDate={selectedgroup?.createdAt} />
           )}
         </div>
-      </div>
+      </CardHeader>
 
-      <div className="text-left w-full font-normal text-base mt-1">
-        {selectedgroup?.semesterName}
-      </div>
-
-      {/*Field name */}
-      <div className="mt-4 flex justify-start gap-2 items-center">
-        <h2 className="font-semibold text-lg">Field:</h2>
-        <p className="font-normal text-base">{selectedgroup?.fieldName}</p>
-      </div>
-
-      {/*Max member */}
-      <div className="mt-2 flex justify-start gap-2 items-center">
-        <h2 className="font-semibold text-lg">Max member:</h2>
-        <p className="font-normal text-base">{selectedgroup?.maxMember}</p>
-      </div>
-
-      {/*Total member */}
-      <div className="mt-2 flex justify-start gap-2 items-center">
-        <h2 className="font-semibold text-lg">Total member:</h2>
-        <p className="font-normal text-base">{selectedgroup?.totalMembers}</p>
-      </div>
-
-      {/*description */}
-      <div className="container mt-5">
-        <div className="text-left w-full font-semibold text-xl text-[#8C8F8E] my-5">
-          Description
+      <CardContent className="space-y-6">
+        <div className="grid grid-cols-3 gap-4">
+          <div>
+            <h3 className="text-sm font-medium text-muted-foreground">Field</h3>
+            <p className="mt-1">{selectedgroup?.fieldName}</p>
+          </div>
+          <div>
+            <h3 className="text-sm font-medium text-muted-foreground">
+              Max Members
+            </h3>
+            <p className="mt-1">{selectedgroup?.maxMember}</p>
+          </div>
+          <div>
+            <h3 className="text-sm font-medium text-muted-foreground">
+              Total Members
+            </h3>
+            <p className="mt-1">{selectedgroup?.totalMembers}</p>
+          </div>
         </div>
 
-        <div className="text-left w-full font-normal text-base">
-          {selectedgroup?.description}
+        <div>
+          <h3 className="text-lg font-medium text-muted-foreground mb-2">
+            Description
+          </h3>
+          <p className="text-sm">{selectedgroup?.description}</p>
         </div>
-      </div>
 
-      <div className="w-full h-[1px] bg-gray-300 my-8"></div>
+        <Separator />
 
       {/*position */}
       <div className="container">
@@ -145,59 +152,71 @@ const GroupDetail: React.FC = () => {
             positions={groupPositions}
             members={groupMembers}
             isMemberOrLeader={isLeader || isMember}
+
           />
         )}
       </div>
 
-      <div className="w-full h-[1px] bg-gray-300 my-8"></div>
-      <div className="container">
-        <div className="text-left w-full font-semibold text-xl text-[#8C8F8E] my-5">
-          Member
-        </div>
-        {/*Member */}
-        <div className="text-left w-full font-normal text-lg">
-          <div className="grid grid-cols-2 gap-4 mt-4">
+      <Separator />
+
+        <div>
+          <h3 className="text-lg font-medium text-muted-foreground mb-4">
+            Members
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {selectedgroup?.groupMembers.map((member, index) => (
-              <div key={index} className="bg-gray-100 p-4 rounded-lg shadow-md cursor-pointer"
-                   onClick={() => router.push(`/profile/details/${member.studentId}`)}>
-                <div className="flex items-center gap-4">
-                  <div key={member.studentId}>
-                    {member?.imgUrl ? (
-                      <MemberAvatar imgUrl={member?.imgUrl} />
-                    ) : (
-                      <Image
-                        src={defaultAvatar}
-                        alt={member?.studentName || "none"}
-                        className="w-10 h-10 rounded-full object-cover border-2 border-gray-300 shadow-sm"
+              
+              <Card key={index} className="bg-gray-50">
+                <CardContent className="p-4">
+                  <div className="flex items-center gap-4">
+
+                    <Avatar onClick={() => router.push(`/profile/details/${member.studentId}`)}>
+                      <AvatarImage
+                        src={member?.imgUrl}
+                        alt={member?.studentName || "User"}
                       />
-                    )}
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <h4 className="font-bold">{member.studentName}</h4>
-                      {member?.role === "Leader" && (
-                        <IoIosStar className="text-yellow-500" />
-                      )}
+                      <AvatarFallback className="bg-blue-100 text-blue-600">
+                        {member?.studentName?.substring(0, 2) || "U"}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <h4 className="font-medium">{member.studentName}</h4>
+                        {member?.role === "Leader" && (
+                          <IoIosStar className="text-yellow-500" />
+                        )}
+                      </div>
+                      <Badge variant="outline" className="text-blue-500 mt-1">
+                        {member.role}
+                      </Badge>
                     </div>
-                    <p className="text-blue-500 text-sm">{member.role}</p>
                   </div>
-                </div>
-                <p className="mt-2 text-gray-600">{member.positions}</p>
-              </div>
+                  <p className="mt-3 text-sm text-muted-foreground">
+                    {member.positions}
+                  </p>
+                </CardContent>
+              </Card>
             ))}
           </div>
-          {isLeader && (
-            <div className="mt-5 flex ">
-              <Link href={`/groups/${selectedgroup?.id}/applications`} className="w-full flex justify-center items-center h-full" passHref>
-                <button className="w-1/2 rounded-full  bg-gradient-to-r from-[#46afe9] to-[#c5e9f9] text-white py-4 text-xl font-bold flex justify-center items-center transition duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg">
-                  View Application
-                </button>
-              </Link>
-            </div>
-          )}
         </div>
-      </div>
-    </div>
+      </CardContent>
+
+      <CardFooter className="pt-2 pb-6">
+        {isLeader && (
+          <Link
+            href={`/groups/${selectedgroup?.id}/applications`}
+            className="w-full"
+          >
+            <Button
+              className="w-full bg-gradient-to-r from-blue-500 to-blue-300 hover:from-blue-600 hover:to-blue-400"
+              size="lg"
+            >
+              View Applications
+            </Button>
+          </Link>
+        )}
+      </CardFooter>
+    </Card>
   );
 };
 

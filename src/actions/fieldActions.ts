@@ -8,7 +8,7 @@ export async function getData(query: string): Promise<PagedResult<Field>> {
     return await fetchWrapper.get(`fields${query}`)
 }
 
-export async function getAllFields(): Promise<Field[]> {
+export async function getAllFields(): Promise<PagedResult<Field>> {
     return await fetchWrapper.get(`fields`)
 }
 

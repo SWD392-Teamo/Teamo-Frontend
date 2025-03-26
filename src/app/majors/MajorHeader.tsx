@@ -7,7 +7,7 @@ import SearchBar from "../../components/SearchBar";
 export default function MajorHeader({ setSearch }: { setSearch: React.Dispatch<React.SetStateAction<string>> }) {
   return (
     <div>
-      <BackButton url="/" />
+      <BackButton  />
       <div className="">
         <h1 className="page-title">Choose Major</h1>
       </div>

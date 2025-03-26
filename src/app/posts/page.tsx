@@ -75,7 +75,7 @@ export default function Listings() {
           url: '',
           query: {
             pageIndex: 1,
-            pageSize: 100, // Adjust as needed
+            pageSize: 100, 
           },
         });
         
@@ -190,7 +190,7 @@ export default function Listings() {
   return (
     <div className="space-y-4">
       <header className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Group Posts</h1>
+        <h1 className="page-title">Group Posts</h1>
       </header>
 
       <div className="flex items-center space-x-4">

@@ -1,4 +1,4 @@
-export interface imgProps  {
+export interface imgProps {
    imgUrl: string;
 }
 
@@ -14,8 +14,8 @@ export interface addLinkProfile {
 }
 
 export interface addGroup {
-   name:string,
-   title:string, 
+   name: string,
+   title: string,
    semesterId: number,
    maxMember: number,
    fieldId: number,
@@ -25,7 +25,7 @@ export interface addGroup {
 }
 
 export interface addGroupPositions {
-   name: string, 
+   name: string,
    count: number,
    skillIds: number[],
 }
@@ -33,4 +33,16 @@ export interface addGroupPositions {
 export interface addGroupMembers {
    studentId: number,
    groupPositionIds: number[]
+}
+
+export interface editGroupPositions {
+   name: string,
+   count: number,
+   status: string, //Open, Closed, Deleted
+   skillIds: number[],
+}
+
+export interface editMember {
+   role: string, //Leader, Member
+   groupPositionIds: number[],
 }

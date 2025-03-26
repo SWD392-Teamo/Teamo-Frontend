@@ -7,7 +7,7 @@ export async function getData(query: string): Promise<PagedResult<Subject>> {
     return await fetchWrapper.get(`subjects${query}`)
 }
 
-export async function getAllSubjects(query: string): Promise<Subject[]> {
+export async function getAllSubjects(query: string): Promise<PagedResult<Subject>> {
     return await fetchWrapper.get(`subjects${query}`)
 }
 

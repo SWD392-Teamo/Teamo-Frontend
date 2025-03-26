@@ -480,11 +480,11 @@ const CreateGroupStep: React.FC<CreateGroupStepProps> = ({
                               </FormControl>
                             </PopoverTrigger>
                             <PopoverContent className='w-full p-0'>
-                              <Command>
+                              <Command className='bg-white'>
                                 <CommandInput placeholder='Search skills...' />
                                 <CommandList>
                                   <CommandEmpty>No skills found.</CommandEmpty>
-                                  <CommandGroup>
+                                  <CommandGroup >
                                     {skills.map((skill) => (
                                       <CommandItem
                                         className='bg-white'

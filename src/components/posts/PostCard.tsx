@@ -1,7 +1,14 @@
 "use client";
 import { Post } from "@/types";
-import React, { useState } from "react";
-import { MoreHorizontal, FileText, Maximize } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import {
+  MoreHorizontal,
+  FileText,
+  Maximize,
+  MoreVertical,
+  Pencil,
+  Trash2,
+} from "lucide-react";
 import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Badge } from "../ui/badge";
@@ -15,10 +22,20 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 import { VisuallyHidden } from "radix-ui";
+import UpdatePostPopup from "./UpdatePostPopup";
+import DeletePostPopup from "./DeletePostPoup";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { getUserId } from "@/actions/userActions";
+import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
 // Helper function to determine file type
-const getFileTypeFromFirebaseUrl = (
+export const getFileTypeFromFirebaseUrl = (
   url: string
 ): "image" | "document" | "unknown" => {
   if (!url) return "unknown";
@@ -60,6 +77,8 @@ const getFileTypeFromFirebaseUrl = (
 };
 
 const PostCard: React.FC<Post> = ({
+  id,
+  groupId,
   groupMemberName,
   groupMemberImgUrl,
   studentId,
@@ -68,7 +87,20 @@ const PostCard: React.FC<Post> = ({
   content,
   documentUrl,
   status,
+  updatedAt,
 }) => {
+  const [currentUserId, setCurrentUserId] = useState<number | null>(null);
+  const [isOwner, setIsOwner] = useState(false);
+
+  useEffect(() => {
+    const fetchCurrentUser = async () => {
+      const userId = await getUserId();
+      setCurrentUserId(userId);
+      setIsOwner(userId === studentId);
+    };
+
+    fetchCurrentUser();
+  }, [studentId]);
   const router = useRouter();
 
   const getInitials = (name: string) => {
@@ -79,31 +111,51 @@ const PostCard: React.FC<Post> = ({
       .toUpperCase();
   };
 
-  const getStatusBadge = () => {
+  type BadgeVariant = "default" | "destructive" | "outline" | "secondary";
+
+  const getStatusBadge = (): { variant: BadgeVariant; text: string } => {
     switch (status) {
       case "Posted":
         return { variant: "default", text: "Posted" };
       case "Edited":
-        return { variant: "destructive", text: "Edited" };
+        return { variant: "outline", text: "Edited" };
       default:
         return { variant: "secondary", text: status };
     }
   };
 
-  const statusBadge = getStatusBadge();
+  const handleUpdateSuccess = () => {
+    toast.success("Post updated successfully");
+  };
 
-  // Determine file type
+  const handleDeleteSuccess = () => {
+    toast.success("Post deleted successfully");
+  };
+
+  const statusBadge = getStatusBadge();
   const fileType = documentUrl
     ? getFileTypeFromFirebaseUrl(documentUrl)
     : "unknown";
 
+  const post = {
+    id,
+    groupId,
+    groupName,
+    studentId,
+    groupMemberName,
+    groupMemberImgUrl,
+    content,
+    status,
+    documentUrl,
+    createdAt,
+    updatedAt,
+  };
+
   return (
     <div>
       <Card className="w-full mx-16 my-8">
-        <CardHeader 
-          className="flex flex-row items-center space-x-4 border-b cursor-pointer"
-          onClick={() => router.push(`/profile/details/${studentId}`)}>
-          <Avatar>
+        <CardHeader className="flex flex-row items-center space-x-4 border-b cursor-pointer">
+          <Avatar onClick={() => router.push(`/profile/details/${studentId}`)}>
             <AvatarImage src={groupMemberImgUrl} alt={groupMemberName} />
             <AvatarFallback>{getInitials(groupMemberName)}</AvatarFallback>
           </Avatar>
@@ -117,6 +169,26 @@ const PostCard: React.FC<Post> = ({
               <Badge variant="secondary">{groupName}</Badge>
             </div>
           </div>
+
+          {isOwner && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon">
+                  <MoreVertical className="h-5 w-5" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <UpdatePostPopup
+                  post={post}
+                  onUpdateSuccess={handleUpdateSuccess}
+                />
+                <DeletePostPopup
+                  post={post}
+                  onDeleteSuccess={handleDeleteSuccess}
+                />
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
         </CardHeader>
 
         <CardContent className="p-8">
@@ -179,8 +251,8 @@ const PostCard: React.FC<Post> = ({
           )}
         </CardContent>
 
-        <CardFooter className="border-t p-4">
-          <Badge variant={statusBadge.variant as any} >{statusBadge.text}</Badge>
+        <CardFooter className="border-t p-4 flex justify-between items-center">
+          <Badge variant={statusBadge.variant}>{statusBadge.text}</Badge>
         </CardFooter>
       </Card>
     </div>
