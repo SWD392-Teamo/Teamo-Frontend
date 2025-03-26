@@ -36,7 +36,7 @@ export default function ApplicationsListing({ isForUser }: Props) {
   const { showLoading, hideLoading } = useLoading();
   const [selectedApplication, setSelectedApplication] = useState<Application>();
   const [pageIndex, setPageIndex] = useState<number>(1);
-  const [status, setStatus] = useState<string>('');
+  const [status, setStatus] = useState<string>('requested');
   const [sort, setSort] = useState<string>('');
 
   const params = useParams();
@@ -138,13 +138,18 @@ export default function ApplicationsListing({ isForUser }: Props) {
 
   // COLUMNS
   const columns: { header: string; key: keyof Application }[] = [
-    { header: '', key: 'imgUrl' },
-    { header: 'Applicant', key: 'studentName' },
     { header: 'Position', key: 'groupPositionName' },
     { header: 'Date', key: 'requestTime' },
     { header: 'Status', key: 'status' },
   ];
 
+  if (!isForUser) {
+    columns.unshift({ header: 'Applicant', key: 'studentName' });
+    columns.unshift({ header: '', key: 'imgUrl' });
+  }
+  if (isForUser) {
+    columns.unshift({ header: 'Group', key: 'groupName' });
+  }
   if (!isForUser && !(status === 'rejected' || status === 'approved')) {
     columns.push({ header: 'Action', key: 'id' });
   }
@@ -155,6 +160,11 @@ export default function ApplicationsListing({ isForUser }: Props) {
       showLoading();
       // Approve application
       await reviewApplication(groupId, Number(id), { status: 'Approved' });
+      if (isForUser) {
+        getApplicationsForUser();
+      } else {
+        getApplicationsForGroup();
+      }
       toast.success('Application approved successfully');
     } catch (error) {
       toast.error('Failed to approve application');

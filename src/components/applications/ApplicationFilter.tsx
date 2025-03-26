@@ -11,45 +11,51 @@ interface ApplicationFilterProps {
   setPageIndex: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export default function ApplicationFilter({status, sort, setSort, setStatus, setPageIndex}: ApplicationFilterProps) {
+export default function ApplicationFilter({
+  status,
+  sort,
+  setSort,
+  setStatus,
+  setPageIndex,
+}: ApplicationFilterProps) {
   const sortOptions = [
     { value: 'dateAsc', label: 'Date (Oldest First)' },
-    { value: 'dateDesc', label: 'Date (Newest First)' }
+    { value: 'dateDesc', label: 'Date (Newest First)' },
   ];
 
   return (
-    <div className="flex flex-row justify-between items-center w-full mb-5">
-      <div className="flex gap-5">
+    <div className='flex flex-row justify-between items-center w-full mb-5'>
+      <div className='flex gap-5'>
         <Button
-          className={`btn ${status === '' ? 'btn--primary' : 'btn--primary--outline'}`}
-          onClick={() => 
-            {
-              setStatus('');
-              setPageIndex(1);
-            }
-          }
+          className={`btn ${
+            status === 'requested' ? 'btn--primary' : 'btn--primary--outline'
+          }`}
+          onClick={() => {
+            setStatus('requested');
+            setPageIndex(1);
+          }}
         >
           Requested
         </Button>
         <Button
-          className={`btn ${status === 'approved' ? 'btn--primary' : 'btn--primary--outline'}`}
-          onClick={() => 
-            {
-              setStatus('approved');
-              setPageIndex(1);
-            }
-          }
+          className={`btn ${
+            status === 'approved' ? 'btn--primary' : 'btn--primary--outline'
+          }`}
+          onClick={() => {
+            setStatus('approved');
+            setPageIndex(1);
+          }}
         >
           Approved
         </Button>
         <Button
-          className={`btn ${status === 'rejected' ? 'btn--primary' : 'btn--primary--outline'}`}
-          onClick={() => 
-            {
-              setStatus('rejected');
-              setPageIndex(1);
-            }
-          }
+          className={`btn ${
+            status === 'rejected' ? 'btn--primary' : 'btn--primary--outline'
+          }`}
+          onClick={() => {
+            setStatus('rejected');
+            setPageIndex(1);
+          }}
         >
           Rejected
         </Button>
@@ -59,9 +65,9 @@ export default function ApplicationFilter({status, sort, setSort, setStatus, set
           value={sort || 'dateDesc'}
           onChange={(value) => setSort(value)}
           options={sortOptions}
-          placeholder="Sort by date"
+          placeholder='Sort by date'
         />
       </div>
     </div>
   );
-};
+}
