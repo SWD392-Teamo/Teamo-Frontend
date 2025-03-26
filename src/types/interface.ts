@@ -20,6 +20,7 @@ export interface addGroup {
    maxMember: number,
    fieldId: number,
    subjectId: number,
+   description: string,
    groupPositions: addGroupPositions[],
 }
 
@@ -27,4 +28,9 @@ export interface addGroupPositions {
    name: string, 
    count: number,
    skillIds: number[],
+}
+
+export interface addGroupMembers {
+   studentId: number,
+   groupPositionIds: number[]
 }

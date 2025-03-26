@@ -2,7 +2,7 @@
 
 import { fetchWrapper } from "@/lib/fetchWrapper"
 import { Group, PagedResult } from "@/types"
-import { addGroup } from './../types/interface';
+import { addGroup, addGroupMembers } from './../types/interface';
 
 
 export async function getData(query: string): Promise<PagedResult<Group>> {
@@ -25,4 +25,12 @@ export async function unBanGroup(groupId: number): Promise<any> {
 
 export async function createGroup(addGroup: addGroup): Promise<Group> {
     return await fetchWrapper.post('groups', addGroup);
+}
+
+export async function uploadImage( groupId: number, formData: FormData): Promise<any> {
+    return await fetchWrapper.post(`groups/${groupId}/images`, formData)
+}
+
+export async function addMember( groupId: number, addGroupMember: addGroupMembers): Promise<any>{
+    return await fetchWrapper.post(`groups/${groupId}/members`, addGroupMember)
 }
