@@ -1,21 +1,21 @@
-import { banUser, getAllUsers, getProfile } from "@/actions/userActions";
-import { useUserstore } from "@/hooks/useUserStore";
-import { useLoading } from "@/providers/LoadingProvider";
-import queryString from "query-string";
-import React, { useEffect, useState } from "react";
-import toast from "react-hot-toast";
-import { HiBan, HiOutlineUserGroup } from "react-icons/hi";
-import SearchBar from "../SearchBar";
-import GenericTable from "../GenericTable";
-import AppPagination from "../AppPagination";
-import AppModal from "../AppModal";
-import { User } from "@/types";
-import { useParamsStore } from "@/hooks/useParamsStore";
-import { useShallow } from "zustand/shallow";
-import BackButton from "../BackButton";
-import ConfirmationPopup from "./ConfirmationPopup";
-import UserFilter from "./UserFilter";
-import { useRouter } from "next/navigation";
+import { banUser, getAllUsers, getProfile } from '@/actions/userActions';
+import { useUserstore } from '@/hooks/useUserStore';
+import { useLoading } from '@/providers/LoadingProvider';
+import queryString from 'query-string';
+import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+import { HiBan, HiOutlineUserGroup } from 'react-icons/hi';
+import SearchBar from '../SearchBar';
+import GenericTable from '../GenericTable';
+import AppPagination from '../AppPagination';
+import AppModal from '../AppModal';
+import { User } from '@/types';
+import { useParamsStore } from '@/hooks/useParamsStore';
+import { useShallow } from 'zustand/shallow';
+import BackButton from '../BackButton';
+import ConfirmationPopup from './ConfirmationPopup';
+import UserFilter from './UserFilter';
+import { useRouter } from 'next/navigation';
 
 export default function UsersListings() {
   /**
@@ -23,7 +23,7 @@ export default function UsersListings() {
    */
   const { showLoading, hideLoading } = useLoading();
   const [showModel, setShowModal] = useState(false);
-  const [search, setSearch] = useState<string>("");
+  const [search, setSearch] = useState<string>('');
   const [selectedUser, setSelectedUser] = useState<number>(0);
   const [pageIndex, setPageIndex] = useState(1);
   const router = useRouter();
@@ -50,7 +50,7 @@ export default function UsersListings() {
   const setData = useUserstore((state) => state.setData);
 
   const url = queryString.stringifyUrl({
-    url: "",
+    url: '',
     query: {
       ...userParams,
       pageIndex,
@@ -68,7 +68,7 @@ export default function UsersListings() {
         setData(data);
       })
       .catch((error) => {
-        toast.error(error.status + " " + error.message);
+        toast.error(error.status + ' ' + error.message);
       })
       .finally(() => {
         hideLoading();
@@ -100,9 +100,9 @@ export default function UsersListings() {
     try {
       await banUser(id);
       setData(await getAllUsers(url));
-      toast.success("Successfully banned this user");
+      toast.success('Successfully banned this user');
     } catch (error) {
-      toast.error("Failed to ban this user");
+      toast.error('Failed to ban this user');
     } finally {
       setShowModal(false);
     }
@@ -114,42 +114,42 @@ export default function UsersListings() {
 
   // Columns
   const columns = [
-    { header: "ID", key: "id" },
-    { header: "", key: "imgUrl" },
-    { header: "Student Code", key: "code" },
-    { header: "Full Name", key: "fullName" },
-    { header: "Email", key: "email" },
-    { header: "Status", key: "status" },
+    { header: 'ID', key: 'id' },
+    { header: '', key: 'imgUrl' },
+    { header: 'Student Code', key: 'code' },
+    { header: 'Full Name', key: 'fullName' },
+    { header: 'Email', key: 'email' },
+    { header: 'Status', key: 'status' },
   ];
 
-  if (!(userParams.status === "banned")) {
-    columns.push({ header: "Action", key: "action" });
+  if (!(userParams.status === 'banned')) {
+    columns.push({ header: 'Action', key: 'action' });
   }
 
   // Buttons
   const actions = [
     {
-      label: "BAN",
+      label: 'BAN',
       onClick: handlePopup,
-      className: "btn btn--danger--outline",
+      className: 'btn btn--danger--outline',
     },
   ];
 
   return (
-    <div className="w-full">
+    <div className='w-full'>
       {/* Header */}
-      <div className="flex items-center space-x-3 py-4 px-2">
+      <div className='flex items-center space-x-3 py-4 px-2'>
         {/* <HiOutlineUserGroup className="w-7 h-7" /> */}
-        <h1 className="page-title">User Accounts List</h1>
-        <span className="text-gray-600 mt-4">({data.totalCount} users)</span>
+        <h1 className='page-title'>User Accounts List</h1>
+        <span className='text-gray-600 mt-4'>({data.totalCount} users)</span>
       </div>
       {/* Search & Filter */}
-      <SearchBar className="mb-8" setSearch={setSearch} />
+      <SearchBar className='mb-8' setSearch={setSearch} />
       <UserFilter />
 
       {/* User Table */}
       {data.users.length > 0 && (
-        <div className="mb-5">
+        <div className='mb-5'>
           <GenericTable<User>
             data={mappedData}
             columns={columns}
@@ -159,8 +159,8 @@ export default function UsersListings() {
         </div>
       )}
       {/* Pagination */}
-      {data.totalCount > data.pageSize && (
-        <div className="flex justify-end mt-5">
+      {data.totalCount > data.pageSize ? (
+        <div className='flex justify-end mt-5'>
           <AppPagination
             currentPage={pageIndex}
             pageSize={data.pageSize}
@@ -168,16 +168,20 @@ export default function UsersListings() {
             pageChanged={setPageIndex}
           />
         </div>
+      ) : (
+        <div className='flex flex-col gap-2 justify-center items-center shadow-lg p-5 mt-5 bg-tertiary'>
+          <h1 className='page-title'>Empty Result</h1>
+        </div>
       )}
 
       {/* Popup Modal */}
       <AppModal
         show={showModel}
         onClose={() => setShowModal(false)}
-        title="Confirmation"
+        title='Confirmation'
       >
         <ConfirmationPopup
-          message="Are you sure you want to ban this user?"
+          message='Are you sure you want to ban this user?'
           onConfirm={() => handleBanUser(selectedUser)}
         />
       </AppModal>

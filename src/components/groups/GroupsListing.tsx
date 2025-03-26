@@ -1,25 +1,25 @@
-import { getData as getGroupData, getUserGroups } from "@/actions/groupActions";
-import { getData as getSemesterData } from "@/actions/semesterActions";
-import { useGroupStore } from "@/hooks/useGroupStore";
-import { useLoading } from "@/providers/LoadingProvider";
-import queryString from "query-string";
-import React, { useEffect, useState } from "react";
-import toast from "react-hot-toast";
-import { useShallow } from "zustand/shallow";
-import GroupCard from "../../components/groups/GroupCard";
-import HandlePaging from "@/components/HandlePaging";
-import { useSemesterStore } from "@/hooks/useSemesterStore";
-import { useParamsStore } from "@/hooks/useParamsStore";
-import GenericTable from "../GenericTable";
-import { Group } from "@/types";
-import AppPagination from "../AppPagination";
-import DropdownSelect from "../DropdownSelect";
-import GroupFilter from "./GroupFilter";
-import SemesterNavbar from "./SemesterNavbar";
-import SearchBar from "../SearchBar";
-import BackButton from "../BackButton";
-import { Button } from "flowbite-react";
-import { useRouter } from "next/navigation";
+import { getData as getGroupData, getUserGroups } from '@/actions/groupActions';
+import { getData as getSemesterData } from '@/actions/semesterActions';
+import { useGroupStore } from '@/hooks/useGroupStore';
+import { useLoading } from '@/providers/LoadingProvider';
+import queryString from 'query-string';
+import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+import { useShallow } from 'zustand/shallow';
+import GroupCard from '../../components/groups/GroupCard';
+import HandlePaging from '@/components/HandlePaging';
+import { useSemesterStore } from '@/hooks/useSemesterStore';
+import { useParamsStore } from '@/hooks/useParamsStore';
+import GenericTable from '../GenericTable';
+import { Group } from '@/types';
+import AppPagination from '../AppPagination';
+import DropdownSelect from '../DropdownSelect';
+import GroupFilter from './GroupFilter';
+import SemesterNavbar from './SemesterNavbar';
+import SearchBar from '../SearchBar';
+import BackButton from '../BackButton';
+import { Button } from 'flowbite-react';
+import { useRouter } from 'next/navigation';
 
 interface Props {
   isForUser?: boolean;
@@ -28,11 +28,11 @@ interface Props {
 
 export default function GroupsListing({ isForUser, viewMode }: Props) {
   /** LOCAL STATE MANAGEMENT */
-  const [search, setSearch] = useState<string>("");
-  const [semesterId, setSemesterId] = useState<string>("");
-  const [subjectId, setSubjectId] = useState<string>("");
-  const [status, setStatus] = useState<string>("");
-  const [sort, setSort] = useState<string>("");
+  const [search, setSearch] = useState<string>('');
+  const [semesterId, setSemesterId] = useState<string>('');
+  const [subjectId, setSubjectId] = useState<string>('');
+  const [status, setStatus] = useState<string>('');
+  const [sort, setSort] = useState<string>('');
 
   const { showLoading, hideLoading } = useLoading();
 
@@ -56,7 +56,7 @@ export default function GroupsListing({ isForUser, viewMode }: Props) {
   const setData = useGroupStore((state) => state.setData);
 
   const url = queryString.stringifyUrl({
-    url: "",
+    url: '',
     query: {
       pageIndex,
       pageSize,
@@ -84,17 +84,17 @@ export default function GroupsListing({ isForUser, viewMode }: Props) {
           ...groups,
           data: groups.data.map((group) => ({
             ...group,
-            createdAt: new Date(group.createdAt).toLocaleDateString("vi-VN", {
-              day: "2-digit",
-              month: "2-digit",
-              year: "numeric",
+            createdAt: new Date(group.createdAt).toLocaleDateString('vi-VN', {
+              day: '2-digit',
+              month: '2-digit',
+              year: 'numeric',
             }),
           })),
         };
 
         setData(formattedGroups);
       } catch (error) {
-        toast.error("Failed to load groups");
+        toast.error('Failed to load groups');
       } finally {
         hideLoading();
       }
@@ -106,13 +106,13 @@ export default function GroupsListing({ isForUser, viewMode }: Props) {
   /** TABLE CONFIGURATIONS */
   // COLLUMNS
   const columns = [
-    { header: "ID", key: "id" },
-    { header: "Name", key: "name" },
-    { header: "Created By", key: "createdByUserName" },
-    { header: "Created At", key: "createdAt" },
-    { header: "Subject Code", key: "subjectCode" },
-    { header: "Semester Name", key: "semesterName" },
-    { header: "Status", key: "status" },
+    { header: 'ID', key: 'id' },
+    { header: 'Name', key: 'name' },
+    { header: 'Created By', key: 'createdByUserName' },
+    { header: 'Created At', key: 'createdAt' },
+    { header: 'Subject Code', key: 'subjectCode' },
+    { header: 'Semester Name', key: 'semesterName' },
+    { header: 'Status', key: 'status' },
   ];
 
   /** HANDLE ACTIONS */
@@ -133,29 +133,29 @@ export default function GroupsListing({ isForUser, viewMode }: Props) {
     setVisibleItems(incrementSize);
   };
   const handleResetFilter = () => {
-    setSemesterId("");
-    setSubjectId("");
-    setSearch("");
-    setStatus("");
-    setSort("");
+    setSemesterId('');
+    setSubjectId('');
+    setSearch('');
+    setStatus('');
+    setSort('');
   };
 
   return (
-    <div className=" mb-10">
-      <div className="mb-10">
+    <div className=' mb-10'>
+      <div className='mb-10'>
         {/* Title */}
-        <div className="flex items-center space-x-3 py-4 px-2">
-          <h1 className="page-title">{isForUser ? "My Groups" : "Groups"}</h1>
-          <span className="text-gray-600 mt-4">({data.totalCount} groups)</span>
+        <div className='flex items-center space-x-3 py-4 px-2'>
+          <h1 className='page-title'>{isForUser ? 'My Groups' : 'Groups'}</h1>
+          <span className='text-gray-600 mt-4'>({data.totalCount} groups)</span>
         </div>
         {/* search bar */}
-        <div className="flex items-center justify-between pr-10">
+        <div className='flex items-center justify-between pr-10'>
           <SearchBar setSearch={setSearch} />
         </div>
       </div>
 
       <div>
-        {viewMode === "Card" ? (
+        {viewMode === 'Card' ? (
           <div>
             {/* Semester navbar */}
             <SemesterNavbar
@@ -163,7 +163,7 @@ export default function GroupsListing({ isForUser, viewMode }: Props) {
               setSemesterId={setSemesterId}
             />
             {/* Group Cards */}
-            <div className="grid grid-cols-2 gap-6">
+            <div className='grid grid-cols-2 gap-6'>
               {data.groups &&
                 data.groups
                   .slice(0, visibleItems)
@@ -181,7 +181,7 @@ export default function GroupsListing({ isForUser, viewMode }: Props) {
         ) : (
           <div>
             {/* Filter */}
-            <div className="mb-10">
+            <div className='mb-10'>
               <GroupFilter
                 semesterId={semesterId}
                 subjectId={subjectId}
@@ -195,18 +195,22 @@ export default function GroupsListing({ isForUser, viewMode }: Props) {
               />
             </div>
             {/* Table */}
-            {data.groups.length > 0 && (
-              <div className="mb-5">
+            {data.groups.length > 0 ? (
+              <div className='mb-5'>
                 <GenericTable<Group>
                   data={data.groups}
                   columns={columns}
                   onRowClick={handleRowClick}
                 />
               </div>
+            ) : (
+              <div className='flex flex-col gap-2 justify-center items-center shadow-lg p-5 mt-5 bg-tertiary'>
+                <h1 className='page-title'>Empty Result</h1>
+              </div>
             )}
             {/* paging */}
             {data.totalCount > data.pageSize && (
-              <div className="flex justify-end mt-5">
+              <div className='flex justify-end mt-5'>
                 <AppPagination
                   currentPage={pageIndex}
                   pageSize={data.pageSize}
