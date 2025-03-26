@@ -1,8 +1,8 @@
 'use client'
 
 import { logout } from '@/actions/authActions'
+import { Button } from '@/components/ui/button'
 import { useLoading } from '@/providers/LoadingProvider'
-import { Button } from 'flowbite-react'
 import { signOut } from 'next-auth/react'
 import React from 'react'
 import { AiOutlineLogout } from 'react-icons/ai'
@@ -18,7 +18,7 @@ export default function LogoutButton() {
   }
 
   return (
-    <Button className="btn btn--secondary--outline" onClick={onLogout}>
+    <Button className='btn flex justify-items-end' variant={"destructive"} size={"lg"} onClick={onLogout}>
         <div className="btn--icon">
             <AiOutlineLogout size={20}/>
             <div>Logout</div>

@@ -16,12 +16,12 @@ import GroupPositionCard from "./GroupPosition";
 import { getUserId } from "@/actions/userActions";
 import Link from "next/link";
 import { getGroupById } from "@/actions/groupActions";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 const GroupDetail: React.FC = () => {
   const [userId, setUserId] = useState<number | null>(null);
   const param = useParams();
-
+  const router = useRouter();
   const {id} = param;
 
   const { selectedgroup } = useGroupStore(
@@ -55,7 +55,11 @@ const GroupDetail: React.FC = () => {
   const groupPositions = selectedgroup?.groupPositions;
   const isLeader = groupMembers?.some(
     (member) => member.studentId === userId && member.role === "Leader"
-  );
+  ) ?? false;
+
+  const isMember = groupMembers?.some(
+    (member) => member.studentId === userId && member.role === "Member"
+  ) ?? false;
 
   return (
     <div className="border border-gray-200 rounded-lg shadow-sm p-12 flex flex-col items-start hover:shadow-lg transition flex-1 mb-16">
@@ -140,6 +144,7 @@ const GroupDetail: React.FC = () => {
           <GroupPositionCard
             positions={groupPositions}
             members={groupMembers}
+            isMemberOrLeader={isLeader || isMember}
           />
         )}
       </div>
@@ -153,7 +158,8 @@ const GroupDetail: React.FC = () => {
         <div className="text-left w-full font-normal text-lg">
           <div className="grid grid-cols-2 gap-4 mt-4">
             {selectedgroup?.groupMembers.map((member, index) => (
-              <div key={index} className="bg-gray-100 p-4 rounded-lg shadow-md">
+              <div key={index} className="bg-gray-100 p-4 rounded-lg shadow-md cursor-pointer"
+                   onClick={() => router.push(`/profile/details/${member.studentId}`)}>
                 <div className="flex items-center gap-4">
                   <div key={member.studentId}>
                     {member?.imgUrl ? (

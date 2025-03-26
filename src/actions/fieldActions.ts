@@ -8,6 +8,11 @@ export async function getData(query: string): Promise<PagedResult<Field>> {
     return await fetchWrapper.get(`fields${query}`)
 }
 
+export async function getAllFields(): Promise<Field> {
+    return await fetchWrapper.get(`fields`)
+}
+
+
 export async function getFieldById(fieldId: number): Promise<Field> {
     return await fetchWrapper.get(`fields/${fieldId}`)
 }

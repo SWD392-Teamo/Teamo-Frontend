@@ -43,6 +43,7 @@ export type Application = {
     groupName: string
     studentName: string
     studentEmail: string
+    studentId: number
     imgUrl: string
     requestTime: string
     requestContent: string
@@ -125,4 +126,18 @@ export type StudentSkill = {
     skillName: string,
     skillType: string,
     skillLevel: string,
+}
+
+export type Post = {
+    id: number,
+    groupId : number,
+    groupName: string,
+    studentId: number,
+    groupMemberName: string,
+    groupMemberImgUrl: string,
+    content: string,
+    status: string,
+    documentUrl: string,
+    createdAt: string,
+    updatedAt: string,
 }

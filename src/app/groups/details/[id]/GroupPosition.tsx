@@ -18,7 +18,8 @@ import ApplicationForm from "@/components/applications/ApplicationForm";
 const GroupPositionCard: React.FC<{
   positions: GroupPosition[];
   members: GroupMember[];
-}> = ({ positions, members }) => {
+  isMemberOrLeader: boolean;
+}> = ({ positions, members, isMemberOrLeader }) => {
   const [showModal, setShowModal] = useState(false);
   const [selectedPositionId, setSelectedPositionId] = useState<number>(0);
   const { selectedgroup } = useGroupStore(
@@ -101,16 +102,18 @@ const GroupPositionCard: React.FC<{
                 </div>
               ))}
             </div>
-            <Button className="btn btn--primary justify-self-end" onClick={() => 
-              {
-                setShowModal(true)
-                setSelectedPositionId(position.id);
-              }}>
-              <div className="btn--icon">
-                <HiOutlineLightningBolt size={20} />
-                <div className="font-bold">Easy Apply</div>
-              </div>
-            </Button>
+            {!isMemberOrLeader &&           
+              <Button className="btn btn--primary justify-self-end" onClick={() => 
+                {
+                  setShowModal(true)
+                  setSelectedPositionId(position.id);
+                }}>
+                <div className="btn--icon">
+                  <HiOutlineLightningBolt size={20} />
+                  <div className="font-bold">Easy Apply</div>
+                </div>
+              </Button>
+            }
           </div>
         </div>
       ))}

@@ -7,6 +7,7 @@ import { Badge } from 'flowbite-react';
 import { dateFormatter } from '@/utils/dateFormatter';
 import dynamic from 'next/dynamic'
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
  
 const PDFViewer = dynamic(() => import('@/components/PDFViewer'), {
   ssr: false,
@@ -18,6 +19,7 @@ type Props = {
 
 export default function ApplicationDetails({application}: Props) {
     const [imageUrl, setImageUrl] = useState<string | null>(null);
+    const router = useRouter();
 
     useEffect(() => {
         const fetchImage = async () => {
@@ -44,7 +46,8 @@ export default function ApplicationDetails({application}: Props) {
     return (
         <div className="p-6 space-y-6">
             {/* Header with Profile */}
-            <div className="flex items-center gap-4 pb-4 border-b">
+            <div className="flex items-center gap-4 pb-4 border-b cursor-pointer"
+                 onClick={() => router.push(`/profile/details/${application.studentId}`)}>
                 {imageUrl && (
                     <Image
                         src={imageUrl}

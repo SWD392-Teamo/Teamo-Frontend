@@ -48,7 +48,7 @@ export default function LoginForm() {
         return;
       }
       else if (res?.code == null){
-        window.location.href = '/';
+        window.location.href = '/posts';
       }
       else {
         throw res?.code;
@@ -73,7 +73,7 @@ export default function LoginForm() {
         return;
       }
       else if (res?.code == null){
-        window.location.href = '/';
+        window.location.href = '/posts';
       }
       else {
         throw res?.code;
