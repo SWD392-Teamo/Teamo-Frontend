@@ -114,12 +114,13 @@ async function handleResponse(response: Response) {
     if (response.ok) {
         return data || response.statusText;
     } else {
-        const error = {
-            status: response.status,
-            // If there is an error text then display it
-            message: typeof(data === 'string') ? data : response.statusText
-        }
-         throw {error}
+        const errorMessage = data?.message || response.statusText;
+        const error = new Error(errorMessage); 
+
+        // (error as any).status = response.status;
+        // (error as any).responseData = data;
+
+        throw error;
     }
 }
 

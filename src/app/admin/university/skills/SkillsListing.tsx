@@ -118,10 +118,8 @@ export default function SkillsListing() {
       await deleteSkill(Number(id));
       getSkills();
       toast.success('Skill deleted successfully');
-    } catch (error) {
-      toast.error(
-        'Unable to delete this skill because it is being used in at least one student profile or group position'
-      );
+    } catch (error: any) {
+      toast.error(error.message);
     } finally {
       setShowConfirmModal(false);
     }
