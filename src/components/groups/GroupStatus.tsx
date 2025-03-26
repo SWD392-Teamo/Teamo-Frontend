@@ -7,7 +7,7 @@ export default function GroupStatusBadge({ status }: { status: string }) {
    };
  
    return (
-     <span className={`px-3 py-1 rounded-full text-base font-semibold ${statusClasses[status] || "bg-gray-100 text-gray-700"}`}>
+     <span className={`ml-4 px-3 py-1 rounded-full text-xs font-semibold ${statusClasses[status] || "bg-gray-100 text-gray-700"}`}>
        {status}
      </span>
    );
