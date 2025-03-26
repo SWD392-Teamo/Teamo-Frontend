@@ -21,11 +21,17 @@ import {
 } from '@/components/ui/avatar';
 import { PositionBadge } from "./PositionCard";
 import { AvatarGroup } from "../ui/avatar-group";
+import { useEffect, useState } from "react";
+import { getUserId } from "@/actions/userActions";
+import LeaderActions from "./actions/LeaderActions";
 
 const GroupCard: React.FC<{ group: Group }> = ({ group }) => {
   const link = `/groups/details/${group.id}`;
 
   const { setSelectedGroup } = useGroupStore();
+  const [currentUserId, setCurrentUserId] = useState<number | null>(null);
+  const [isLeader, setIsLeader] = useState<boolean>(false);
+  
 
   const handleDetailsClick = () => {
     setSelectedGroup(group);
@@ -46,6 +52,20 @@ const GroupCard: React.FC<{ group: Group }> = ({ group }) => {
     );
   };
 
+  useEffect(() => {
+    const fetchUserId = async (): Promise<void> => {
+      const userId = await getUserId();
+      setCurrentUserId(userId);
+      
+      const isUserLeader = group.groupMembers.some(
+        member => member.studentId === userId && member.role === "Leader"
+      );
+      setIsLeader(isUserLeader);
+    };
+    
+    fetchUserId();
+  }, [group.groupMembers]);
+
   return (
     <Card className="overflow-hidden hover:shadow-lg transition h-full flex flex-col">
       <CardHeader className="pb-2">
@@ -58,7 +78,13 @@ const GroupCard: React.FC<{ group: Group }> = ({ group }) => {
           </Avatar>
           
           <div className="flex-1">
-            <h3 className="text-xl font-bold text-blue-500 truncate">{group?.name}</h3>
+            <div className="flex justify-between items-start">
+              <h3 className="text-xl font-bold text-blue-500 truncate">{group?.name}</h3>
+              
+              {isLeader && (
+                <LeaderActions group={group} />
+              )}
+            </div>
             <div className="flex flex-wrap items-center mt-1">
               <h2 className="font-semibold text-lg text-gray-900">{group?.title}</h2>
               {group?.status && <GroupStatusBadge status={group?.status} />}

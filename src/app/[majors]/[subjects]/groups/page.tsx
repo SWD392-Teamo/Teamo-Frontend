@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { getData } from "@/actions/groupActions";
 import { useMajorStore } from "@/hooks/useMajorStore";
@@ -12,17 +12,20 @@ import { useShallow } from "zustand/shallow";
 import GroupHeader from "./GroupHeader";
 import GroupCard from "../../../../components/groups/GroupCard";
 import { useGroupStore } from "@/hooks/useGroupStore";
-import { 
-  Pagination, 
-  PaginationContent, 
-  PaginationEllipsis, 
-  PaginationItem, 
-  PaginationLink, 
-  PaginationNext, 
-  PaginationPrevious 
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
 } from "@/components/ui/pagination";
+import { getUserId } from "@/actions/userActions";
 
 export default function Listings() {
+  const [userId, setUserId] = useState<number | null>(null);
+
   const { selectedSubject } = useSubjectStore(
     useShallow((state) => ({
       selectedSubject: state.selectedSubject,
@@ -56,7 +59,7 @@ export default function Listings() {
 
   const setData = useGroupStore((state) => state.setData);
   const setParams = useParamsStore((state) => state.setParams);
-  
+
   const totalPages = Math.ceil(totalCount / params.pageSize);
 
   const url = queryString.stringifyUrl({
@@ -67,7 +70,14 @@ export default function Listings() {
     },
   });
 
+  useEffect(() => {
+    const fetchUserId = async () => {
+      const id = await getUserId();
+      setUserId(id);
+    };
 
+    fetchUserId();
+  }, []);
 
   useEffect(() => {
     showLoading();
@@ -91,11 +101,11 @@ export default function Listings() {
   const renderPaginationItems = () => {
     const items = [];
     const maxVisiblePages = 5;
-    
+
     items.push(
       <PaginationItem key="first">
-        <PaginationLink 
-          isActive={params.pageIndex === 1} 
+        <PaginationLink
+          isActive={params.pageIndex === 1}
           onClick={() => handlePageChange(1)}
         >
           1
@@ -105,7 +115,7 @@ export default function Listings() {
 
     let startPage = Math.max(2, params.pageIndex - 1);
     let endPage = Math.min(totalPages - 1, params.pageIndex + 1);
-    
+
     const maxMiddlePages = maxVisiblePages - 2;
     if (endPage - startPage + 1 > maxMiddlePages) {
       if (params.pageIndex - startPage > endPage - params.pageIndex) {
@@ -114,7 +124,7 @@ export default function Listings() {
         endPage = Math.min(totalPages - 1, startPage + maxMiddlePages - 1);
       }
     }
-    
+
     if (startPage > 2) {
       items.push(
         <PaginationItem key="ellipsis-start">
@@ -122,12 +132,12 @@ export default function Listings() {
         </PaginationItem>
       );
     }
-    
+
     for (let i = startPage; i <= endPage; i++) {
       items.push(
         <PaginationItem key={i}>
-          <PaginationLink 
-            isActive={params.pageIndex === i} 
+          <PaginationLink
+            isActive={params.pageIndex === i}
             onClick={() => handlePageChange(i)}
           >
             {i}
@@ -135,7 +145,7 @@ export default function Listings() {
         </PaginationItem>
       );
     }
-    
+
     if (endPage < totalPages - 1) {
       items.push(
         <PaginationItem key="ellipsis-end">
@@ -143,12 +153,12 @@ export default function Listings() {
         </PaginationItem>
       );
     }
-    
+
     if (totalPages > 1) {
       items.push(
         <PaginationItem key="last">
-          <PaginationLink 
-            isActive={params.pageIndex === totalPages} 
+          <PaginationLink
+            isActive={params.pageIndex === totalPages}
             onClick={() => handlePageChange(totalPages)}
           >
             {totalPages}
@@ -156,42 +166,54 @@ export default function Listings() {
         </PaginationItem>
       );
     }
-    
+
     return items;
   };
+
 
   return (
     <div className="mb-10">
       {selectedMajor && selectedSubject && (
-        <GroupHeader 
-          subject={selectedSubject} 
-          major={selectedMajor} 
+        <GroupHeader
+          subject={selectedSubject}
+          major={selectedMajor}
           setSearch={setSearch}
         />
       )}
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-        {groups && groups.map((group) => (
-          <GroupCard key={group.id} group={group} />
-        ))}
+        {groups &&
+          groups.map((group) => <GroupCard key={group.id} group={group} />)}
       </div>
 
       {totalPages > 1 && (
         <Pagination className="mt-8">
           <PaginationContent>
             <PaginationItem>
-              <PaginationPrevious 
-                onClick={() => handlePageChange(Math.max(1, params.pageIndex - 1))}
-                className={params.pageIndex === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+              <PaginationPrevious
+                onClick={() =>
+                  handlePageChange(Math.max(1, params.pageIndex - 1))
+                }
+                className={
+                  params.pageIndex === 1
+                    ? "pointer-events-none opacity-50"
+                    : "cursor-pointer"
+                }
               />
             </PaginationItem>
-            
+
             {renderPaginationItems()}
-            
+
             <PaginationItem>
-              <PaginationNext 
-                onClick={() => handlePageChange(Math.min(totalPages, params.pageIndex + 1))}
-                className={params.pageIndex === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+              <PaginationNext
+                onClick={() =>
+                  handlePageChange(Math.min(totalPages, params.pageIndex + 1))
+                }
+                className={
+                  params.pageIndex === totalPages
+                    ? "pointer-events-none opacity-50"
+                    : "cursor-pointer"
+                }
               />
             </PaginationItem>
           </PaginationContent>

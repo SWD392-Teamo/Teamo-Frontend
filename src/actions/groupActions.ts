@@ -2,7 +2,7 @@
 
 import { fetchWrapper } from "@/lib/fetchWrapper"
 import { Group, PagedResult } from "@/types"
-import { addGroup, addGroupMembers } from './../types/interface';
+import { addGroup, addGroupMembers, addGroupPositions, editGroupPositions, editMember,  } from './../types/interface';
 
 
 export async function getData(query: string): Promise<PagedResult<Group>> {
@@ -33,4 +33,31 @@ export async function uploadImage( groupId: number, formData: FormData): Promise
 
 export async function addMember( groupId: number, addGroupMember: addGroupMembers): Promise<any>{
     return await fetchWrapper.post(`groups/${groupId}/members`, addGroupMember)
+}
+
+export async function updateGroup(groupId:number, updateGroup: addGroup): Promise<Group> {
+    return await fetchWrapper.patch(`groups/${groupId}`, updateGroup)
+}
+
+export async function deleteGroup(groupId: number): Promise<any> {
+    return await fetchWrapper.del(`groups/${groupId}`)
+}
+
+export async function updateGroupPosition(groupId: number, positionId: number, position: editGroupPositions): Promise<any> {
+    return await fetchWrapper.patch(`groups/${groupId}/positions/${positionId}`, position)
+}
+
+export async function createGroupPosition(groupId: number, addPosition: addGroupPositions): Promise<any> {
+    return await fetchWrapper.post(`groups/${groupId}/positions`, addPosition)
+}
+
+export async function removeMember(groupId: number, userId: number): Promise<any> {
+    return await fetchWrapper.del(`groups/${groupId}/members/${userId}`)
+}
+export async function removeGroupPosition(groupId: number, positionId: number): Promise<any> {
+    return await fetchWrapper.del(`groups/${groupId}/positions/${positionId}`)
+}
+
+export async function updateMember(groupId: number, userId: number, updateMember: editMember): Promise<any> {
+    return await fetchWrapper.patch(`groups/${groupId}/members/${userId}`, updateMember)
 }

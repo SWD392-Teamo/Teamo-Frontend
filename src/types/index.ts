@@ -57,6 +57,7 @@ export type GroupPosition = {
     name: string;
     count: number;
     status: string;
+    skillIds: number[];
 }
 
 export type GroupMember = {
