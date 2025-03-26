@@ -38,7 +38,6 @@ const AddMembersStep: React.FC<AddMembersStepProps> = ({
   const [isSearching, setIsSearching] = useState<boolean>(false);
   const [searchError, setSearchError] = useState<string | null>(null);
 
-  // Debounced search function
   const debouncedSearch = useCallback(async (query: string) => {
     if (query.length < 2) {
       setUsers([]);
@@ -65,45 +64,36 @@ const AddMembersStep: React.FC<AddMembersStepProps> = ({
     }
   }, []);
 
-  // Handle search input change
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearchQuery(value);
   };
 
-  // Search users effect with debounce
   useEffect(() => {
     const timer = setTimeout(() => {
       debouncedSearch(searchQuery);
-    }, 300); // 300ms debounce
+    }, 300); 
 
     return () => clearTimeout(timer);
   }, [searchQuery, debouncedSearch]);
 
-  // Validate form on change
   useEffect(() => {
     setIsFormValid(selectedUser !== null && selectedPositions.length > 0);
   }, [selectedUser, selectedPositions]);
 
-  // Handle position selection
   const handlePositionSelect = (positionId: number) => {
     setSelectedPositions((prev) => {
-      // Check if already selected
       if (prev.includes(positionId)) {
-        // Remove if already selected
         return prev.filter((id) => id !== positionId);
       } else {
-        // Add if not selected
         return [...prev, positionId];
       }
     });
   };
 
-  // Handle submit
   const handleSubmit = async (): Promise<void> => {
     if (!isFormValid || !selectedUser) return;
 
-    // Ensure position IDs are properly formatted as numbers
     const positionIds = selectedPositions.map((id) => Number(id));
 
     const memberData: addGroupMembers = {
@@ -116,10 +106,8 @@ const AddMembersStep: React.FC<AddMembersStepProps> = ({
     try {
       const success = await onSubmit(memberData);
       if (success) {
-        // Reset form state
         setSelectedUser(null);
         setSelectedPositions([]);
-        // Don't reset search query to improve UX - allow the user to continue searching
       }
     } catch (error) {
       console.error("Error adding member:", error);
@@ -127,7 +115,6 @@ const AddMembersStep: React.FC<AddMembersStepProps> = ({
     }
   };
 
-  // Helper to highlight matching text
   const highlightMatch = (text: string, query: string): JSX.Element => {
     if (!query || query.length < 2) return <>{text}</>;
 
@@ -149,7 +136,6 @@ const AddMembersStep: React.FC<AddMembersStepProps> = ({
         </>
       );
     } catch (e) {
-      // Fallback for any regex issues
       return <>{text}</>;
     }
   };

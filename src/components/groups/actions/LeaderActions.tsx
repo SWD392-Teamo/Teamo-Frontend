@@ -56,7 +56,7 @@ interface LeaderActionsProps {
          <DropdownMenuLabel>Member Management</DropdownMenuLabel>
          
          {/* Member Actions */}
-         <AddMemberDialog groupId={group.id} />
+         <AddMemberDialog group={group} />
          <UpdateMemberDialog members={group.groupMembers} />
          <RemoveMemberDialog groupId={group.id} members={group.groupMembers} />
        </DropdownMenuContent>
