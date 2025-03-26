@@ -6,10 +6,15 @@ import "./globals.css";
 import Footer from "./layout/footer/Footer";
 import Header from "./layout/header/Header";
 import MainWrapper from "./MainWrapper";
+import logo from '@/assets/Logo.png';
+
 
 export const metadata: Metadata = {
   title: "Teamo",
   description: "Teamo",
+  icons: {
+    icon: logo.src
+  }
 };
 
 export default async function RootLayout({
