@@ -148,7 +148,7 @@ export default function UsersListings() {
       <UserFilter />
 
       {/* User Table */}
-      {data.users.length > 0 && (
+      {data.users.length > 0 ? (
         <div className='mb-5'>
           <GenericTable<User>
             data={mappedData}
@@ -157,9 +157,13 @@ export default function UsersListings() {
             onRowClick={handleRowClick}
           />
         </div>
+      ) : (
+        <div className='flex flex-col gap-2 justify-center items-center shadow-lg p-5 mt-5 bg-tertiary'>
+          <h1 className='page-title'>Empty Result</h1>
+        </div>
       )}
       {/* Pagination */}
-      {data.totalCount > data.pageSize ? (
+      {data.totalCount > data.pageSize && (
         <div className='flex justify-end mt-5'>
           <AppPagination
             currentPage={pageIndex}
@@ -167,10 +171,6 @@ export default function UsersListings() {
             totalCount={data.totalCount}
             pageChanged={setPageIndex}
           />
-        </div>
-      ) : (
-        <div className='flex flex-col gap-2 justify-center items-center shadow-lg p-5 mt-5 bg-tertiary'>
-          <h1 className='page-title'>Empty Result</h1>
         </div>
       )}
 
