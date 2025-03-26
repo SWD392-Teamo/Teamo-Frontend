@@ -18,8 +18,10 @@ import GroupFilter from "./GroupFilter";
 import SemesterNavbar from "./SemesterNavbar";
 import SearchBar from "../SearchBar";
 import BackButton from "../BackButton";
-import { Button } from "flowbite-react";
 import { useRouter } from "next/navigation";
+import { Link, PlusIcon } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { Button } from "../ui/button";
 
 interface Props {
   isForUser?: boolean;
@@ -140,6 +142,7 @@ export default function GroupsListing({ isForUser, viewMode }: Props) {
     setSort("");
   };
 
+
   return (
     <div className=" mb-10">
       <div className="mb-10">
@@ -151,6 +154,11 @@ export default function GroupsListing({ isForUser, viewMode }: Props) {
         {/* search bar */}
         <div className="flex items-center justify-between pr-10">
           <SearchBar setSearch={setSearch} />
+
+          <Button onClick={() => router.push("/groups/create")}>
+            <PlusIcon className="mr-2 h-4 w-4" />
+            Create Group
+          </Button>
         </div>
       </div>
 

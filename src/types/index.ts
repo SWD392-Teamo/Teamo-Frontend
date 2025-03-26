@@ -126,3 +126,17 @@ export type StudentSkill = {
     skillType: string,
     skillLevel: string,
 }
+
+export type Post = {
+    id: number,
+    groupId : number,
+    groupName: string,
+    studentId: number,
+    groupMemberName: string,
+    groupMemberImgUrl: string,
+    content: string,
+    status: string,
+    documentUrl: string,
+    createdAt: string,
+    updatedAt: string,
+}

@@ -8,6 +8,10 @@ export async function getData(query: string): Promise<PagedResult<Semester>> {
     return await fetchWrapper.get(`semesters${query}`)
 }
 
+export async function getAllSemesters(query: string): Promise<Semester[]> {
+    return await fetchWrapper.get(`semesters${query}`)
+}
+
 export async function getSemesterById(semesterId: number): Promise<Semester> {
     return await fetchWrapper.get(`semesters/${semesterId}`)
 }

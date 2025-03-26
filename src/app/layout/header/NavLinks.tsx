@@ -27,18 +27,11 @@ export default function NavLinks({ role }: Props) {
         ];
       case "Student":
         return [
-          <Link key="home" href="/majors" className="link">
-            Home
-          </Link>,
-          <Link key="groups" href="/groups" className="link">
-            Groups
-          </Link>,
-          <Link key="profile" href="/profile" className="link">
-            Profile
-          </Link>,
-          <Link key="applications" href="/applications" className="link">
-            Applications
-          </Link>,
+          <Link key="home" href='/posts' className='link'>Home</Link>,
+          <Link key="majors" href='/majors' className='link'>Majors</Link>,
+          <Link key="groups" href='/groups' className='link'>Groups</Link>,
+          <Link key="profile" href='/profile' className='link'>Profile</Link>,
+          <Link key="applications" href='/applications' className='link'>Applications</Link>
         ];
       default:
         return <></>;
