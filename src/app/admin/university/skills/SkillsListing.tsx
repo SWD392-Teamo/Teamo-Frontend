@@ -118,8 +118,8 @@ export default function SkillsListing() {
       await deleteSkill(Number(id));
       getSkills();
       toast.success('Skill deleted successfully');
-    } catch (error) {
-      toast.error('Failed to delete skill');
+    } catch (error: any) {
+      toast.error(error.message);
     } finally {
       setShowConfirmModal(false);
     }
