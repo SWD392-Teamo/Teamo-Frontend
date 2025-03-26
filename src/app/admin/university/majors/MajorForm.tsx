@@ -1,15 +1,19 @@
 'use client'
 
 import { createMajor, updateMajor } from '@/actions/majorActions';
+import { getAllSubjects, getData } from '@/actions/subjectAction';
 import FilePicker from '@/components/FilePicker';
 import Input from '@/components/Input';
+import { useSubjectStore } from '@/hooks/useSubjectStore';
 import { useLoading } from '@/providers/LoadingProvider';
-import { Major } from '@/types';
+import { Major, Subject } from '@/types';
 import { Button } from 'flowbite-react';
 import Image from 'next/image';
+import queryString from 'query-string';
 import React, { useEffect, useState } from 'react'
 import { FieldValues, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
+import { useShallow } from 'zustand/shallow';
 
 interface Props {
   major?: Major,
@@ -21,6 +25,59 @@ export default function MajorForm({major, onCancel, onSuccess}: Props) {
   const { showLoading, hideLoading } = useLoading();
   const [hasMajor, setHasMajor] = useState<boolean>(false);
   const [selectedFile, setSelectedFile] = useState<File>();
+  const [selectedSubjectIds, setSelectedSubjectIds] = useState<number[]>([]);
+
+  const status = "Active";  
+  const [allSubjects, setAllSubjects] = useState<Subject[]>([]);
+
+  const getUrl = (pageNum:number) => {
+      return queryString.stringifyUrl({
+        url: "",
+        query: {
+          status,
+          pageIndex: pageNum
+        },
+      });
+    };
+
+  useEffect(() => {
+    let allData: any[] = [];
+    let currentPage = 1;
+
+    const fetchAllSubjects = async () => {
+      showLoading();
+      allData = [];
+
+      while (true) {
+        const response = await getData(getUrl(currentPage));
+
+        if (response.data.length === 0) break;
+
+        allData = [...allData, ...response.data];
+        currentPage++;
+
+        if (allData.length >= response.count) break;
+      }
+
+      setAllSubjects(allData);
+      hideLoading();
+    };
+
+    fetchAllSubjects();
+  }, []);
+
+  // Handle subject selection change
+  function handleSubjectChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const subjectId = parseInt(e.target.value);
+    
+    if (e.target.checked) {
+      // Add the subject ID to the selected list
+      setSelectedSubjectIds((prevIds) => [...prevIds, subjectId]);
+    } else {
+      // Remove the subject ID from the selected list
+      setSelectedSubjectIds((prevIds) => prevIds.filter(id => id !== subjectId));
+    }
+  }
 
   async function handleImagePicked(file: File) {
     setSelectedFile(file);
@@ -38,6 +95,9 @@ export default function MajorForm({major, onCancel, onSuccess}: Props) {
         setHasMajor(true);
         const {code, name} = major
         reset({code, name});
+
+        const subjectIds = major.subjects ? major.subjects.map((subject: { id: number }) => subject.id) : [];
+        setSelectedSubjectIds(subjectIds);
     }
   }, [major, reset])
 
@@ -55,6 +115,10 @@ export default function MajorForm({major, onCancel, onSuccess}: Props) {
         if (selectedFile) {
           formData.append('image', selectedFile);
         }
+
+        console.log(JSON.stringify(selectedSubjectIds))
+
+        formData.append('subjectIds', JSON.stringify(selectedSubjectIds));
 
         let res;
 
@@ -140,6 +204,28 @@ export default function MajorForm({major, onCancel, onSuccess}: Props) {
               />
           </div>
         }
+
+        {/* Subject selection */}
+        <div className="mb-5">
+          <label className="text-sm font-medium">Select Subjects</label>
+          <div className="space-y-2">
+            {allSubjects.map((subject) => (
+              <div key={subject.id} className="flex items-center">
+                <input
+                  type="checkbox"
+                  id={`subject-${subject.id}`}
+                  value={subject.id}
+                  onChange={handleSubjectChange}
+                  checked={selectedSubjectIds.includes(subject.id)}
+                  className="mr-2"
+                />
+                <label htmlFor={`subject-${subject.id}`} className="text-sm">
+                  {subject.name}
+                </label>
+              </div>
+            ))}
+          </div>
+        </div>
 
         <div className='flex gap-6 justify-end'>
             <Button 

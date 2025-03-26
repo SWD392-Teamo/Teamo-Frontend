@@ -9,6 +9,7 @@ type ActionButton = {
   label: React.ReactNode;
   onClick: (id: number) => void;
   className?: string;
+  constraintStatus?: string
 };
 
 // Update the props type to include actions
@@ -81,6 +82,7 @@ export default function GenericTable<T>({
                   ) : column.header === "Action" && actions ? (
                     <div className="flex flex-row align-middle justify-between gap-3">
                       {actions.map((action, index) => (
+                        !(String(item['status']) == action.constraintStatus) &&
                         <Button
                           key={index}
                           className={
