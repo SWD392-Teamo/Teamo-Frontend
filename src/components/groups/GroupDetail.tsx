@@ -127,7 +127,9 @@ export default function GroupDetail() {
 
         <div className='font-semibold text-base text-[#8C8F8E] '>
           {selectedgroup?.createdAt && (
-            <DateConverter isoDate={selectedgroup?.createdAt + 'Z'} />
+            <DateConverter
+              isoDate={new Date(selectedgroup.createdAt).toISOString()}
+            />
           )}
         </div>
       </div>
