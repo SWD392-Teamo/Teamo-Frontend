@@ -263,7 +263,7 @@ export const UpdatePositionsDialog: React.FC<{ group: Group }> = ({ group }) => 
                                     <SelectValue placeholder="Select status" />
                                   </SelectTrigger>
                                 </FormControl>
-                                <SelectContent>
+                                <SelectContent className='bg-white'>
                                   {positionStatusOptions.map(option => (
                                     <SelectItem key={option.value} value={option.value}>
                                       {option.label}
