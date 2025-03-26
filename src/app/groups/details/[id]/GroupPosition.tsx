@@ -98,7 +98,7 @@ const GroupPositionCard: React.FC<{
                   ))}
                 </div>
                 
-                {!isMemberOrLeader &&           
+                {!isMemberOrLeader &&  position?.status === "Open" &&   
 
                 <Button 
                   variant="default"

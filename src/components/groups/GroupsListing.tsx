@@ -80,7 +80,7 @@ export default function GroupsListing({ isForUser, viewMode }: Props) {
         const groups = isForUser
           ? await getUserGroups(url)
           : await getGroupData(url);
-
+        console.log(groups);
         // Format Created Date
         const formattedGroups = {
           ...groups,

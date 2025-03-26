@@ -1,11 +1,14 @@
-'use client'
+'use client';
 
 import React, { useCallback, useState } from 'react'
 import { Controller, FieldValues, useForm } from 'react-hook-form'
 import FilePicker from '@/components/FilePicker';
 import toast from 'react-hot-toast';
 import { useLoading } from '@/providers/LoadingProvider';
-import { sendApplication, uploadApplicationDocument } from '@/actions/applicationActions';
+import {
+  sendApplication,
+  uploadApplicationDocument,
+} from '@/actions/applicationActions';
 import InputArea from '@/components/InputArea';
 import { Label } from '../ui/label';
 import { Input } from '../ui/input';
@@ -19,17 +22,16 @@ interface ApplicationFormProps {
   onCancel: () => void;
 }
 
-export default function ApplicationForm({ 
+export default function ApplicationForm({
   groupPositionId,
-  groupId, 
-  onCancel
+  groupId,
+  onCancel,
 }: ApplicationFormProps) {
   const { showLoading, hideLoading } = useLoading();
   const [documentUrl, setDocumentUrl] = useState<string>('');
   const [fileName, setFileName] = useState<string>('');
   const [isDragging, setIsDragging] = useState<boolean>(false);
 
-  // Set up form with react-hook-form
   const {
     control,
     handleSubmit,
@@ -115,21 +117,17 @@ export default function ApplicationForm({
       const res = await sendApplication(groupId, {
         ...data,
         documentUrl,
-        groupPositionId 
       });
-      
-      if (res && res.statusCode !== 400) {
-        toast.success("Application sent successfully!");
-
+      if (res) {
+        toast.success(res.message);
         onCancel();
-      } else {
-        toast.success("Application sent failed! Please try again later");
-
+      } else if (res.statusCode == 400) {
+        toast.error(res.message);
       }
     } catch (error: any) {
-      toast.error("Document uploaded failed!");
-
+      toast.error(error.message);
     } finally {
+      hideLoading();
       hideLoading();
     }
   }
@@ -242,5 +240,6 @@ export default function ApplicationForm({
         </Button>
       </div>
     </form>
+
   );
 }
