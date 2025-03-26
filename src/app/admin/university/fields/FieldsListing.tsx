@@ -118,8 +118,8 @@ export default function FieldsListing() {
       await deleteField(Number(id));
       getFields();
       toast.success('Field deleted successfully');
-    } catch (error) {
-      toast.error('Failed to delete field');
+    } catch (error: any) {
+      toast.error(error.message);
     } finally {
       setShowConfirmModal(false);
     }
