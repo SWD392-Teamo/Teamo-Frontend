@@ -119,7 +119,9 @@ export default function SkillsListing() {
       getSkills();
       toast.success('Skill deleted successfully');
     } catch (error) {
-      toast.error('Failed to delete skill');
+      toast.error(
+        'Unable to delete this skill because it is being used in at least one student profile or group position'
+      );
     } finally {
       setShowConfirmModal(false);
     }
