@@ -42,8 +42,8 @@ export default function FieldForm({field, onCancel, onSuccess}: Props) {
 
         let res;
 
-        if (hasField) {
-          res = await updateField(field?.id!, data);
+        if (hasField && field?.id) {
+          res = await updateField(field?.id, data);
         }
         else {
           res = await createField(data);

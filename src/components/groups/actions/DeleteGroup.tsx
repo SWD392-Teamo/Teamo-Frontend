@@ -46,7 +46,7 @@ export const DeleteGroupDialog: React.FC<{
         <DialogHeader>
           <DialogTitle>Delete Group</DialogTitle>
           <DialogDescription>
-            Are you sure you want to delete "{groupName}"? This action cannot be undone.
+            Are you sure you want to delete &quot;{groupName}&quot;? This action cannot be undone.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>

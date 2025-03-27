@@ -42,8 +42,8 @@ export default function SkillForm({skill, onCancel, onSuccess}: Props) {
 
         let res;
 
-        if (hasField) {
-          res = await updateSkill(skill?.id!, data);
+        if (hasField && skill?.id) {
+          res = await updateSkill(skill?.id, data);
         }
         else {
           res = await createSkill(data);

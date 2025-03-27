@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import CreateGroupStep from "@/components/groups/create/CreateGroupStep";
 import AddMembersStep from "@/components/groups/create/AddMemberStep";
 import AddImageStep from "@/components/groups/create/AddImageStep";
+import { GroupPosition } from "@/types";
 
 const STEPS = {
    CREATE_GROUP: 0,
@@ -18,7 +19,7 @@ const STEPS = {
  const CreateGroupPage = () => {
    const [step, setStep] = useState(STEPS.CREATE_GROUP);
    const [createdGroupId, setCreatedGroupId] = useState<number | undefined>(undefined);
-   const [createdPositions, setCreatedPositions] = useState([]);
+   const [createdPositions, setCreatedPositions] = useState<GroupPosition[]>([]);
    const [isSubmitting, setIsSubmitting] = useState(false);
    
    const router = useRouter();
@@ -45,7 +46,7 @@ const STEPS = {
  
    // Handle member addition
    const handleAddMember = async (memberData: addGroupMembers) => {
-     if (!createdGroupId) return;
+     if (!createdGroupId) return false;
      
      setIsSubmitting(true);
      try {

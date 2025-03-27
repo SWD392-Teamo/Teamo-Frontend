@@ -57,8 +57,8 @@ export default function SubjectForm({semester, onCancel, onSuccess}: Props) {
 
         let res;
 
-        if (hasSemester) {
-          res = await updateSemester(semester?.id!, data);
+        if (hasSemester && semester?.id) {
+          res = await updateSemester(semester?.id, data);
         }
         else {
           res = await createSemester(data);

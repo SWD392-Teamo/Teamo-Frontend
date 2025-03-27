@@ -38,8 +38,8 @@ export interface addGroupMembers {
 export interface editGroupPositions {
    name: string,
    count: number,
-   status: string, //Open, Closed, Deleted
-   skillIds: number[],
+   status: string | undefined, //Open, Closed, Deleted
+   skillIds: (number | undefined)[],
 }
 
 export interface editMember {

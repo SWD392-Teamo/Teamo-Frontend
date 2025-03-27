@@ -122,8 +122,8 @@ export default function MajorForm({major, onCancel, onSuccess}: Props) {
 
         let res;
 
-        if (hasMajor) {
-          res = await updateMajor(major?.id!, formData);
+        if (hasMajor && major?.id) {
+          res = await updateMajor(major?.id, formData);
         }
         else {
           res = await createMajor(formData);

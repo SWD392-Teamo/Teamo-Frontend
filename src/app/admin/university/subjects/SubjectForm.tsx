@@ -60,8 +60,8 @@ export default function SubjectForm({subject, onCancel, onSuccess}: Props) {
 
         let res;
 
-        if (hasSubject) {
-          res = await updateSubject(subject?.id!, formData);
+        if (hasSubject && subject?.id) {
+          res = await updateSubject(subject?.id, formData);
         }
         else {
           res = await createSubject(formData);

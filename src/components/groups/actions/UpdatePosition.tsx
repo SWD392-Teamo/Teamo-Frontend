@@ -123,7 +123,7 @@ export const UpdatePositionsDialog: React.FC<{ group: Group }> = ({ group }) => 
     }
   }, [open]);
 
-  const getSkillNames = (skillIds: number[]) => {
+  const getSkillNames = (skillIds: (number | undefined)[]) => {
     return skillIds.map(id => {
       const skill = skills.find(s => s.id === id);
       return skill ? skill.name : `Skill ${id}`;

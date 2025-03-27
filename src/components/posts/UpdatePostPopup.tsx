@@ -130,7 +130,7 @@ const UpdatePostPopup: React.FC<UpdatePostPopupProps> = ({
         <DialogHeader>
           <DialogTitle>Update Post</DialogTitle>
           <DialogDescription>
-            Make changes to your post. Click save when you're done.
+            Make changes to your post. Click save when you&#39;re done.
           </DialogDescription>
         </DialogHeader>
 

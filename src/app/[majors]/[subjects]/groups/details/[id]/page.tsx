@@ -36,9 +36,13 @@ const GroupDetail: React.FC = () => {
 
   const groupMembers = selectedgroup?.groupMembers;
   const groupPositions = selectedgroup?.groupPositions;
+
   const isLeader = groupMembers?.some(
     (member) => member.studentId === userId && member.role === "Leader"
-  );
+  ) ?? false;
+  const isMember = groupMembers?.some(
+    (member) => member.studentId === userId && member.role === "Member"
+  ) ?? false;
 
   return (
     <div className="border border-gray-200 rounded-lg shadow-sm p-12 flex flex-col items-start hover:shadow-lg transition flex-1 mb-16">
@@ -123,6 +127,7 @@ const GroupDetail: React.FC = () => {
           <GroupPositionCard
             positions={groupPositions}
             members={groupMembers}
+            isMemberOrLeader={isLeader || isMember}
           />
         )}
       </div>
