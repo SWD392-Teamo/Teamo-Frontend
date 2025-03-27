@@ -151,7 +151,7 @@ export default function MajorsListing() {
     <div className='mb-10 mt-5'>
       {/* Create Major Button */}
       <Button
-        className='btn btn--secondary btn--icon'
+        className='btn btn--primary btn--icon'
         onClick={() => {
           setSelectedMajor(undefined);
           setShowModal(true);

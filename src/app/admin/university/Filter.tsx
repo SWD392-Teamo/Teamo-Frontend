@@ -14,7 +14,7 @@ export default function Filter({status, setSearch, setStatus, setPageIndex}: Fil
       {setStatus && 
         <div className="flex gap-5 mt-3">
           <Button
-            className={`btn ${status === '' ? 'btn--primary' : 'btn--primary--outline'}`}
+            className={`btn ${status === '' ? 'btn--secondary' : 'btn--secondary--outline'}`}
             onClick={() => 
               {
                 setStatus('');
@@ -25,7 +25,7 @@ export default function Filter({status, setSearch, setStatus, setPageIndex}: Fil
             All
           </Button>
           <Button
-            className={`btn ${status === 'active' ? 'btn--primary' : 'btn--primary--outline'}`}
+            className={`btn ${status === 'active' ? 'btn--secondary' : 'btn--secondary--outline'}`}
             onClick={() => 
               {
                 setStatus('active');
@@ -36,7 +36,7 @@ export default function Filter({status, setSearch, setStatus, setPageIndex}: Fil
             Active
           </Button>
           <Button
-            className={`btn ${status === 'inactive' ? 'btn--primary' : 'btn--primary--outline'}`}
+            className={`btn ${status === 'inactive' ? 'btn--secondary' : 'btn--secondary--outline'}`}
             onClick={() => 
               {
                 setStatus('inactive');
