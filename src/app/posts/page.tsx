@@ -1,6 +1,7 @@
 "use client";
 import { getData, getUserGroups } from "@/actions/groupActions";
-import {  getPostByGroup, getPostData } from "@/actions/postAction";
+import { getPostByGroup, getPostData } from "@/actions/postAction";
+import { getProfile, getUserId } from "@/actions/userActions";
 import { CreatePostPopup } from "@/components/posts/CreatePostPopup";
 import PostCard from "@/components/posts/PostCard";
 import {
@@ -35,7 +36,12 @@ export default function Listings() {
   } | null>(null);
   const [posts, setPosts] = useState<Post[]>([]);
   const [groups, setGroups] = useState<Group[]>([]);
-
+  const [refreshData, setRefreshData] = useState<boolean>(false);
+  const [currentUser, setCurrentUser] = useState<{
+    id: number;
+    name: string;
+    imgUrl?: string;
+  } | null>(null);
 
   const params = useParamsStore(
     useShallow((state) => ({
@@ -57,7 +63,6 @@ export default function Listings() {
 
   const setData = usePostStore((state) => state.setData);
 
-  // Updated URL generation to include pageIndex and pageSize
   const url = queryString.stringifyUrl({
     url: "",
     query: {
@@ -68,44 +73,62 @@ export default function Listings() {
   });
 
   useEffect(() => {
+    const fetchCurrentUser = async () => {
+      try {
+        const userId = await getUserId();
+        const userResponse = await getProfile(); // Assume this function exists
+        setCurrentUser({
+          id: userId,
+          name: userResponse.firstName || "User",
+          imgUrl: userResponse.imgUrl,
+        });
+      } catch (error) {
+        console.error("Failed to fetch user info:", error);
+      }
+    };
+
+    fetchCurrentUser();
+  }, []);
+
+  useEffect(() => {
     const fetchGroups = async () => {
       try {
         showLoading();
         const groupQuery = queryString.stringifyUrl({
-          url: '',
+          url: "",
           query: {
             pageIndex: 1,
-            pageSize: 100, 
+            pageSize: 100,
           },
         });
-        
+
         const groupsResponse = await getUserGroups(groupQuery);
         setGroups([
-          { 
-            id: 0, 
-            name: 'All', 
-            title: 'All Groups', 
-            semesterName: '',
-            description: '',
-            createdAt: '',
-            createdByUserName: '',
+          {
+            id: 0,
+            name: "All",
+            title: "All Groups",
+            semesterName: "",
+            description: "",
+            createdAt: "",
+            createdByUserName: "",
             maxMember: 0,
-            imgUrl: '',
+            imgUrl: "",
             groupMembers: [],
-            status: '',
-            fieldName: '',
-            subjectCode: '',
+            status: "",
+            fieldName: "",
+            subjectCode: "",
             totalMembers: 0,
             totalGroupPositions: 0,
             totalApplications: 0,
             groupPositions: [],
-            applications: []
+            applications: [],
           },
-          ...groupsResponse.data
+          ...groupsResponse.data,
         ]);
       } catch (error) {
-        console.error('Failed to fetch groups:', error);
-        toast.error('Failed to load groups');
+        console.error("Failed to fetch groups:", error);
+        toast.error("Failed to load groups");
       } finally {
         hideLoading();
       }
@@ -114,18 +137,28 @@ export default function Listings() {
     fetchGroups();
   }, []);
 
+  // Modified useEffect to also respond to refreshData changes
   useEffect(() => {
-    console.log("Fetching data with URL:", url);
+    console.log(
+      "Fetching data with URL:",
+      url,
+      "Refresh trigger:",
+      refreshData
+    );
     showLoading();
 
-    const fetchMethod = selectedGroup && selectedGroup.id !== 0
-      ? () => getPostByGroup(selectedGroup.id, url)
-      : () => getPostData(url);
+    const fetchMethod =
+      selectedGroup && selectedGroup.id !== 0
+        ? () => getPostByGroup(selectedGroup.id, url)
+        : () => getPostData(url);
 
     fetchMethod()
       .then((responseData) => {
         console.log("Fetched Data:", responseData);
         setData(responseData);
+        if (refreshData) {
+          setRefreshData(false);
+        }
       })
       .catch((error) => {
         console.error("Fetch Error:", error);
@@ -142,9 +175,11 @@ export default function Listings() {
     setData,
     showLoading,
     hideLoading,
+    refreshData,
   ]);
 
   useEffect(() => {
+    console.log("data.posts:", data);
     const filteredPosts = data.posts.filter(
       (p) => p.status === "Posted" || p.status === "Edited"
     );
@@ -158,6 +193,21 @@ export default function Listings() {
     }
   }, [data.posts]);
 
+  // Handler functions for CRUD operations
+  const handlePostCreated = () => {
+    console.log("Post created, refreshing data");
+    setRefreshData(true);
+  };
+
+  const handlePostUpdated = () => {
+    console.log("Post updated, refreshing data");
+    setRefreshData(true);
+  };
+
+  const handlePostDeleted = () => {
+    console.log("Post deleted, refreshing data");
+    setRefreshData(true);
+  };
 
   const filteredPosts = posts;
 
@@ -192,8 +242,6 @@ export default function Listings() {
       <header className="flex justify-between items-center">
         <h1 className="page-title">Group Posts</h1>
       </header>
-
-      <div className="flex items-center space-x-4">
       <Select
           onValueChange={handleGroupSelect}
           value={selectedGroup ? selectedGroup.id.toString() : undefined}
@@ -214,20 +262,24 @@ export default function Listings() {
           </SelectContent>
         </Select>
 
-        {selectedGroup && selectedGroup.id !== 0 && (
+      <div className="space-y-4">
+        {currentUser && (
           <CreatePostPopup
-            groupId={selectedGroup.id}
-            groupName={selectedGroup.name}
-            onPostCreated={() => {
-              // Optional: Refresh posts or update state
-            }}
+            groups={groups}
+            currentUser={currentUser}
+            onPostCreated={handlePostCreated}
           />
         )}
       </div>
 
       <div className="space-y-4">
         {filteredPosts.map((post) => (
-          <PostCard key={post.id} {...post} />
+          <PostCard
+            key={post.id}
+            {...post}
+            onPostUpdated={handlePostUpdated}
+            onPostDeleted={handlePostDeleted}
+          />
         ))}
 
         {/* No Posts Message */}

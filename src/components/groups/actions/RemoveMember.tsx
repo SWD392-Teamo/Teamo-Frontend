@@ -27,13 +27,13 @@ import { getUserId } from "@/actions/userActions";
 interface RemoveMemberDialogProps {
   groupId: number;
   members: GroupMember[];
-  onMemberRemoved?: () => void;
+  onComplete?: () => void;
 }
 
 export const RemoveMemberDialog: React.FC<RemoveMemberDialogProps> = ({
   groupId,
   members,
-  onMemberRemoved,
+  onComplete,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedMember, setSelectedMember] = useState<GroupMember | null>(null);
@@ -99,9 +99,8 @@ export const RemoveMemberDialog: React.FC<RemoveMemberDialogProps> = ({
       
       toast.success("Member removed successfully!");
       
-      if (onMemberRemoved) {
-        onMemberRemoved();
-      }
+      if (onComplete) onComplete();
+
       
       setIsOpen(false);
     } catch (error:any) {

@@ -19,7 +19,7 @@ import toast from "react-hot-toast";
 import { addGroupMembers } from "@/types/interface";
 import { addMember } from "@/actions/groupActions";
 
-export const AddMemberDialog: React.FC<{ group: Group }> = ({ group }) => {
+export const AddMemberDialog: React.FC<{ group: Group, onComplete?: () => void }> = ({ group, onComplete }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearching, setIsSearching] = useState(false);
   const [searchError, setSearchError] = useState("");
@@ -139,6 +139,8 @@ export const AddMemberDialog: React.FC<{ group: Group }> = ({ group }) => {
       toast.success("Member added successfully!");
 
       setIsOpen(false);
+
+      if (onComplete) onComplete();
     } catch (error) {
       console.error("Error adding member:", error);
       toast.error("Failed to add member. Please try again.");

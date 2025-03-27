@@ -11,8 +11,8 @@ import toast from "react-hot-toast";
 export const DeleteGroupDialog: React.FC<{ 
   groupId: number; 
   groupName: string;
-  onDeleteSuccess?: () => void;
-}> = ({ groupId, groupName, onDeleteSuccess }) => {
+  onComplete?: () => void;
+}> = ({ groupId, groupName, onComplete }) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
@@ -23,6 +23,7 @@ export const DeleteGroupDialog: React.FC<{
       await deleteGroup(groupId);
       setIsOpen(false);
       toast.success("Group deleted successfully!");
+      if (onComplete) onComplete();
 
     } catch (error: any) {
       console.error("Error deleting group:", error);

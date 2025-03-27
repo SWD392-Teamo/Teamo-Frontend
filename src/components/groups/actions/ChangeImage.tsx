@@ -15,13 +15,21 @@ import ImageUpload from './ImageUpload'; // Make sure to import your ImageUpload
 interface ChangeImageDialogProps {
   groupId: number;
   groupName: string;
+  onComplete?: () => void;
 }
-
-const ChangeImageDialog: React.FC<ChangeImageDialogProps> = ({ groupId, groupName }) => {
+const ChangeImageDialog: React.FC<ChangeImageDialogProps> = ({ 
+  groupId, 
+  groupName,
+  onComplete 
+}) => {
   const [open, setOpen] = React.useState(false);
 
   const handleSuccess = () => {
     setOpen(false);
+    
+    if (onComplete) {
+      onComplete();
+    }
   };
 
   return (

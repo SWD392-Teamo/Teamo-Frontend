@@ -82,8 +82,9 @@ const updatePositionsSchema = z.object({
   positions: z.array(positionSchema),
 });
 
-export const UpdatePositionsDialog: React.FC<{ group: Group }> = ({
+export const UpdatePositionsDialog: React.FC<{ group: Group, onComplete?: () => void }> = ({
   group,
+  onComplete
 }) => {
   const [skills, setSkills] = useState<Skill[]>([]);
   const [open, setOpen] = useState(false);
@@ -151,6 +152,7 @@ export const UpdatePositionsDialog: React.FC<{ group: Group }> = ({
       toast.success("Positions updated successfully!");
 
       setOpen(false);
+      if (onComplete) onComplete();
     } catch (error: any) {
       console.error("Failed to update positions:", error);
       toast.error(error.message);
