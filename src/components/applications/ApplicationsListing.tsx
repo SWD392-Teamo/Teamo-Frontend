@@ -22,6 +22,8 @@ import { useShallow } from 'zustand/shallow';
 import AppModal from '../AppModal';
 import ApplicationDetails from './ApplicationDetails';
 import EmptyFilter from '../EmptyFilter';
+import { addMember } from '@/actions/groupActions';
+import { addGroupMembers } from '@/types/interface';
 
 interface Props {
   isForUser: boolean;
@@ -158,14 +160,29 @@ export default function ApplicationsListing({ isForUser }: Props) {
   const handleApprove = async (id: number) => {
     try {
       showLoading();
+
       // Approve application
+      const application = await getApplicationById(id);
       await reviewApplication(groupId, Number(id), { status: 'Approved' });
+
+      // Add member to the group
+      var res = await addMember(groupId, {
+        studentId: application?.studentId,
+        groupPositionIds: [application.groupPositionId]
+      });
+      
+      if (res.error == undefined) {
+        toast.success('Application approved successfully');
+      }
+      else if(res.error.message.statusCode == 400) {
+        toast.error(res.error.message.message);
+      }
+
       if (isForUser) {
         getApplicationsForUser();
       } else {
         getApplicationsForGroup();
       }
-      toast.success('Application approved successfully');
     } catch (error) {
       toast.error('Failed to approve application');
     } finally {
