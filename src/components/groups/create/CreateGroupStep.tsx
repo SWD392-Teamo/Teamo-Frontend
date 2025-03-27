@@ -134,11 +134,11 @@ const CreateGroupStep: React.FC<CreateGroupStepProps> = ({
           subjectsData,
           fieldssData,
         ] = await Promise.all([
-          getAllSkills(''),
-          getAllSemesters('?status=ongoing'),
-          getAllSemesters('?status=upcoming'),
-          getAllSubjects('?status=Active'),
-          getAllFields(''),
+          getAllSkills('?pageSize=300'),
+          getAllSemesters('?status=ongoing&pageSize=300'),
+          getAllSemesters('?status=upcoming&pageSize=300'),
+          getAllSubjects('?status=Active&pageSize=300'),
+          getAllFields('?pageSize=300'),
         ]);
 
         setSkills(skillsData.data);
@@ -195,6 +195,8 @@ const CreateGroupStep: React.FC<CreateGroupStepProps> = ({
       .map((id) => skills.find((skill) => skill.id === id)?.name)
       .filter(Boolean) as string[];
   };
+
+  console.log("subject", subjects )
 
   return (
     <Card className='w-full mx-auto'>

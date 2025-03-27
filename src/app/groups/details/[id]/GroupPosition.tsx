@@ -2,7 +2,7 @@
 
 import MemberAvatar from "@/components/groups/MemberAvatar";
 import PositionStatusBadge from "@/components/PositionStatus";
-import { Group, GroupMember, GroupPosition } from "@/types";
+import { Group, GroupMember, GroupPosition, Skill } from "@/types";
 import Image from "next/image";
 import { List } from "postcss/lib/list";
 import defaultAvatar from "@/assets/defaultAvatar.jpg";
@@ -10,7 +10,7 @@ import { IoIosStar } from "react-icons/io";
 import { useGroupStore } from "@/hooks/useGroupStore";
 import { useShallow } from "zustand/shallow";
 import { HiOutlineLightningBolt } from "react-icons/hi";
-import { useState } from "react";
+import { use, useEffect, useState } from "react";
 import AppModal from "@/components/AppModal";
 import ApplicationForm from "@/components/applications/ApplicationForm";
 
@@ -20,6 +20,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 
 
+
 const GroupPositionCard: React.FC<{
   positions: GroupPosition[];
   members: GroupMember[];
@@ -27,12 +28,17 @@ const GroupPositionCard: React.FC<{
 }> = ({ positions, members, isMemberOrLeader }) => {
   const [showModal, setShowModal] = useState(false);
   const [selectedPositionId, setSelectedPositionId] = useState(0);
+  const [skills, setSkills] = useState<Skill[]>([]);
   
   const { selectedgroup } = useGroupStore(
     useShallow((state) => ({
       selectedgroup: state.selectedGroup,
     }))
   );
+
+  useEffect(() => {
+    
+  }, [selectedgroup]);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

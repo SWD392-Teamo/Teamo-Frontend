@@ -67,11 +67,7 @@ export const RemoveMemberDialog: React.FC<RemoveMemberDialogProps> = ({
     setConfirmRemoval(false);
   };
 
-  const memberHasPositions = (member: GroupMember | null): boolean => {
-    return (
-      !!member && Array.isArray(member.positions) && member.positions.length > 0
-    );
-  };
+
   
   const isCurrentUser = (member: GroupMember | null): boolean => {
     return !!member && !!currentUserId && member.studentId === currentUserId;
@@ -79,17 +75,11 @@ export const RemoveMemberDialog: React.FC<RemoveMemberDialogProps> = ({
   
   const canRemoveMember = (member: GroupMember | null): boolean => {
     return !!member && 
-      !memberHasPositions(member) && 
       !isCurrentUser(member);
   };
 
   const handleConfirmRemoval = () => {
     if (!selectedMember) return;
-
-    if (memberHasPositions(selectedMember)) {
-      toast.error("Cannot remove member with positions.");
-      return;
-    }
     
     if (isCurrentUser(selectedMember)) {
       toast.error("Cannot remove current user.");
@@ -156,9 +146,8 @@ export const RemoveMemberDialog: React.FC<RemoveMemberDialogProps> = ({
               </SelectTrigger>
               <SelectContent className="bg-white">
                 {members.map((member) => {
-                  const hasPositions = memberHasPositions(member);
                   const isSelf = isCurrentUser(member);
-                  const disabled = hasPositions || isSelf;
+                  const disabled =  isSelf;
                   
                   return (
                     <SelectItem
@@ -168,17 +157,13 @@ export const RemoveMemberDialog: React.FC<RemoveMemberDialogProps> = ({
                     >
                       <div className="flex items-center">
                         {member.studentName}
-                        {hasPositions && (
-                          <span className="ml-2 text-xs text-red-500">
-                            (Has positions)
-                          </span>
-                        )}
+
                         {isSelf && (
                           <span className="ml-2 text-xs text-red-500">
                             (You)
                           </span>
                         )}
-                        {member.role === "Leader" && !isSelf && !hasPositions && (
+                        {member.role === "Leader" && !isSelf && (
                           <span className="ml-2 text-xs text-amber-500">
                             (Leader)
                           </span>
@@ -211,26 +196,7 @@ export const RemoveMemberDialog: React.FC<RemoveMemberDialogProps> = ({
                 <span className="font-medium">Role:</span> {selectedMember.role}
               </p>
 
-              {memberHasPositions(selectedMember) ? (
-                <div className="mt-3 p-3 bg-red-50 border border-red-200 rounded-md flex items-start">
-                  <AlertCircle className="h-5 w-5 text-red-500 mr-2 flex-shrink-0 mt-0.5" />
-                  <div>
-                    <p className="text-sm font-medium text-red-700">
-                      Cannot Remove
-                    </p>
-                    <p className="text-sm text-red-600">
-                      This member has the following positions:
-                      <span className="font-medium">
-                        {" "}
-                        {selectedMember.positions.join(", ")}
-                      </span>
-                    </p>
-                    <p className="text-sm text-red-600 mt-1">
-                      Please update their positions first before removing them.
-                    </p>
-                  </div>
-                </div>
-              ) : isCurrentUser(selectedMember) ? (
+              {isCurrentUser(selectedMember) ? (
                 <div className="mt-3 p-3 bg-red-50 border border-red-200 rounded-md flex items-start">
                   <AlertCircle className="h-5 w-5 text-red-500 mr-2 flex-shrink-0 mt-0.5" />
                   <div>

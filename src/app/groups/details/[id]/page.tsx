@@ -29,12 +29,15 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import LeaderActions from "@/components/groups/actions/LeaderActions";
+import { Skill } from "@/types";
+import { getAllSkills } from "@/actions/skillActions";
 
 const GroupDetail: React.FC = () => {
   const [userId, setUserId] = useState<number | null>(null);
   const param = useParams();
   const router = useRouter();
-  const {id} = param;
+  const { id } = param;
 
   const { selectedgroup } = useGroupStore(
     useShallow((state) => ({
@@ -64,53 +67,63 @@ const GroupDetail: React.FC = () => {
 
   const groupMembers = selectedgroup?.groupMembers;
   const groupPositions = selectedgroup?.groupPositions;
-  const isLeader = groupMembers?.some(
-    (member) => member.studentId === userId && member.role === "Leader"
-  ) ?? false;
+  const isLeader =
+    groupMembers?.some(
+      (member) => member.studentId === userId && member.role === "Leader"
+    ) ?? false;
 
-  const isMember = groupMembers?.some(
-    (member) => member.studentId === userId && member.role === "Member"
-  ) ?? false;
+  const isMember =
+    groupMembers?.some(
+      (member) => member.studentId === userId && member.role === "Member"
+    ) ?? false;
 
   return (
     <Card className="shadow-sm hover:shadow-md transition-all duration-300 mb-8">
       <CardHeader className="pb-2">
-        <div className="flex items-start justify-between">
-          <BackButton />
-        </div>
-
-        <div className="flex items-center gap-4 mt-4">
-          <Avatar className="h-16 w-16 border-2 border-gray-200">
-            <AvatarImage
-              src={selectedgroup?.imgUrl}
-              alt={selectedgroup?.name || "Group"}
-            />
-            <AvatarFallback className="bg-blue-100 text-blue-600">
-              {selectedgroup?.name?.substring(0, 2) || "GP"}
-            </AvatarFallback>
-          </Avatar>
-
+        <div className="flex items-center justify-between">
           <div>
-            <CardTitle className="text-2xl text-blue-500">
-              {selectedgroup?.name}
-            </CardTitle>
-            <div className="flex items-center gap-2 mt-1">
-              <h2 className="text-xl font-semibold">{selectedgroup?.title}</h2>
-              {selectedgroup?.status && (
-                <GroupStatusBadge status={selectedgroup?.status} />
+            <div className="flex items-start justify-between">
+              <BackButton />
+            </div>
+
+            <div className="flex items-center gap-4 mt-4">
+              <Avatar className="h-16 w-16 border-2 border-gray-200">
+                <AvatarImage
+                  src={selectedgroup?.imgUrl}
+                  alt={selectedgroup?.name || "Group"}
+                />
+                <AvatarFallback className="bg-blue-100 text-blue-600">
+                  {selectedgroup?.name?.substring(0, 2) || "GP"}
+                </AvatarFallback>
+              </Avatar>
+
+              <div>
+                <CardTitle className="text-2xl text-blue-500">
+                  {selectedgroup?.name}
+                </CardTitle>
+                <div className="flex items-center gap-2 mt-1">
+                  <h2 className="text-xl font-semibold">
+                    {selectedgroup?.title}
+                  </h2>
+                  {selectedgroup?.status && (
+                    <GroupStatusBadge status={selectedgroup?.status} />
+                  )}
+                </div>
+                <CardDescription className="mt-1">
+                  {selectedgroup?.semesterName}
+                </CardDescription>
+              </div>
+            </div>
+            <div className="text-sm text-muted-foreground mt-2">
+              {selectedgroup?.createdAt && (
+                <DateConverter isoDate={selectedgroup?.createdAt} />
               )}
             </div>
-            <CardDescription className="mt-1">
-              {selectedgroup?.semesterName}
-            </CardDescription>
           </div>
+          {isLeader && selectedgroup && <LeaderActions group={selectedgroup} />}
+
         </div>
 
-        <div className="text-sm text-muted-foreground mt-2">
-          {selectedgroup?.createdAt && (
-            <DateConverter isoDate={selectedgroup?.createdAt} />
-          )}
-        </div>
       </CardHeader>
 
       <CardContent className="space-y-6">
@@ -142,22 +155,21 @@ const GroupDetail: React.FC = () => {
 
         <Separator />
 
-      {/*position */}
-      <div className="container">
-        <div className="text-left w-full font-semibold text-xl text-[#8C8F8E] my-5">
-          Position
+        {/*position */}
+        <div className="container">
+          <div className="text-left w-full font-semibold text-xl text-[#8C8F8E] my-5">
+            Position
+          </div>
+          {groupPositions && groupMembers && (
+            <GroupPositionCard
+              positions={groupPositions}
+              members={groupMembers}
+              isMemberOrLeader={isLeader || isMember}
+            />
+          )}
         </div>
-        {groupPositions && groupMembers && (
-          <GroupPositionCard
-            positions={groupPositions}
-            members={groupMembers}
-            isMemberOrLeader={isLeader || isMember}
 
-          />
-        )}
-      </div>
-
-      <Separator />
+        <Separator />
 
         <div>
           <h3 className="text-lg font-medium text-muted-foreground mb-4">
@@ -165,12 +177,14 @@ const GroupDetail: React.FC = () => {
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {selectedgroup?.groupMembers.map((member, index) => (
-              
               <Card key={index} className="bg-gray-50">
                 <CardContent className="p-4">
                   <div className="flex items-center gap-4">
-
-                    <Avatar onClick={() => router.push(`/profile/details/${member.studentId}`)}>
+                    <Avatar
+                      onClick={() =>
+                        router.push(`/profile/details/${member.studentId}`)
+                      }
+                    >
                       <AvatarImage
                         src={member?.imgUrl}
                         alt={member?.studentName || "User"}
