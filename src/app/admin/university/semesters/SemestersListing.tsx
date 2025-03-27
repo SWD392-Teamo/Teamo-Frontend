@@ -155,11 +155,11 @@ export default function SemestersListing() {
             />
           </div>
 
-          {/* Subject Form Modal */}
+          {/* Semester Form Modal */}
           <AppModal
             show={showModal}
             onClose={() => setShowModal(false)}
-            title={selectedSemester == null ? "Create Subject" : "Edit Subject"}
+            title={selectedSemester == null ? "Create Semester" : "Edit Semester"}
             size="3xl"
           >
             <SemesterForm 
