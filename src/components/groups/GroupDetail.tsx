@@ -46,7 +46,6 @@ export default function GroupDetail() {
     const fetchGroup = async (id: number) => {
       const group = await getGroupById(id);
       setSelectedGroup(group);
-      console.log(selectedgroup);
     };
 
     fetchUserId();

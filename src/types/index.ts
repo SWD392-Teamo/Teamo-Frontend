@@ -50,6 +50,7 @@ export type Application = {
     requestContent: string
     documentUrl: string
     groupPositionName: string
+    groupPositionId: number
     status: string
   }
 

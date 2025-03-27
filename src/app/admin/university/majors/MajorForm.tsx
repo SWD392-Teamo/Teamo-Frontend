@@ -133,10 +133,10 @@ export default function MajorForm({major, onCancel, onSuccess}: Props) {
           toast.success((hasMajor ? "Update" : "Create") + " major succeeded");
           onSuccess();
           onCancel();
-      }
-      else if(res.error.message.statusCode == 400) {
-          toast.error(res.error.message.message);
-      }
+        }
+        else if(res.error.message.statusCode == 400) {
+            toast.error(res.error.message.message);
+        }
     } catch (error: any) {
         toast.error(error.status + ' ' + error.message)
     } finally {
