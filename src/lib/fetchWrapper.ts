@@ -50,10 +50,18 @@ async function put(url: string, body: NonNullable<unknown>) {
 
 // PATCH request
 async function patch(url: string, body: NonNullable<unknown>) {
+    const headers = await getHeaders();
+    
+    // If body is FormData, don't set Content-Type header
+    if (body instanceof FormData) {
+        delete headers['Content-Type'];
+    }
+
     const requestOptions = {
         method: 'PATCH',
-        headers: await getHeaders(),
-        body: JSON.stringify(body)
+        headers: headers,
+        // Don't stringify if it's FormData
+        body: body instanceof FormData ? body : JSON.stringify(body)
     }
 
     const response = await fetch(baseUrl + url, requestOptions);
@@ -106,12 +114,13 @@ async function handleResponse(response: Response) {
     if (response.ok) {
         return data || response.statusText;
     } else {
-        const error = {
-            status: response.status,
-            // If there is an error text then display it
-            message: typeof(data === 'string') ? data : response.statusText
-        }
-        return {error}
+        const errorMessage = data?.message || response.statusText;
+        const error = new Error(errorMessage); 
+
+        // (error as any).status = response.status;
+        // (error as any).responseData = data;
+
+        throw error;
     }
 }
 

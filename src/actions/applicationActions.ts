@@ -12,11 +12,7 @@ export async function getGroupApplications(groupId: number, query: string): Prom
     return await fetchWrapper.get(`groups/${groupId}/applications${query}`)
 }
 
-export async function getGroupApplicationById(groupId: number, appId: number): Promise<Application> {
-    return await fetchWrapper.get(`groups/${groupId}/applications/${appId}`)
-}
-
-export async function getUserApplicationById(appId: number): Promise<Application> {
+export async function getApplicationById(appId: number): Promise<Application> {
     return await fetchWrapper.get(`applications/${appId}`)
 }
 
@@ -29,5 +25,5 @@ export async function sendApplication(groupId: number, data: FieldValues): Promi
 }
 
 export async function uploadApplicationDocument(formData: FormData): Promise<any> {
-    return await fetchWrapper.post(`applications/document`, formData)
+    return await fetchWrapper.post(`applications/documents`, formData)
 }

@@ -12,10 +12,10 @@ import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { IoIosStar } from "react-icons/io";
 import { useShallow } from "zustand/shallow";
-import GroupPositionCard from "./GroupPosition";
 import { getUserId } from "@/actions/userActions";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import GroupPositionCard from "@/app/groups/details/[id]/GroupPosition";
 
 const GroupDetail: React.FC = () => {
   const [userId, setUserId] = useState<number | null>(null);
@@ -36,9 +36,13 @@ const GroupDetail: React.FC = () => {
 
   const groupMembers = selectedgroup?.groupMembers;
   const groupPositions = selectedgroup?.groupPositions;
+
   const isLeader = groupMembers?.some(
     (member) => member.studentId === userId && member.role === "Leader"
-  );
+  ) ?? false;
+  const isMember = groupMembers?.some(
+    (member) => member.studentId === userId && member.role === "Member"
+  ) ?? false;
 
   return (
     <div className="border border-gray-200 rounded-lg shadow-sm p-12 flex flex-col items-start hover:shadow-lg transition flex-1 mb-16">
@@ -53,7 +57,7 @@ const GroupDetail: React.FC = () => {
               <Image
                 src={defaultGroup}
                 alt={selectedgroup?.name || "none"}
-                className="w-full h-full rounded-full object-cover border-2 border-gray-300 shadow-sm"
+                className="w-full h-full rounded-full object-cover border-2 border-gray-300 shadow-sm  aspect-square"
               />
             </div>
           )}
@@ -123,6 +127,7 @@ const GroupDetail: React.FC = () => {
           <GroupPositionCard
             positions={groupPositions}
             members={groupMembers}
+            isMemberOrLeader={isLeader || isMember}
           />
         )}
       </div>
@@ -145,7 +150,7 @@ const GroupDetail: React.FC = () => {
                       <Image
                         src={defaultAvatar}
                         alt={member?.studentName || "none"}
-                        className="w-10 h-10 rounded-full object-cover border-2 border-gray-300 shadow-sm"
+                        className="w-10 h-10 rounded-full object-cover border-2 border-gray-300 shadow-sm aspect-square"
                       />
                     )}
                   </div>

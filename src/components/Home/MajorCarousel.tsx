@@ -31,7 +31,7 @@ export default function MajorCarousel() {
     useShallow((state) => ({
       majors: state.majors,
       totalCount: state.totalCount,
-      pageCount: state.pageCount,
+      pageSize: state.pageSize,
     }))
   );
 

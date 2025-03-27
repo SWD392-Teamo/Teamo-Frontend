@@ -3,35 +3,59 @@ import { Button } from 'flowbite-react';
 import DropdownSelect from '../DropdownSelect';
 import { useParamsStore } from '@/hooks/useParamsStore';
 
-export default function ApplicationFilter() {
+interface ApplicationFilterProps {
+  status: string;
+  sort: string;
+  setSort: React.Dispatch<React.SetStateAction<string>>;
+  setStatus: React.Dispatch<React.SetStateAction<string>>;
+  setPageIndex: React.Dispatch<React.SetStateAction<number>>;
+}
 
-  const setParams = useParamsStore(state => state.setParams)
-  const sort = useParamsStore(state => state.sort)
-  const status = useParamsStore(state => state.status)
-
+export default function ApplicationFilter({
+  status,
+  sort,
+  setSort,
+  setStatus,
+  setPageIndex,
+}: ApplicationFilterProps) {
   const sortOptions = [
     { value: 'dateAsc', label: 'Date (Oldest First)' },
-    { value: 'dateDesc', label: 'Date (Newest First)' }
+    { value: 'dateDesc', label: 'Date (Newest First)' },
   ];
 
   return (
-    <div className="flex flex-row justify-between items-center w-full mb-5">
-      <div className="flex gap-5">
+    <div className='flex flex-row justify-between items-center w-full mb-5'>
+      <div className='flex gap-5'>
         <Button
-          className={`btn ${status === undefined ? 'btn--primary' : 'btn--primary--outline'}`}
-          onClick={() => setParams({status: undefined})}
+          className={`btn ${
+            status === 'requested' ? 'btn--primary' : 'btn--primary--outline'
+          }`}
+          onClick={() => {
+            setStatus('requested');
+            setPageIndex(1);
+          }}
         >
-          All
+          Requested
         </Button>
         <Button
-          className={`btn ${status === 'approved' ? 'btn--primary' : 'btn--primary--outline'}`}
-          onClick={() => setParams({status: 'approved'})}
+          className={`btn ${
+            status === 'approved' ? 'btn--primary' : 'btn--primary--outline'
+          }`}
+          onClick={() => {
+            setStatus('approved');
+            setPageIndex(1);
+          }}
         >
           Approved
         </Button>
         <Button
-          className={`btn ${status === 'rejected' ? 'btn--primary' : 'btn--primary--outline'}`}
-          onClick={() => setParams({status: 'rejected'})}
+          className={`btn ${
+            status === 'rejected' ? 'btn--primary' : 'btn--primary--outline'
+          }`}
+          onClick={() => {
+            setStatus('rejected');
+            setPageIndex(1);
+          }}
         >
           Rejected
         </Button>
@@ -39,11 +63,11 @@ export default function ApplicationFilter() {
       <div>
         <DropdownSelect
           value={sort || 'dateDesc'}
-          onChange={(value) => setParams({sort: value})}
+          onChange={(value) => setSort(value)}
           options={sortOptions}
-          placeholder="Sort by date"
+          placeholder='Sort by date'
         />
       </div>
     </div>
   );
-};
+}

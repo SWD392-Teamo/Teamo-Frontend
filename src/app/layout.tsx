@@ -7,9 +7,13 @@ import Footer from "./layout/footer/Footer";
 import Header from "./layout/header/Header";
 import MainWrapper from "./MainWrapper";
 
+
 export const metadata: Metadata = {
   title: "Teamo",
   description: "Teamo",
+  icons: {
+    icon: "/icon.png",
+  }
 };
 
 export default async function RootLayout({

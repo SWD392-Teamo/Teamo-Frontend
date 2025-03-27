@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { getData } from "@/actions/groupActions";
 import { useMajorStore } from "@/hooks/useMajorStore";
@@ -10,11 +10,22 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useShallow } from "zustand/shallow";
 import GroupHeader from "./GroupHeader";
-import GroupCard from "./GroupCard";
+import GroupCard from "../../../../components/groups/GroupCard";
 import { useGroupStore } from "@/hooks/useGroupStore";
-import { group } from "console";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import { getUserId } from "@/actions/userActions";
 
 export default function Listings() {
+  const [userId, setUserId] = useState<number | null>(null);
+
   const { selectedSubject } = useSubjectStore(
     useShallow((state) => ({
       selectedSubject: state.selectedSubject,
@@ -27,32 +38,29 @@ export default function Listings() {
     }))
   );
 
-  console.log("subject", selectedSubject);
-  console.log("major", selectedMajor);
-
-
   const { showLoading, hideLoading } = useLoading();
   const [search, setSearch] = useState<string>("");
 
   const params = useParamsStore(
     useShallow((state) => ({
       pageIndex: state.pageIndex,
-      pageSize: state.pageSize,
+      pageSize: 4,
       subjectId: selectedSubject?.id,
       search: state.search,
     }))
   );
 
-  const data = useGroupStore(
+  const { groups, totalCount } = useGroupStore(
     useShallow((state) => ({
       groups: state.groups,
       totalCount: state.totalCount,
-      pageCount: state.pageCount,
     }))
   );
 
   const setData = useGroupStore((state) => state.setData);
   const setParams = useParamsStore((state) => state.setParams);
+
+  const totalPages = Math.ceil(totalCount / params.pageSize);
 
   const url = queryString.stringifyUrl({
     url: "",
@@ -63,10 +71,18 @@ export default function Listings() {
   });
 
   useEffect(() => {
+    const fetchUserId = async () => {
+      const id = await getUserId();
+      setUserId(id);
+    };
+
+    fetchUserId();
+  }, []);
+
+  useEffect(() => {
     showLoading();
     getData(url)
       .then((data) => {
-        console.log("data", data);
         setData(data);
       })
       .catch((error) => {
@@ -77,37 +93,132 @@ export default function Listings() {
       });
   }, [url, setData, showLoading, hideLoading]);
 
-  console.log(data);
+  const handlePageChange = (page: number) => {
+    setParams({ pageIndex: page });
+    window.scrollTo(0, 0);
+  };
 
+  const renderPaginationItems = () => {
+    const items = [];
+    const maxVisiblePages = 5;
+
+    items.push(
+      <PaginationItem key="first">
+        <PaginationLink
+          isActive={params.pageIndex === 1}
+          onClick={() => handlePageChange(1)}
+        >
+          1
+        </PaginationLink>
+      </PaginationItem>
+    );
+
+    let startPage = Math.max(2, params.pageIndex - 1);
+    let endPage = Math.min(totalPages - 1, params.pageIndex + 1);
+
+    const maxMiddlePages = maxVisiblePages - 2;
+    if (endPage - startPage + 1 > maxMiddlePages) {
+      if (params.pageIndex - startPage > endPage - params.pageIndex) {
+        startPage = Math.max(2, endPage - maxMiddlePages + 1);
+      } else {
+        endPage = Math.min(totalPages - 1, startPage + maxMiddlePages - 1);
+      }
+    }
+
+    if (startPage > 2) {
+      items.push(
+        <PaginationItem key="ellipsis-start">
+          <PaginationEllipsis />
+        </PaginationItem>
+      );
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      items.push(
+        <PaginationItem key={i}>
+          <PaginationLink
+            isActive={params.pageIndex === i}
+            onClick={() => handlePageChange(i)}
+          >
+            {i}
+          </PaginationLink>
+        </PaginationItem>
+      );
+    }
+
+    if (endPage < totalPages - 1) {
+      items.push(
+        <PaginationItem key="ellipsis-end">
+          <PaginationEllipsis />
+        </PaginationItem>
+      );
+    }
+
+    if (totalPages > 1) {
+      items.push(
+        <PaginationItem key="last">
+          <PaginationLink
+            isActive={params.pageIndex === totalPages}
+            onClick={() => handlePageChange(totalPages)}
+          >
+            {totalPages}
+          </PaginationLink>
+        </PaginationItem>
+      );
+    }
+
+    return items;
+  };
 
 
   return (
     <div className="mb-10">
       {selectedMajor && selectedSubject && (
-        <GroupHeader subject={selectedSubject} major={selectedMajor} setSearch={setSearch} />
+        <GroupHeader
+          subject={selectedSubject}
+          major={selectedMajor}
+          setSearch={setSearch}
+        />
       )}
-      <div>
-        <div className="grid grid-cols-2 gap-6 ">
-          {data.groups &&
-            data.groups
-              // .slice(0, visibleSubject)
-              .map((a) => (
-                <GroupCard key={a.id} group={a} />
-              ))}
-        </div>
 
-        {/* {data.subjects && visibleSubject < data.subjects.length && (
-          <div className="mt-8 flex justify-center">
-            <button
-              className="text-logo text-lg hover:underline flex flex-row items-center gap-2"
-              onClick={handleSeeMore}
-            >
-              <div>See More</div>
-              <FaChevronDown color="gray" />
-            </button>
-          </div>
-        )} */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        {groups &&
+          groups.map((group) => <GroupCard key={group.id} group={group} />)}
       </div>
+
+      {totalPages > 1 && (
+        <Pagination className="mt-8">
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
+                onClick={() =>
+                  handlePageChange(Math.max(1, params.pageIndex - 1))
+                }
+                className={
+                  params.pageIndex === 1
+                    ? "pointer-events-none opacity-50"
+                    : "cursor-pointer"
+                }
+              />
+            </PaginationItem>
+
+            {renderPaginationItems()}
+
+            <PaginationItem>
+              <PaginationNext
+                onClick={() =>
+                  handlePageChange(Math.min(totalPages, params.pageIndex + 1))
+                }
+                className={
+                  params.pageIndex === totalPages
+                    ? "pointer-events-none opacity-50"
+                    : "cursor-pointer"
+                }
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+      )}
     </div>
   );
 }

@@ -23,7 +23,7 @@ export default function Listings() {
   const data = useSubjectStore(useShallow(state => ({
     subjects: state.subjects,
     totalCount: state.totalCount,
-    pageCount: state.pageCount
+    pageSize: state.pageSize
   })))
 
   const setData = useSubjectStore(state => state.setData);
@@ -52,7 +52,7 @@ export default function Listings() {
       <div>Subjects list here</div>
       <div className='flex justify-center mt-4'>
           <Paginator pageChanged={setPageIndex} 
-            currentPage={params.pageIndex} pageCount={data.pageCount} />
+            currentPage={params.pageIndex} pageCount={data.pageSize} />
       </div>
     </div>
   )

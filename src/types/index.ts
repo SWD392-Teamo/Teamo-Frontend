@@ -12,6 +12,8 @@ export type Subject = {
     name: string
     description: string
     createdDate: string
+    imgUrl: string
+    status: string
 }
 
 export type Major = {
@@ -20,6 +22,8 @@ export type Major = {
     name: string;
     imgUrl: string;
     createdDate: Date;
+    subjects: Subject[];
+    status: string;
 }
 
 export type Skill = {
@@ -40,6 +44,7 @@ export type Application = {
     groupName: string
     studentName: string
     studentEmail: string
+    studentId: number
     imgUrl: string
     requestTime: string
     requestContent: string
@@ -53,6 +58,7 @@ export type GroupPosition = {
     name: string;
     count: number;
     status: string;
+    skillIds: number[];
 }
 
 export type GroupMember = {
@@ -90,7 +96,9 @@ export type Semester = {
     id: number,
     name: string,
     code: string,
-    status: string
+    status: string,
+    startDate: Date,
+    endDate: Date,
 }
 
 export type User = {
@@ -104,6 +112,7 @@ export type User = {
     imgUrl: string,
     description: string,
     majorCode: string,
+    status: string,
     links: Link[];
     studentSkills: StudentSkill[],
 }
@@ -119,4 +128,18 @@ export type StudentSkill = {
     skillName: string,
     skillType: string,
     skillLevel: string,
+}
+
+export type Post = {
+    id: number,
+    groupId : number,
+    groupName: string,
+    studentId: number,
+    groupMemberName: string,
+    groupMemberImgUrl: string,
+    content: string,
+    status: string,
+    documentUrl: string,
+    createdAt: string,
+    updatedAt: string,
 }

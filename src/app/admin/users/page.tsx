@@ -1,7 +1,7 @@
-import React from 'react'
+"use client";
+import React, { useEffect, useState } from "react";
+import UsersListings from "@/components/users/UsersListings";
 
-export default function Listings() {
-  return (
-    <div>Users list here</div>
-  )
+export default function UsersList() {
+  return <UsersListings />;
 }

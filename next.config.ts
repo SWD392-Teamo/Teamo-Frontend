@@ -1,6 +1,7 @@
 import { hostname } from "os";
 
 module.exports = {
+    
     images: {
         remotePatterns: [
             {

@@ -3,6 +3,8 @@
 import Feature from "@/components/Home/Feature";
 import Title from "../components/Home/Title";
 import MajorCarousel from "@/components/Home/MajorCarousel";
+import PostCarousel from "@/components/Home/PostCarousel";
+import CustomComponents from "@/components/CustomComponents";
 
 export default function Home() {
   return (

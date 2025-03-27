@@ -6,25 +6,26 @@ import Image from "next/image";
 
 // Define a type for action buttons
 type ActionButton = {
-  label: string;
+  label: React.ReactNode;
   onClick: (id: number) => void;
   className?: string;
+  constraintStatus?: string
 };
 
 // Update the props type to include actions
 // Add onRowClick to props
 type GenericTableProps<T> = {
   data: T[];
-  columns: { header: string; key: keyof T }[];
+  columns: { header: string; key: keyof T | string }[];
   actions?: ActionButton[];
-  onRowClick?: (id: number) => void;  // New prop for row click
+  onRowClick?: (id: number) => void;
 };
 
-export default function GenericTable<T>({ 
-  data, 
+export default function GenericTable<T>({
+  data,
   columns,
   actions,
-  onRowClick 
+  onRowClick,
 }: GenericTableProps<T>) {
   return (
     <div className="overflow-x-auto">
@@ -43,18 +44,24 @@ export default function GenericTable<T>({
         </thead>
         <tbody>
           {data.map((item: any, rowIndex) => (
-            <tr 
+            <tr
               key={rowIndex}
               onClick={() => onRowClick && onRowClick(Number(item.id))}
-              className={`${onRowClick ? 'cursor-pointer hover:bg-gray-100' : ''}`}
+              className={`${
+                onRowClick ? "cursor-pointer hover:bg-gray-100" : ""
+              }`}
             >
               {columns.map((column, colIndex) => (
-                  <td
+                <td
                   key={String(column.key)}
                   className={`px-4 py-2 border border-gray-300 bg-gray-50 ${
                     colIndex === 0 ? "border-l" : "border-l-0"
-                  } ${colIndex === columns.length - 1 ? "border-r" : "border-r-0"} ${
-                    column.header === "" ? "flex justify-center items-center" : ""
+                  } ${
+                    colIndex === columns.length - 1 ? "border-r" : "border-r-0"
+                  } ${
+                    column.header === ""
+                      ? "flex justify-center items-center"
+                      : ""
                   }`}
                   onClick={(e) => {
                     // Prevent row click when clicking action buttons
@@ -69,16 +76,19 @@ export default function GenericTable<T>({
                       alt="Header Image"
                       width={50}
                       height={50}
-                      className="rounded-full object-cover border-2 border-gray-300 shadow-sm"                      />
+                      className="rounded-full object-cover border-2 border-gray-300 shadow-sm  aspect-square"                      />
                   ) : column.header === "Date" ? (
                     dateFormatter(String(item[column.key]))
                   ) : column.header === "Action" && actions ? (
                     <div className="flex flex-row align-middle justify-between gap-3">
                       {actions.map((action, index) => (
+                        !(String(item['status']) == action.constraintStatus) &&
                         <Button
                           key={index}
-                          className={action.className || "btn btn--primary--outline"}
-                          onClick={() => action.onClick(Number(String(item[column.key])))}
+                          className={
+                            action.className || "btn btn--primary--outline"
+                          }
+                          onClick={() => action.onClick(Number(item.id))}
                         >
                           {action.label}
                         </Button>
