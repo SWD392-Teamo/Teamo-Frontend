@@ -4,12 +4,13 @@ import Input from "@/components/Input";
 import { useLoading } from "@/providers/LoadingProvider";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { Button } from "flowbite-react";
-import { signIn } from "next-auth/react";
+import { getSession, signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { FieldValues, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { AiFillGoogleCircle } from "react-icons/ai";
 import { firebaseAuth } from "../../../../firebase";
+import { auth } from "@/auth";
 
 export default function LoginForm() {
   // Next navigation
@@ -43,7 +44,7 @@ export default function LoginForm() {
       });
       hideLoading();
 
-      if (res?.code == 'credentials') {
+      if (res?.code == 'credentials' || res?.error == 'Configuration') {
         toast.error("Please use the provided email from FPT education");
         return;
       }
@@ -68,12 +69,21 @@ export default function LoginForm() {
       });
       hideLoading();
 
-      if (res?.code == 'credentials') {
+      console.log(res)
+
+      if (res?.code == 'credentials' || res?.error == 'Configuration') {
         toast.error("Incorrect email or password");
         return;
       }
-      else if (res?.code == null){
-        window.location.href = '/posts';
+      else if (res?.code == null && res?.error == null){
+          // Get the session
+          const session = await getSession();
+          if (session?.user.role == 'Student') {
+            window.location.href = '/posts';
+          }
+          else if (session?.user.role == 'Admin') {
+            window.location.href = '/admin/university';
+          }
       }
       else {
         throw res?.code;
