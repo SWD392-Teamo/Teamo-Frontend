@@ -76,7 +76,12 @@ export const getFileTypeFromFirebaseUrl = (
   }
 };
 
-const PostCard: React.FC<Post> = ({
+interface PostCardProps extends Post {
+  onPostUpdated?: () => void;
+  onPostDeleted?: () => void;
+}
+
+const PostCard: React.FC<PostCardProps> = ({
   id,
   groupId,
   groupMemberName,
@@ -88,6 +93,8 @@ const PostCard: React.FC<Post> = ({
   documentUrl,
   status,
   updatedAt,
+  onPostUpdated,
+  onPostDeleted,
 }) => {
   const [currentUserId, setCurrentUserId] = useState<number | null>(null);
   const [isOwner, setIsOwner] = useState(false);
@@ -125,11 +132,18 @@ const PostCard: React.FC<Post> = ({
   };
 
   const handleUpdateSuccess = () => {
-    toast.success("Post updated successfully");
+
+    if (onPostUpdated) {
+      onPostUpdated();
+    }
+
   };
 
   const handleDeleteSuccess = () => {
-    toast.success("Post deleted successfully");
+
+    if (onPostDeleted) {
+      onPostDeleted();
+    }
   };
 
   const statusBadge = getStatusBadge();

@@ -32,9 +32,12 @@ import { Separator } from "@/components/ui/separator";
 import LeaderActions from "@/components/groups/actions/LeaderActions";
 import { Skill } from "@/types";
 import { getAllSkills } from "@/actions/skillActions";
+import toast from "react-hot-toast";
 
 const GroupDetail: React.FC = () => {
   const [userId, setUserId] = useState<number | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [refreshTrigger, setRefreshTrigger] = useState<number>(0);
   const param = useParams();
   const router = useRouter();
   const { id } = param;
@@ -47,23 +50,38 @@ const GroupDetail: React.FC = () => {
 
   const setSelectedGroup = useGroupStore((state) => state.setSelectedGroup);
 
+  const refreshGroupData = () => {
+    setRefreshTrigger(prev => prev + 1);
+  };
+
   useEffect(() => {
     const fetchUserId = async () => {
       const id = await getUserId();
       setUserId(id);
     };
 
-    const fetchGroup = async (id: number) => {
-      const group = await getGroupById(id);
-      setSelectedGroup(group);
+    fetchUserId();
+  }, []);
+
+  useEffect(() => {
+    const fetchGroup = async () => {
+      if (!id) return;
+      
+      setIsLoading(true);
+      try {
+        console.log(`Fetching group data for ID: ${id}, refresh count: ${refreshTrigger}`);
+        const group = await getGroupById(Number(id));
+        setSelectedGroup(group);
+      } catch (error: any) {
+        console.error("Error fetching group data:", error);
+        toast.error(error.message);
+      } finally {
+        setIsLoading(false);
+      }
     };
 
-    fetchUserId();
-
-    if (selectedgroup == null) {
-      fetchGroup(Number(id));
-    }
-  }, []);
+    fetchGroup();
+  }, [id, refreshTrigger, setSelectedGroup]);
 
   const groupMembers = selectedgroup?.groupMembers;
   const groupPositions = selectedgroup?.groupPositions;
@@ -76,6 +94,14 @@ const GroupDetail: React.FC = () => {
     groupMembers?.some(
       (member) => member.studentId === userId && member.role === "Member"
     ) ?? false;
+
+  if (isLoading && !selectedgroup) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
 
   return (
     <Card className="shadow-sm hover:shadow-md transition-all duration-300 mb-8">
@@ -120,10 +146,13 @@ const GroupDetail: React.FC = () => {
               )}
             </div>
           </div>
-          {isLeader && selectedgroup && <LeaderActions group={selectedgroup} />}
-
+          {isLeader && selectedgroup && (
+            <LeaderActions 
+              group={selectedgroup} 
+              onActionComplete={refreshGroupData} 
+            />
+          )}
         </div>
-
       </CardHeader>
 
       <CardContent className="space-y-6">

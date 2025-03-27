@@ -26,12 +26,12 @@ import { updateMember } from "@/actions/groupActions";
 
 interface UpdateMemberDialogProps {
   group: Group;
-  onMemberUpdated?: () => void;
+  onComplete?: () => void;
 }
 
 export const UpdateMemberDialog: React.FC<UpdateMemberDialogProps> = ({
   group,
-  onMemberUpdated,
+  onComplete,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedMember, setSelectedMember] = useState<GroupMember | null>(
@@ -106,9 +106,7 @@ export const UpdateMemberDialog: React.FC<UpdateMemberDialogProps> = ({
 
       toast.success("Member updated successfully!");
 
-      if (onMemberUpdated) {
-        onMemberUpdated();
-      }
+      if (onComplete) onComplete();
 
       setIsOpen(false);
     } catch (error: any) {

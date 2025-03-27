@@ -43,85 +43,93 @@ const UpdatePostPopup: React.FC<UpdatePostPopupProps> = ({
   post,
   onUpdateSuccess,
 }) => {
-   const [isLoading, setIsLoading] = useState<boolean>(false);
-   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-   const [previewUrl, setPreviewUrl] = useState<string | null>(post.documentUrl || null);
-   const [isDragging, setIsDragging] = useState<boolean>(false);
-   const fileInputRef = useRef<HTMLInputElement>(null);
-   
-   const form = useForm<UpdateFormValues>({
-     defaultValues: {
-       content: post.content,
-     },
-   });
- 
-   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-     const file = e.target.files?.[0] || null;
-     if (file) {
-       processFile(file);
-     }
-   };
-   
-   const processFile = (file: File) => {
-     setSelectedFile(file);
-     const fileReader = new FileReader();
-     fileReader.onload = () => {
-       setPreviewUrl(fileReader.result as string);
-     };
-     fileReader.readAsDataURL(file);
-   };
-   
-   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-     e.preventDefault();
-     setIsDragging(true);
-   };
-   
-   const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
-     e.preventDefault();
-     setIsDragging(false);
-   };
-   
-   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-     e.preventDefault();
-     setIsDragging(false);
-     
-     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-       const file = e.dataTransfer.files[0];
-       processFile(file);
-     }
-   };
-   
-   const handleButtonClick = () => {
-     fileInputRef.current?.click();
-   };
- 
-   const onSubmit = async (values: UpdateFormValues) => {
-     try {
-       setIsLoading(true);
-       
-       const formData = new FormData();
-       formData.append("content", values.content);
-       
-       if (selectedFile) {
-         formData.append("document", selectedFile);
-       } else if (!previewUrl && post.documentUrl) {
-         formData.append("removeDocument", "true");
-       }
-       
-       await updatePost(post.groupId, post.id, formData);
-       toast.success("Post updated successfully");
-       onUpdateSuccess();
-     } catch (error) {
-       console.error("Error updating post:", error);
-       toast.error("Failed to update post");
-     } finally {
-       setIsLoading(false);
-     }
-   };
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(post.documentUrl || null);
+  const [isDragging, setIsDragging] = useState<boolean>(false);
+  const [open, setOpen] = useState<boolean>(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  
+  const form = useForm<UpdateFormValues>({
+    defaultValues: {
+      content: post.content,
+    },
+  });
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    if (file) {
+      processFile(file);
+    }
+  };
+  
+  const processFile = (file: File) => {
+    setSelectedFile(file);
+    const fileReader = new FileReader();
+    fileReader.onload = () => {
+      setPreviewUrl(fileReader.result as string);
+    };
+    fileReader.readAsDataURL(file);
+  };
+  
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+  
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+  
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
+    
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      const file = e.dataTransfer.files[0];
+      processFile(file);
+    }
+  };
+  
+  const handleButtonClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const onSubmit = async (values: UpdateFormValues) => {
+    try {
+      setIsLoading(true);
+      
+      const formData = new FormData();
+      formData.append("content", values.content);
+      
+      if (selectedFile) {
+        formData.append("document", selectedFile);
+      } else if (!previewUrl && post.documentUrl) {
+        formData.append("removeDocument", "true");
+      }
+      
+      await updatePost(post.groupId, post.id, formData);
+      toast.success("Post updated successfully");
+      
+      setOpen(false);
+      
+      onUpdateSuccess();
+    } catch (error) {
+      console.error("Error updating post:", error);
+      toast.error("Failed to update post");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+        <DropdownMenuItem onSelect={(e) => {
+          e.preventDefault();
+          setOpen(true);
+        }}>
           <Pencil className="h-4 w-4 mr-2" />
           Update
         </DropdownMenuItem>

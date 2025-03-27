@@ -64,8 +64,7 @@ import ImageUpload from "./ImageUpload";
 
 interface UpdateGroupDialogProps {
   group: Group;
-  onSuccess?: () => void;
-}
+  onComplete?: () => void; }
 
 // Simplified schema for form validation (without groupPositions)
 const updateGroupSchema = z.object({
@@ -82,7 +81,7 @@ type UpdateGroupFormValues = z.infer<typeof updateGroupSchema>;
 
 const UpdateGroupDialog: React.FC<UpdateGroupDialogProps> = ({
   group,
-  onSuccess,
+  onComplete, 
 }) => {
   const [semesters, setSemesters] = useState<Semester[]>([]);
   const [subjects, setSubjects] = useState<Subject[]>([]);
@@ -266,7 +265,7 @@ const UpdateGroupDialog: React.FC<UpdateGroupDialogProps> = ({
       await updateGroup(group.id, updateData as addGroup);
       toast.success("Group updated successfully");
       setIsOpen(false);
-      if (onSuccess) onSuccess();
+      
     } catch (error) {
       console.error("Error updating group:", error);
       toast.error("Failed to update group");

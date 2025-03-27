@@ -25,47 +25,74 @@ import UpdateGroupDialog from "./UpdateGroup";
 import ChangeImageDialog from "./ChangeImage";
 
 interface LeaderActionsProps {
-   group: Group;
- }
- 
- const LeaderActions: React.FC<LeaderActionsProps> = ({ group }) => {
-   return (
-     <DropdownMenu >
-       <DropdownMenuTrigger asChild >
-         <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-           <MoreVertical className="h-4 w-4" />
-         </Button>
-       </DropdownMenuTrigger>
-       <DropdownMenuContent align="end" color="white" className="bg-white">
-         <DropdownMenuLabel>Group Management</DropdownMenuLabel>
-         
-         {/* Group Actions */}
-         <ChangeImageDialog groupId={group.id} groupName={group.name} />
-         <UpdateGroupDialog group={group} />
-         <DeleteGroupDialog groupId={group.id} groupName={group.name} />
-         
-         <DropdownMenuSeparator />
-         <DropdownMenuLabel>Position Management</DropdownMenuLabel>
-         
-         {/* Position Actions */}
-         <AddPositionDialog groupId={group.id} />
-         <UpdatePositionsDialog group={group} />
-         <DeletePositionDialog groupId={group.id} positions={group.groupPositions} />
-         
-         <DropdownMenuSeparator />
-         <DropdownMenuLabel>Member Management</DropdownMenuLabel>
-         
-         {/* Member Actions */}
-         <AddMemberDialog group={group} />
-         <UpdateMemberDialog group={group} />
-         <RemoveMemberDialog groupId={group.id} members={group.groupMembers} />
-       </DropdownMenuContent>
-     </DropdownMenu>
-   );
- };
- 
- export default LeaderActions;
- 
+  group: Group;
+  onActionComplete: () => void; 
+}
+const LeaderActions: React.FC<LeaderActionsProps> = ({ group, onActionComplete }) => {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+          <MoreVertical className="h-4 w-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" color="white" className="bg-white">
+        <DropdownMenuLabel>Group Management</DropdownMenuLabel>
+        
+        <ChangeImageDialog 
+          groupId={group.id} 
+          groupName={group.name} 
+          onComplete={onActionComplete} 
+        />
+        <UpdateGroupDialog 
+          group={group} 
+          onComplete={onActionComplete} 
+        />
+        <DeleteGroupDialog 
+          groupId={group.id} 
+          groupName={group.name} 
+          onComplete={onActionComplete} 
+        />
+        
+        <DropdownMenuSeparator />
+        <DropdownMenuLabel>Position Management</DropdownMenuLabel>
+        
+        <AddPositionDialog 
+          groupId={group.id} 
+          onComplete={onActionComplete} 
+        />
+        <UpdatePositionsDialog 
+          group={group} 
+          onComplete={onActionComplete} 
+        />
+        <DeletePositionDialog 
+          groupId={group.id} 
+          positions={group.groupPositions} 
+          onComplete={onActionComplete} 
+        />
+        
+        <DropdownMenuSeparator />
+        <DropdownMenuLabel>Member Management</DropdownMenuLabel>
+        
+        <AddMemberDialog 
+          group={group} 
+          onComplete={onActionComplete} 
+        />
+        <UpdateMemberDialog 
+          group={group} 
+          onComplete={onActionComplete} 
+        />
+        <RemoveMemberDialog 
+          groupId={group.id} 
+          members={group.groupMembers} 
+          onComplete={onActionComplete} 
+        />
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
+
+export default LeaderActions;
  
  
  

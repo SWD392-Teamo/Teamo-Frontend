@@ -49,13 +49,12 @@ const GroupPositionCard: React.FC<{
       }
     };
 
-    
-    checkIfAdmin();
-
     checkIfAdmin();
   }, [selectedgroup]);
 
   console.log("positions", positions);
+
+  const isGroupRecruiting = selectedgroup?.status === "Recruiting";
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -87,18 +86,18 @@ const GroupPositionCard: React.FC<{
                   )}
                 </div>
                 {skill.length > 0 && (
-                <div className="flex flex-wrap gap-2 mt-2">
-                  {skill.map((skill) => (
-                    <Badge 
-                      key={skill.id} 
-                      variant="outline" 
-                      className='text-xs px-2 py-1 rounded-md bg-blue-50 text-blue-700 border-blue-200'
-                    >
-                      {skill.name}
-                    </Badge>
-                  ))}
-                </div>
-              )}
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {skill.map((skill) => (
+                      <Badge
+                        key={skill.id}
+                        variant="outline"
+                        className="text-xs px-2 py-1 rounded-md bg-blue-50 text-blue-700 border-blue-200"
+                      >
+                        {skill.name}
+                      </Badge>
+                    ))}
+                  </div>
+                )}
               </div>
             </CardHeader>
 
@@ -132,7 +131,6 @@ const GroupPositionCard: React.FC<{
                     </div>
                   ))}
 
-                  {/* Empty slots */}
                   {Array.from({ length: emptySlots }).map((_, index) => (
                     <div
                       key={`empty-${index}`}
@@ -153,19 +151,22 @@ const GroupPositionCard: React.FC<{
                   ))}
                 </div>
 
-                {!isMemberOrLeader && !isAdmin && position?.status === "Open" && (
-                  <Button
-                    variant="default"
-                    className="bg-gradient-to-r from-[#46afe9] to-blue-400 hover:from-blue-400 hover:to-sky-400"
-                    onClick={() => {
-                      setShowModal(true);
-                      setSelectedPositionId(position.id);
-                    }}
-                  >
-                    <HiOutlineLightningBolt className="h-4 w-4 mr-2" />
-                    <span className="font-semibold">Easy Apply</span>
-                  </Button>
-                )}
+                {!isMemberOrLeader &&
+                  !isAdmin &&
+                  isGroupRecruiting &&
+                  position?.status === "Open" && (
+                    <Button
+                      variant="default"
+                      className="bg-gradient-to-r from-[#46afe9] to-blue-400 hover:from-blue-400 hover:to-sky-400"
+                      onClick={() => {
+                        setShowModal(true);
+                        setSelectedPositionId(position.id);
+                      }}
+                    >
+                      <HiOutlineLightningBolt className="h-4 w-4 mr-2" />
+                      <span className="font-semibold">Easy Apply</span>
+                    </Button>
+                  )}
               </div>
             </CardContent>
           </Card>
