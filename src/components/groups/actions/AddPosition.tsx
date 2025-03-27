@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -51,7 +52,7 @@ const positionFormSchema = z.object({
   skillIds: z.array(z.number()).min(1, { message: "At least one skill is required" }),
 });
 
-export const AddPositionDialog: React.FC<{ groupId: number }> = ({ groupId }) => {
+export const AddPositionDialog: React.FC<{ groupId: number, onComplete?: () => void }> = ({ groupId, onComplete }) => {
   const [skills, setSkills] = useState<Skill[]>([]);
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -99,6 +100,8 @@ export const AddPositionDialog: React.FC<{ groupId: number }> = ({ groupId }) =>
       toast.success("Position created successfully!");
       
       setOpen(false);
+      if (onComplete) onComplete();
+
       form.reset();
     } catch (error:any) {
       console.error("Failed to create position:", error);

@@ -1,48 +1,50 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  Dialog, 
-  DialogTrigger, 
-  DialogContent, 
-  DialogHeader, 
-  DialogTitle, 
-  DialogDescription, 
-  DialogFooter 
-} from '@/components/ui/dialog';
-import { 
-  Select, 
-  SelectContent, 
-  SelectItem, 
-  SelectTrigger, 
-  SelectValue 
-} from '@/components/ui/select';
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
-import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
-import { Settings, UserCheck, Loader2 } from 'lucide-react';
-import { Group, GroupMember, GroupPosition } from '@/types';
-import toast from 'react-hot-toast';
-import { editMember } from '@/types/interface';
-import { updateMember } from '@/actions/groupActions';
+import React, { useState, useEffect } from "react";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import { Settings, UserCheck, Loader2 } from "lucide-react";
+import { Group, GroupMember, GroupPosition } from "@/types";
+import toast from "react-hot-toast";
+import { editMember } from "@/types/interface";
+import { updateMember } from "@/actions/groupActions";
 
 interface UpdateMemberDialogProps {
   group: Group;
-  onMemberUpdated?: () => void;
+  onComplete?: () => void;
 }
 
-export const UpdateMemberDialog: React.FC<UpdateMemberDialogProps> = ({ 
+export const UpdateMemberDialog: React.FC<UpdateMemberDialogProps> = ({
   group,
-  onMemberUpdated 
+  onComplete,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedMember, setSelectedMember] = useState<GroupMember | null>(null);
-  const [selectedRole, setSelectedRole] = useState<string>('Member');
+  const [selectedMember, setSelectedMember] = useState<GroupMember | null>(
+    null
+  );
+  const [selectedRole, setSelectedRole] = useState<string>("Member");
   const [selectedPositions, setSelectedPositions] = useState<number[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
       setSelectedMember(null);
-      setSelectedRole('Member');
+      setSelectedRole("Member");
       setSelectedPositions([]);
     }
   }, [isOpen]);
@@ -50,13 +52,17 @@ export const UpdateMemberDialog: React.FC<UpdateMemberDialogProps> = ({
   useEffect(() => {
     if (selectedMember) {
       setSelectedRole(selectedMember.role);
-      
+
       if (selectedMember.positions && Array.isArray(selectedMember.positions)) {
-        const positionIds = selectedMember.positions.map(posName => {
-          const foundPosition = group.groupPositions.find(pos => pos.name === posName);
-          return foundPosition ? foundPosition.id : -1;
-        }).filter(id => id !== -1);
-        
+        const positionIds = selectedMember.positions
+          .map((posName) => {
+            const foundPosition = group.groupPositions.find(
+              (pos) => pos.name === posName
+            );
+            return foundPosition ? foundPosition.id : -1;
+          })
+          .filter((id) => id !== -1);
+
         setSelectedPositions(positionIds);
       } else {
         setSelectedPositions([]);
@@ -65,14 +71,14 @@ export const UpdateMemberDialog: React.FC<UpdateMemberDialogProps> = ({
   }, [selectedMember, group.groupPositions]);
 
   const handleMemberSelect = (memberId: number) => {
-    const member = group.groupMembers.find(m => m.studentId === memberId);
+    const member = group.groupMembers.find((m) => m.studentId === memberId);
     setSelectedMember(member || null);
   };
 
   const handlePositionSelect = (positionId: number) => {
-    setSelectedPositions(prev => 
+    setSelectedPositions((prev) =>
       prev.includes(positionId)
-        ? prev.filter(id => id !== positionId)
+        ? prev.filter((id) => id !== positionId)
         : [...prev, positionId]
     );
   };
@@ -93,20 +99,18 @@ export const UpdateMemberDialog: React.FC<UpdateMemberDialogProps> = ({
     try {
       const memberData: editMember = {
         role: selectedRole,
-        groupPositionIds: selectedPositions
+        groupPositionIds: selectedPositions,
       };
 
       await updateMember(group.id, selectedMember.studentId, memberData);
-      
+
       toast.success("Member updated successfully!");
-      
-      if (onMemberUpdated) {
-        onMemberUpdated();
-      }
-      
+
+      if (onComplete) onComplete();
+
       setIsOpen(false);
     } catch (error: any) {
-      console.error('Error updating member:', error);
+      console.error("Error updating member:", error);
       toast.error(error.message);
     } finally {
       setIsSubmitting(false);
@@ -114,17 +118,19 @@ export const UpdateMemberDialog: React.FC<UpdateMemberDialogProps> = ({
   };
 
   const getPositionNameById = (id: number): string => {
-    const position = group.groupPositions.find(p => p.id === id);
-    return position ? position.name : '';
+    const position = group.groupPositions.find((p) => p.id === id);
+    return position ? position.name : "";
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <DropdownMenuItem onSelect={(e) => {
-          e.preventDefault();
-          setIsOpen(true);
-        }}>
+        <DropdownMenuItem
+          onSelect={(e) => {
+            e.preventDefault();
+            setIsOpen(true);
+          }}
+        >
           <Settings className="mr-2 h-4 w-4" /> Update Member
         </DropdownMenuItem>
       </DialogTrigger>
@@ -140,17 +146,17 @@ export const UpdateMemberDialog: React.FC<UpdateMemberDialogProps> = ({
           {/* Member selection */}
           <div className="space-y-2">
             <Label htmlFor="member-select">Select Member</Label>
-            <Select 
-              value={selectedMember?.studentId.toString() || ''} 
+            <Select
+              value={selectedMember?.studentId.toString() || ""}
               onValueChange={(value) => handleMemberSelect(parseInt(value))}
             >
               <SelectTrigger id="member-select">
                 <SelectValue placeholder="Select a member" />
               </SelectTrigger>
-              <SelectContent className='bg-white'>
+              <SelectContent className="bg-white">
                 {group.groupMembers.map((member) => (
-                  <SelectItem 
-                    key={member.studentId} 
+                  <SelectItem
+                    key={member.studentId}
                     value={member.studentId.toString()}
                   >
                     {member.studentName} ({member.studentEmail})
@@ -165,14 +171,11 @@ export const UpdateMemberDialog: React.FC<UpdateMemberDialogProps> = ({
               {/* Role selection */}
               <div className="space-y-2">
                 <Label htmlFor="role-select">Member Role</Label>
-                <Select 
-                  value={selectedRole} 
-                  onValueChange={setSelectedRole}
-                >
+                <Select value={selectedRole} onValueChange={setSelectedRole}>
                   <SelectTrigger id="role-select">
                     <SelectValue placeholder="Select a role" />
                   </SelectTrigger>
-                  <SelectContent className='bg-white'>
+                  <SelectContent className="bg-white">
                     <SelectItem value="Leader">Leader</SelectItem>
                     <SelectItem value="Member">Member</SelectItem>
                   </SelectContent>
@@ -183,26 +186,33 @@ export const UpdateMemberDialog: React.FC<UpdateMemberDialogProps> = ({
               <div className="space-y-2">
                 <Label className="text-md">Select Positions</Label>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
-                  {group.groupPositions.map((position) => (
-                    <div
-                      key={position.id}
-                      className={`border rounded-md p-3 cursor-pointer ${
-                        selectedPositions.includes(position.id)
-                          ? "bg-blue-100 border-blue-500"
-                          : ""
-                      }`}
-                      onClick={() => handlePositionSelect(position.id)}
-                    >
-                      <div className="font-medium">{position.name}</div>
-                      <div className="text-sm">
-                        {position.count} position{position.count > 1 ? "s" : ""}
+                  {group.groupPositions
+                    .filter((position) => position.status === "Open")
+                    .map((position) => (
+                      <div
+                        key={position.id}
+                        className={`border rounded-md p-3 cursor-pointer ${
+                          selectedPositions.includes(position.id)
+                            ? "bg-blue-100 border-blue-500"
+                            : ""
+                        }`}
+                        onClick={() => handlePositionSelect(position.id)}
+                      >
+                        <div className="font-medium">{position.name}</div>
+                        <div className="text-sm">
+                          {position.count} position
+                          {position.count > 1 ? "s" : ""}
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
                 </div>
                 <p className="text-sm text-gray-500 mt-1">
-                  Selected {selectedPositions.length} of {group.groupPositions.length}{" "}
-                  positions
+                  Selected {selectedPositions.length} of{" "}
+                  {
+                    group.groupPositions.filter((p) => p.status === "Open")
+                      .length
+                  }{" "}
+                  open positions
                 </p>
               </div>
 
@@ -221,8 +231,10 @@ export const UpdateMemberDialog: React.FC<UpdateMemberDialogProps> = ({
                   <div className="col-span-2">
                     <p className="text-sm font-medium">Positions:</p>
                     <p className="text-sm">
-                      {selectedPositions.length > 0 
-                        ? selectedPositions.map(id => getPositionNameById(id)).join(', ')
+                      {selectedPositions.length > 0
+                        ? selectedPositions
+                            .map((id) => getPositionNameById(id))
+                            .join(", ")
                         : "None selected"}
                     </p>
                   </div>
@@ -233,18 +245,20 @@ export const UpdateMemberDialog: React.FC<UpdateMemberDialogProps> = ({
         </div>
 
         <DialogFooter>
-          <Button 
-            type="button" 
-            variant="outline" 
+          <Button
+            type="button"
+            variant="outline"
             onClick={() => setIsOpen(false)}
             disabled={isSubmitting}
           >
             Cancel
           </Button>
-          <Button 
-            type="submit" 
+          <Button
+            type="submit"
             onClick={handleSubmit}
-            disabled={!selectedMember || selectedPositions.length === 0 || isSubmitting}
+            disabled={
+              !selectedMember || selectedPositions.length === 0 || isSubmitting
+            }
           >
             {isSubmitting ? (
               <>
@@ -252,7 +266,7 @@ export const UpdateMemberDialog: React.FC<UpdateMemberDialogProps> = ({
                 Saving...
               </>
             ) : (
-              'Save Changes'
+              "Save Changes"
             )}
           </Button>
         </DialogFooter>

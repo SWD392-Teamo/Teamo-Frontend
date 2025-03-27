@@ -1,28 +1,28 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  Dialog, 
-  DialogTrigger, 
-  DialogContent, 
-  DialogHeader, 
-  DialogTitle, 
-  DialogDescription, 
-  DialogFooter 
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
-import { UserPlus, Search, Loader2 } from 'lucide-react';
-import { Group, User } from '@/types';
-import { getAllUsers } from '@/actions/userActions';
-import toast from 'react-hot-toast';
-import { addGroupMembers } from '@/types/interface';
-import { addMember } from '@/actions/groupActions';
+import React, { useState, useEffect } from "react";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import { UserPlus, Search, Loader2 } from "lucide-react";
+import { Group, User } from "@/types";
+import { getAllUsers } from "@/actions/userActions";
+import toast from "react-hot-toast";
+import { addGroupMembers } from "@/types/interface";
+import { addMember } from "@/actions/groupActions";
 
-export const AddMemberDialog: React.FC<{ group: Group }> = ({ group }) => {
-  const [searchQuery, setSearchQuery] = useState('');
+export const AddMemberDialog: React.FC<{ group: Group, onComplete?: () => void }> = ({ group, onComplete }) => {
+  const [searchQuery, setSearchQuery] = useState("");
   const [isSearching, setIsSearching] = useState(false);
-  const [searchError, setSearchError] = useState('');
+  const [searchError, setSearchError] = useState("");
   const [users, setUsers] = useState<User[]>([]);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [selectedPositions, setSelectedPositions] = useState<number[]>([]);
@@ -31,25 +31,25 @@ export const AddMemberDialog: React.FC<{ group: Group }> = ({ group }) => {
 
   useEffect(() => {
     if (isOpen) {
-      setSearchQuery('');
+      setSearchQuery("");
       setUsers([]);
       setSelectedUser(null);
       setSelectedPositions([]);
-      setSearchError('');
+      setSearchError("");
     }
   }, [isOpen]);
 
   const isUserAlreadyMember = (userId: number) => {
-    return group.groupMembers.some(member => member.studentId === userId);
+    return group.groupMembers.some((member) => member.studentId === userId);
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const query = e.target.value;
     setSearchQuery(query);
-    
+
     if (query.length <= 1) {
       setUsers([]);
-      setSearchError('');
+      setSearchError("");
       return;
     }
 
@@ -62,19 +62,19 @@ export const AddMemberDialog: React.FC<{ group: Group }> = ({ group }) => {
 
   const searchUsers = async (query: string) => {
     setIsSearching(true);
-    setSearchError('');
+    setSearchError("");
 
     try {
       const response = await getAllUsers(`?search=${query}`);
 
       setUsers(response.data);
-      
+
       if (response.data.length === 0) {
-        setSearchError('No users found');
+        setSearchError("No users found");
       }
     } catch (error) {
-      console.error('Error searching users:', error);
-      setSearchError('Failed to search users. Please try again.');
+      console.error("Error searching users:", error);
+      setSearchError("Failed to search users. Please try again.");
     } finally {
       setIsSearching(false);
     }
@@ -83,18 +83,27 @@ export const AddMemberDialog: React.FC<{ group: Group }> = ({ group }) => {
   const highlightMatch = (text: string, query: string) => {
     if (!query || query.length <= 1) return text;
 
-    const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+    const regex = new RegExp(
+      `(${query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`,
+      "gi"
+    );
     const parts = text.split(regex);
 
-    return parts.map((part, i) => 
-      regex.test(part) ? <span key={i} className="bg-yellow-200">{part}</span> : part
+    return parts.map((part, i) =>
+      regex.test(part) ? (
+        <span key={i} className="bg-yellow-200">
+          {part}
+        </span>
+      ) : (
+        part
+      )
     );
   };
 
   const handlePositionSelect = (positionId: number) => {
-    setSelectedPositions(prev => 
+    setSelectedPositions((prev) =>
       prev.includes(positionId)
-        ? prev.filter(id => id !== positionId)
+        ? prev.filter((id) => id !== positionId)
         : [...prev, positionId]
     );
   };
@@ -111,7 +120,9 @@ export const AddMemberDialog: React.FC<{ group: Group }> = ({ group }) => {
     }
 
     if (isUserAlreadyMember(selectedUser.id)) {
-      toast.error(`${selectedUser.firstName} ${selectedUser.lastName} is already a member of the group.`);
+      toast.error(
+        `${selectedUser.firstName} ${selectedUser.lastName} is already a member of the group.`
+      );
       return;
     }
 
@@ -120,16 +131,18 @@ export const AddMemberDialog: React.FC<{ group: Group }> = ({ group }) => {
     try {
       const memberData: addGroupMembers = {
         studentId: selectedUser.id,
-        groupPositionIds: selectedPositions
+        groupPositionIds: selectedPositions,
       };
 
       await addMember(group.id, memberData);
-      
+
       toast.success("Member added successfully!");
-      
+
       setIsOpen(false);
+
+      if (onComplete) onComplete();
     } catch (error) {
-      console.error('Error adding member:', error);
+      console.error("Error adding member:", error);
       toast.error("Failed to add member. Please try again.");
     } finally {
       setIsSubmitting(false);
@@ -139,10 +152,12 @@ export const AddMemberDialog: React.FC<{ group: Group }> = ({ group }) => {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <DropdownMenuItem onSelect={(e) => {
-          e.preventDefault();
-          setIsOpen(true);
-        }}>
+        <DropdownMenuItem
+          onSelect={(e) => {
+            e.preventDefault();
+            setIsOpen(true);
+          }}
+        >
           <UserPlus className="mr-2 h-4 w-4" /> Add Member
         </DropdownMenuItem>
       </DialogTrigger>
@@ -284,25 +299,32 @@ export const AddMemberDialog: React.FC<{ group: Group }> = ({ group }) => {
             <div className="space-y-2">
               <Label className="text-xl">Select Positions</Label>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
-                {group.groupPositions.map((position) => (
-                  <div
-                    key={position.id}
-                    className={`border rounded-md p-3 cursor-pointer ${
-                      selectedPositions.includes(position.id)
-                        ? "bg-blue-100 border-blue-500"
-                        : ""
-                    }`}
-                    onClick={() => handlePositionSelect(position.id)}
-                  >
-                    <div className="font-medium">{position.name}</div>
-                    <div className="text-sm">
-                      {position.count} position{position.count > 1 ? "s" : ""}
+                {group.groupPositions
+                  .filter((position) => position.status === "Open")
+                  .map((position) => (
+                    <div
+                      key={position.id}
+                      className={`border rounded-md p-3 cursor-pointer ${
+                        selectedPositions.includes(position.id)
+                          ? "bg-blue-100 border-blue-500"
+                          : ""
+                      }`}
+                      onClick={() => handlePositionSelect(position.id)}
+                    >
+                      <div className="font-medium">{position.name}</div>
+                      <div className="text-sm">
+                        {position.count} position{position.count > 1 ? "s" : ""}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
               </div>
+              {/* Update the count to reflect only open positions */}
               <p className="text-sm text-gray-500 mt-1">
-                Selected {selectedPositions.length} of {group.groupPositions.length}{" "}
+                Selected {selectedPositions.length} of{" "}
+                {
+                  group.groupPositions.filter((p) => p.status === "Open")
+                    .length
+                }{" "}
                 positions
               </p>
             </div>
@@ -310,18 +332,20 @@ export const AddMemberDialog: React.FC<{ group: Group }> = ({ group }) => {
         </div>
 
         <DialogFooter>
-          <Button 
-            type="button" 
-            variant="outline" 
+          <Button
+            type="button"
+            variant="outline"
             onClick={() => setIsOpen(false)}
             disabled={isSubmitting}
           >
             Cancel
           </Button>
-          <Button 
-            type="submit" 
+          <Button
+            type="submit"
             onClick={handleSubmit}
-            disabled={!selectedUser || selectedPositions.length === 0 || isSubmitting}
+            disabled={
+              !selectedUser || selectedPositions.length === 0 || isSubmitting
+            }
           >
             {isSubmitting ? (
               <>
@@ -329,7 +353,7 @@ export const AddMemberDialog: React.FC<{ group: Group }> = ({ group }) => {
                 Adding...
               </>
             ) : (
-              'Add Member'
+              "Add Member"
             )}
           </Button>
         </DialogFooter>

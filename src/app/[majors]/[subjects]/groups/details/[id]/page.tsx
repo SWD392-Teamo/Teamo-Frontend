@@ -15,7 +15,7 @@ import { useShallow } from "zustand/shallow";
 import { getUserId } from "@/actions/userActions";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import GroupPositionCard from "@/app/groups/details/[id]/GroupPosition";
+import GroupPositionCard from "@/app/my-groups/details/[id]/GroupPosition";
 
 const GroupDetail: React.FC = () => {
   const [userId, setUserId] = useState<number | null>(null);

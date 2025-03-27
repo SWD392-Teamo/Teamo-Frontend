@@ -32,7 +32,7 @@
     --primary-hover: 198 82% 52%;   /* Slightly darker for hover state */
     
     /* Secondary Color - Soft Gray-Blue */
-    --secondary: 210 40% 96.1%;     /* Light grayish blue */
+    --secondary: 200 64% 91%;       /* Light blue #daedf5 */
     --secondary-foreground: 222.2 47.4% 11.2%; /* Dark text for secondary */
     
     /* Accent Color - Similar to Secondary */
@@ -66,44 +66,7 @@
     --font-sans: 'Be Vietnam Pro', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   }
 
-  /* Dark Mode Variant */
-  .dark {
-    --background: 222.2 84% 4.9%;   /* Very dark blue-gray */
-    --foreground: 210 40% 98%;      /* Very light text */
-
-    /* Dark Mode Primary - Maintaining Consistency */
-    --primary: 198 82% 57%;         /* Same bright blue */
-    --primary-foreground: 222.2 47.4% 11.2%; /* Dark text on primary */
-    --primary-hover: 198 82% 62%;   /* Slightly lighter for hover */
-    
-    /* Dark Mode Secondary - Darker Tones */
-    --secondary: 217.2 32.6% 17.5%; /* Dark grayish blue */
-    --secondary-foreground: 210 40% 98%; /* Light text */
-    
-    /* Dark Mode Accent */
-    --accent: 217.2 32.6% 17.5%;    /* Dark grayish blue */
-    --accent-foreground: 210 40% 98%; /* Light text */
-    
-    /* Dark Mode Muted */
-    --muted: 217.2 32.6% 17.5%;     /* Dark grayish blue */
-    --muted-foreground: 215 20.2% 65.1%; /* Lighter muted text */
-    
-    /* Dark Mode Destructive */
-    --destructive: 0 62.8% 30.6%;   /* Darker red */
-    --destructive-foreground: 210 40% 98%; /* Light text */
-    
-    /* Dark Mode Utility Colors */
-    --border: 217.2 32.6% 17.5%;    /* Dark border */
-    --input: 217.2 32.6% 17.5%;     /* Dark input */
-    --ring: 198 82% 57%;            /* Consistent highlight */
-    
-    /* Dark Mode Chart Colors - Adjusted for Dark Background */
-    --chart-1: 220 70% 50%;   /* Deeper blue */
-    --chart-2: 160 60% 45%;   /* Muted teal */
-    --chart-3: 30 80% 55%;    /* Warm orange-brown */
-    --chart-4: 280 65% 60%;   /* Muted purple */
-    --chart-5: 340 75% 55%;   /* Deep pink/magenta */
-  }
+  
 }
 
 @layer base {

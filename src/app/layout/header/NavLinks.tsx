@@ -30,6 +30,7 @@ export default function NavLinks({ role }: Props) {
           <Link key="home" href='/posts' className='link'>Home</Link>,
           <Link key="majors" href='/majors' className='link'>Majors</Link>,
           <Link key="groups" href='/groups' className='link'>Groups</Link>,
+          <Link key="my-groups" href='/my-groups' className='link'>My Groups</Link>,
           <Link key="profile" href='/profile' className='link'>Profile</Link>,
           <Link key="applications" href='/applications' className='link'>Applications</Link>
         ];

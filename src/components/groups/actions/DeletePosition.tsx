@@ -32,9 +32,10 @@ import { removeGroupPosition } from '@/actions/groupActions';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { GroupPosition } from '@/types';
 
-export const DeletePositionDialog: React.FC<{ groupId: number; positions: GroupPosition[] }> = ({ 
+export const DeletePositionDialog: React.FC<{ groupId: number; positions: GroupPosition[], onComplete: () => void }> = ({ 
   groupId, 
-  positions 
+  positions,
+  onComplete
 }) => {
   const [open, setOpen] = useState(false);
   const [selectedPositionId, setSelectedPositionId] = useState<number | null>(null);
@@ -64,6 +65,7 @@ export const DeletePositionDialog: React.FC<{ groupId: number; positions: GroupP
       toast.success("Position deleted successfully!");
       
       setOpen(false);
+      if (onComplete) onComplete();
     } catch (error: any) {
       console.error("Failed to delete position:", error);
       toast.error(error.message);

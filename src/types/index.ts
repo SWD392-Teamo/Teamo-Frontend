@@ -60,6 +60,7 @@ export type GroupPosition = {
     count: number;
     status: string;
     skillIds: number[];
+    skills: Skill[];
 }
 
 export type GroupMember = {

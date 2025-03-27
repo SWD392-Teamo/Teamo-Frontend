@@ -7,6 +7,10 @@ export async function getData(query: string): Promise<PagedResult<Major>> {
     return await fetchWrapper.get(`majors${query}`)
 }
 
+export async function getAllMajors(query: string): Promise<PagedResult<Major>> {
+    return await fetchWrapper.get(`majors${query}`)
+}
+
 export async function getMajorById(majorId: number): Promise<Major> {
     return await fetchWrapper.get(`majors/${majorId}`)
 }

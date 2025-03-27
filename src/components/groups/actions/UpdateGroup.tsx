@@ -64,8 +64,7 @@ import ImageUpload from "./ImageUpload";
 
 interface UpdateGroupDialogProps {
   group: Group;
-  onSuccess?: () => void;
-}
+  onComplete?: () => void; }
 
 // Simplified schema for form validation (without groupPositions)
 const updateGroupSchema = z.object({
@@ -82,7 +81,7 @@ type UpdateGroupFormValues = z.infer<typeof updateGroupSchema>;
 
 const UpdateGroupDialog: React.FC<UpdateGroupDialogProps> = ({
   group,
-  onSuccess,
+  onComplete, 
 }) => {
   const [semesters, setSemesters] = useState<Semester[]>([]);
   const [subjects, setSubjects] = useState<Subject[]>([]);
@@ -117,26 +116,29 @@ const UpdateGroupDialog: React.FC<UpdateGroupDialogProps> = ({
   useEffect(() => {
     if (isOpen) {
       setIsDataLoaded(false);
-
+  
       const fetchInitialData = async () => {
         try {
-          const semestersResponse = await getAllSemesters("?status=ongoing");
-          const subjectsResponse = await getAllSubjects("?status=Active");
-          const fieldsResponse = await getAllFields();
-
-          const semestersArray =
-            semestersResponse?.data || semestersResponse || [];
-          const subjectsArray =
-            subjectsResponse?.data || subjectsResponse || [];
+          const ongoingSemestersResponse = await getAllSemesters('?status=ongoing&pageSize=300');
+          const upcomingSemestersResponse = await getAllSemesters('?status=upcoming&pageSize=300');
+          const subjectsResponse = await getAllSubjects('?status=Active&pageSize=300');
+          const fieldsResponse = await getAllFields('?pageSize=300');
+  
+          const ongoingSemestersArray = ongoingSemestersResponse?.data || ongoingSemestersResponse || [];
+          const upcomingSemestersArray = upcomingSemestersResponse?.data || upcomingSemestersResponse || [];
+          
+          const combinedSemesters = [...ongoingSemestersArray, ...upcomingSemestersArray];
+          
+          const subjectsArray = subjectsResponse?.data || subjectsResponse || [];
           const fieldsArray = fieldsResponse?.data || fieldsResponse || [];
-
-          setSemesters(semestersArray);
+  
+          setSemesters(combinedSemesters);
           setSubjects(subjectsArray);
           setFields(fieldsArray);
-
+  
           const updatedValues = { ...selectedValues };
-
-          const matchingSemester = semestersArray.find(
+  
+          const matchingSemester = combinedSemesters.find(
             (s) => s.name === group.semesterName
           );
           if (matchingSemester) {
@@ -144,13 +146,13 @@ const UpdateGroupDialog: React.FC<UpdateGroupDialogProps> = ({
               name: group.semesterName,
               id: matchingSemester.id,
             };
-          } else if (semestersArray.length > 0) {
+          } else if (combinedSemesters.length > 0) {
             updatedValues.semester = {
-              name: semestersArray[0].name,
-              id: semestersArray[0].id,
+              name: combinedSemesters[0].name,
+              id: combinedSemesters[0].id,
             };
           }
-
+  
           const matchingSubject = subjectsArray.find(
             (s) => s.code === group.subjectCode
           );
@@ -165,7 +167,7 @@ const UpdateGroupDialog: React.FC<UpdateGroupDialogProps> = ({
               id: subjectsArray[0].id,
             };
           }
-
+  
           const matchingField = fieldsArray.find(
             (f) => f.name === group.fieldName
           );
@@ -175,27 +177,27 @@ const UpdateGroupDialog: React.FC<UpdateGroupDialogProps> = ({
               id: matchingField.id,
             };
           }
-
+  
           setSelectedValues(updatedValues);
-
+  
           form.reset({
             name: group.name,
             title: group.title,
-            semesterId: updatedValues.semester.id,
+            semesterId: updatedValues.semester?.id,
             maxMember: group.maxMember,
-            fieldId: updatedValues.field.id,
-            subjectId: updatedValues.subject.id,
+            fieldId: updatedValues.field?.id,
+            subjectId: updatedValues.subject?.id,
             description: group.description || "",
           });
-
+  
           setIsDataLoaded(true);
         } catch (error: any) {
           console.error("Error fetching data:", error);
           toast.error(`${error.message}`);
-          setIsDataLoaded(true); // Still mark as loaded even on error
+          setIsDataLoaded(true); 
         }
       };
-
+  
       fetchInitialData();
     }
   }, [isOpen, form, group]);
@@ -263,7 +265,7 @@ const UpdateGroupDialog: React.FC<UpdateGroupDialogProps> = ({
       await updateGroup(group.id, updateData as addGroup);
       toast.success("Group updated successfully");
       setIsOpen(false);
-      if (onSuccess) onSuccess();
+      
     } catch (error) {
       console.error("Error updating group:", error);
       toast.error("Failed to update group");

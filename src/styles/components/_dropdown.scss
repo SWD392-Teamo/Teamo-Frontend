@@ -1,18 +1,18 @@
 /* Dropdown style using Tailwind CSS */
 .dropdown {
-    @apply relative inline-block;
+    @apply relative inline-block !important;
   
     &--primary {
       &--trigger {
-        @apply bg-primary text-tertiary py-2 px-4 rounded-lg text-sm font-medium;
+        @apply bg-primary text-tertiary py-2 px-4 rounded-lg text-sm font-medium !important;
       }
   
       &--menu {
-        @apply bg-tertiary border border-primary rounded-lg mt-1 py-1;
+        @apply bg-tertiary border border-primary rounded-lg mt-1 py-1 !important;
       }
 
       &--item {
-        @apply no-underline py-1 px-6 w-max text-sm font-medium cursor-pointer outline outline-2 outline-primary
+        @apply no-underline py-1 px-6 w-max text-sm font-medium cursor-pointer outline outline-2 outline-primary !important;
       }
     }
   }

@@ -142,7 +142,7 @@ export default function SkillsListing() {
     <div className='mb-10 mt-5'>
       {/* Create skill Button */}
       <Button
-        className='btn btn--secondary btn--icon'
+        className='btn btn--primary btn--icon'
         onClick={() => {
           setSelectedSkill(undefined);
           setShowModal(true);
