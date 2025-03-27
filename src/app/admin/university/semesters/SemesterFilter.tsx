@@ -14,7 +14,7 @@ export default function SemesterFilter({status, setSearch, setStatus, setPageInd
       {setStatus && 
         <div className="flex gap-5 mt-3">
           <Button
-            className={`btn ${status === '' ? 'btn--primary' : 'btn--primary--outline'}`}
+            className={`btn ${status === '' ? 'btn--secondary' : 'btn--secondary--outline'}`}
             onClick={() => 
               {
                 setStatus('');
@@ -25,7 +25,7 @@ export default function SemesterFilter({status, setSearch, setStatus, setPageInd
             All
           </Button>
           <Button
-            className={`btn ${status === 'ongoing' ? 'btn--primary' : 'btn--primary--outline'}`}
+            className={`btn ${status === 'ongoing' ? 'btn--secondary' : 'btn--secondary--outline'}`}
             onClick={() => 
               {
                 setStatus('ongoing');
@@ -36,7 +36,7 @@ export default function SemesterFilter({status, setSearch, setStatus, setPageInd
             OnGoing
           </Button>
           <Button
-            className={`btn ${status === 'past' ? 'btn--primary' : 'btn--primary--outline'}`}
+            className={`btn ${status === 'past' ? 'btn--secondary' : 'btn--secondary--outline'}`}
             onClick={() => 
               {
                 setStatus('past');
@@ -47,7 +47,7 @@ export default function SemesterFilter({status, setSearch, setStatus, setPageInd
             Past
           </Button>
           <Button
-            className={`btn ${status === 'upcoming' ? 'btn--primary' : 'btn--primary--outline'}`}
+            className={`btn ${status === 'upcoming' ? 'btn--secondary' : 'btn--secondary--outline'}`}
             onClick={() => 
               {
                 setStatus('upcoming');

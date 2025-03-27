@@ -142,7 +142,7 @@ export default function FieldsListing() {
     <div className='mb-10 mt-5'>
       {/* Create Field Button */}
       <Button
-        className='btn btn--secondary btn--icon'
+        className='btn btn--primary btn--icon'
         onClick={() => {
           setSelectedField(undefined);
           setShowModal(true);

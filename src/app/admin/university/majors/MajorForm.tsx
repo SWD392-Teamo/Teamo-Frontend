@@ -154,6 +154,7 @@ export default function MajorForm({major, onCancel, onSuccess}: Props) {
             control={control}
             type="text"
             showlabel="true"
+            
             rules={{
               required: "Code is required",
               minLength: {

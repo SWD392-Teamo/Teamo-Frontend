@@ -117,7 +117,7 @@ export default function SemestersListing() {
     <div className="mb-10 mt-5">
       {/* Create Semester Button */}
       <Button 
-          className='btn btn--secondary btn--icon'
+          className='btn btn--primary btn--icon'
           
           onClick={() => {
             setSelectedSemester(undefined);

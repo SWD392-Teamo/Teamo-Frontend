@@ -1,13 +1,13 @@
 /* Button style using Tailwind CSS*/
 .btn {
-  @apply uppercase no-underline py-1 px-3 w-max rounded-full text-sm font-medium cursor-pointer text-tertiary;
+  @apply uppercase no-underline py-1 px-3 w-max rounded-full text-sm font-medium cursor-pointer text-tertiary !important;
   
   &:hover {
-    @apply shadow-lg;
+    @apply shadow-lg !important
   }
 
   &:active {
-    @apply shadow-md;
+    @apply shadow-md !important;
   }
 
   &:focus {
@@ -16,7 +16,7 @@
 
   /* Style for primary color button */
   &--primary {
-    @apply bg-primary;
+    @apply bg-primary !important;
     &:hover {
       @apply outline outline-2 outline-primary text-primary bg-tertiary !important;
     }
@@ -32,23 +32,23 @@
 
   /* Style for secondary color button */
   &--secondary {
-    @apply bg-secondary;
+    @apply bg-secondary text-secondary-foreground !important;
     &:hover {
-      @apply outline outline-2 outline-grey text-secondary bg-tertiary !important;
+      @apply outline outline-2 outline-sky-300 text-accent-foreground bg-muted !important;
     }
 
     /* Style for secondary color button outline type */
     &--outline {
-      @apply bg-tertiary text-secondary outline outline-2 outline-secondary !important;
+      @apply bg-muted text-secondary-foreground outline outline-2 outline-secondary !important;
       &:hover {
-        @apply bg-secondary text-tertiary !important;
+        @apply bg-muted text-primary !important;
       }
     }
   }
 
   /* Style for danger button */
   &--danger {
-    @apply bg-danger;
+    @apply bg-danger !important;
     &:hover {
       @apply outline outline-2 outline-danger text-danger bg-tertiary !important;
     }

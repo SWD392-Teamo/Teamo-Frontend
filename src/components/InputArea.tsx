@@ -18,7 +18,7 @@ export default function InputArea(props: Props) {
                     <Label htmlFor={field.name} value={props.label}/>
                 </div>
             )}
-            <div className='mb-6 block text-secondary'>
+            <div className='mb-6 block text--muted'>
                 <Textarea 
                     {...props}
                     {...field}

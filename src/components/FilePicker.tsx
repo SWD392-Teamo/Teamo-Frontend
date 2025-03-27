@@ -46,7 +46,7 @@ const FilePicker: React.FC<FilePickerProps> = ({
       <button
         onClick={handleClick}
         type="button"
-        className="btn btn--secondary btn--round"
+        className="btn btn--primary btn--round"
       >
         {
             hasIcon 
