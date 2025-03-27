@@ -14,7 +14,7 @@ import { getUserId } from "@/actions/userActions";
 import Link from "next/link";
 import { banGroup, getGroupById, unBanGroup } from "@/actions/groupActions";
 import { useParams, useRouter } from "next/navigation";
-import GroupPositionCard from "@/app/groups/details/[id]/GroupPosition";
+import GroupPositionCard from "@/app/my-groups/details/[id]/GroupPosition";
 import { Button } from "flowbite-react";
 import AppModal from "../AppModal";
 import ConfirmationPopup from "../users/ConfirmationPopup";

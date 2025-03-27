@@ -8,6 +8,11 @@ type State = {
     subjectId?: number
     status?: string
     sort?: string
+    // New multi-select filter params
+    majorIds?: string
+    subjectIds?: string
+    semesterIds?: string
+    fieldIds?: string
 }
 
 type Actions = {
