@@ -82,7 +82,7 @@ const GroupCard: React.FC<{ group: Group }> = ({ group }) => {
               <h3 className="text-xl font-bold text-blue-500 truncate">{group?.name}</h3>
               
               {isLeader && (
-                <LeaderActions group={group} />
+                <LeaderActions group={group} onActionComplete={() => {}}  />
               )}
             </div>
             <div className="flex flex-wrap items-center mt-1">
