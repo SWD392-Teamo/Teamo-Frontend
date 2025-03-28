@@ -1,9 +1,14 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
-import { toast } from "react-hot-toast";
 import queryString from "query-string";
+import { useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
 import { useShallow } from "zustand/react/shallow";
 
+import { getData } from "@/actions/groupActions";
+import { getUserId } from "@/actions/userActions";
+import GroupCard from "@/components/groups/GroupCard";
+import { GroupFilters } from "@/components/groups/GroupFilters";
+import SearchBar from "@/components/SearchBar";
 import {
   Pagination,
   PaginationContent,
@@ -13,17 +18,9 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { useSubjectStore } from "@/hooks/useSubjectStore";
-import { useMajorStore } from "@/hooks/useMajorStore";
-import { useLoading } from "@/providers/LoadingProvider";
-import { useParamsStore } from "@/hooks/useParamsStore";
 import { useGroupStore } from "@/hooks/useGroupStore";
-import { getUserId } from "@/actions/userActions";
-import { getData } from "@/actions/groupActions";
-import { GroupFilters } from "@/components/groups/GroupFilters";
-import GroupCard from "@/components/groups/GroupCard";
-import SearchBar from "@/components/SearchBar";
-import { useFilterStore } from "@/hooks/GroupFilterStore";
+import { useParamsStore } from "@/hooks/useParamsStore";
+import { useLoading } from "@/providers/LoadingProvider";
 
 export default function Listings() {
   const [userId, setUserId] = useState<number | null>(null);
@@ -31,7 +28,12 @@ export default function Listings() {
   const { showLoading, hideLoading } = useLoading();
   const [search, setSearch] = useState<string>("");
 
-  const params = useParamsStore();
+  const params = useParamsStore(
+    useShallow((state) => ({
+      pageIndex: state.pageIndex,
+      pageSize: state.pageSize
+    }))
+  );
   const setParams = useParamsStore((state) => state.setParams);
 
   const { groups, totalCount, pageCount } = useGroupStore(

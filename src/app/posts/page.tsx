@@ -77,11 +77,15 @@ export default function Listings() {
       try {
         const userId = await getUserId();
         const userResponse = await getProfile(); // Assume this function exists
-        setCurrentUser({
-          id: userId,
-          name: userResponse.firstName || "User",
-          imgUrl: userResponse.imgUrl,
-        });
+
+        if (userId) {
+          setCurrentUser({
+            id: userId,
+            name: userResponse.firstName || "User",
+            imgUrl: userResponse.imgUrl,
+          });
+        }
+
       } catch (error) {
         console.error("Failed to fetch user info:", error);
       }
