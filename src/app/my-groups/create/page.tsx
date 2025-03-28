@@ -86,7 +86,7 @@ const STEPS = {
    // Finish the whole process
    const finishProcess = () => {
      toast.success("Group setup completed!");
-     router.push("/groups");
+     router.push("/my-groups");
    };
  
    // Next step handler
