@@ -112,7 +112,7 @@ export const DeletePositionDialog: React.FC<{ groupId: number; positions: GroupP
                   <SelectTrigger id="position-select">
                     <SelectValue placeholder="Choose a position" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className='bg-white'>
                     {positions.map((position) => (
                       <SelectItem key={position.id} value={position.id.toString()}>
                         {position.name}
