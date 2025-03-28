@@ -13,9 +13,26 @@ import React, { useEffect, useState } from "react";
 import { IoIosStar } from "react-icons/io";
 import { useShallow } from "zustand/shallow";
 import { getUserId } from "@/actions/userActions";
-import { useRouter } from "next/router";
 import Link from "next/link";
-import GroupPositionCard from "@/app/my-groups/details/[id]/GroupPosition";
+import { getGroupById } from "@/actions/groupActions";
+import { useParams, useRouter } from "next/navigation";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardFooter,
+} from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import LeaderActions from "@/components/groups/actions/LeaderActions";
+import { Skill } from "@/types";
+import { getAllSkills } from "@/actions/skillActions";
+import toast from "react-hot-toast";
+import GroupPositionCard from "@/app/groups/details/[id]/GroupPosition";
 
 const GroupDetail: React.FC = () => {
   const [userId, setUserId] = useState<number | null>(null);
